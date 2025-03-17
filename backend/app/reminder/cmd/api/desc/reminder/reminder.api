@@ -7,7 +7,7 @@ info(
     version: "v1"
 )
 
-type reminder {
+type Reminder {
     Id int64 `json:"id"`
     UserId int64 `json:"userId"`                //发起提醒用户ID
     ReminderTime int64 `json:"reminderTime"`    //提醒时间
@@ -15,3 +15,47 @@ type reminder {
     status int64 `json:"status"`                //0待提醒，1已提醒，2已完成
     member int64 `json:"member"`                //0提醒自己，1提醒亲友，2共同提醒
 }
+
+type (
+    CreateReminderReq {
+        ReminderTime int64 `json:"reminderTime"`    //提醒时间
+        Content string `json:"content"`             //提醒内容
+        member int64 `json:"member"`                //0提醒自己，1提醒亲友，2共同提醒
+    }
+    CreateReminderResp {
+        Id int `json:"id"`
+    }
+)
+
+type (
+    ReminderListReq {
+        LastId int64 `json:"lastId"`
+        Page int64 `json:"page"`
+        PageSize int64 `json:"pageSize"`
+        status int64 `json:"status"` //0待提醒，1已提醒，2已完成
+    }
+    ReminderListResp {
+        List []Reminder `json:"list"`
+    }
+)
+
+type (
+    ModifyReminderReq {
+        Id int64 `json:"id"`
+        ReminderTime int64 `json:"reminderTime"`    //提醒时间
+        Content string `json:"content"`             //提醒内容
+        member int64 `json:"member"`                //0提醒自己，1提醒亲友，2共同提醒
+    }
+    ModifyReminderResp {
+        Id int `json:"id"`
+    }
+)
+
+type (
+    DeleteReminderReq {
+        Id int `json:"id"`
+    }
+    DeleteReminderResp {
+        Id int `json:"id"`
+    }
+)

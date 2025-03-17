@@ -17,7 +17,7 @@ import (
 	"google.golang.org/grpc/reflection"
 )
 
-var configFile = flag.String("f", "etc/lottery.yaml", "the config file")
+var configFile = flag.String("f", "etc/reminder.yaml", "the config file")
 
 func main() {
 	flag.Parse()

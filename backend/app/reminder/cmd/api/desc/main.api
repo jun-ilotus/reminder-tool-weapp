@@ -1,0 +1,38 @@
+syntax = "v1"
+
+info (
+	title:   "提醒服务"
+	desc:    "提醒奖服务"
+	author:  "ilotus"
+	version: "v1"
+)
+
+import (
+	"reminder/reminder.api"
+)
+
+//=====================================> lottery-lottery v1 <=================================
+//need login
+@server (
+	prefix: reminder/v1
+	group:  reminder
+	jwt:    JwtAuth
+)
+service lottery {
+	@doc "reminder list"
+	@handler reminderList
+	get /reminder/list (ReminderListReq) returns (ReminderListResp)
+
+	@doc "reminder create"
+	@handler createReminder
+	post /reminder/create (CreateReminderReq) returns (CreateReminderResp)
+
+	@doc "reminder modify"
+	@handler modifyReminder
+	post /reminder/modify (ModifyReminderReq) returns (ModifyReminderResp)
+
+	@doc "reminder delete"
+	@handler deleteReminder
+	post /reminder/delete (DeleteReminderReq) returns (DeleteReminderResp)
+}
+
