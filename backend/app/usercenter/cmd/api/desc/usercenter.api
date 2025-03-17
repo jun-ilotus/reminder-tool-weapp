@@ -1,0 +1,46 @@
+syntax = "v1"
+
+info (
+	title:   "用户中心服务"
+	desc:    "用户中心服务"
+	author:  "王中阳"
+	email:   "425772719@qq.com"
+	version: "v1"
+)
+
+import (
+	"user/user.api"
+)
+
+//============================> usercenter v1 <============================
+//no need login
+@server (
+	prefix: usercenter/v1
+	group:  user
+)
+service usercenter {
+	@doc "注册"
+	@handler register
+	post /user/register (RegisterReq) returns (RegisterResp)
+
+	@doc "登录"
+	@handler login
+	post /user/login (LoginReq) returns (LoginResp)
+
+	@doc "小程序注册登录"
+	@handler wxMiniAuth
+	post /user/wxMiniAuth (WXMiniAuthReq) returns (WXMiniAuthResp)
+}
+
+//need login
+@server (
+	prefix: usercenter/v1
+	group:  user
+	jwt:    JwtAuth
+)
+service usercenter {
+	@doc "获得用户数据"
+	@handler detail
+	post /user/detail (UserInfoReq) returns (UserInfoResp)
+}
+

@@ -1,0 +1,17 @@
+syntax = "v1"
+
+info(
+    title: "提醒服务"
+    desc: "提醒服务"
+    author: "ilotus"
+    version: "v1"
+)
+
+type reminder {
+    Id int64 `json:"id"`
+    UserId int64 `json:"userId"`                //发起提醒用户ID
+    ReminderTime int64 `json:"reminderTime"`    //提醒时间
+    Content string `json:"content"`             //提醒内容
+    status int64 `json:"status"`                //0待提醒，1已提醒，2已完成
+    member int64 `json:"member"`                //0提醒自己，1提醒亲友，2共同提醒
+}

@@ -1,0 +1,23 @@
+# idea
+.idea
+.idea/
+*.iml
+.DS_Store
+**/.DS_Store
+
+#deploy data
+
+backend/data/*
+!data/.gitkeep
+
+# gitlab ci
+.cache
+
+#vscode
+.vscode
+.vscode/
+
+usercenter.yaml
+
+weapp/dist
+weapp/node_modules
