@@ -1,0 +1,434 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "提醒服务",
+    "description": "提醒奖服务",
+    "version": "v1"
+  },
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/reminder/v1/reminder/create": {
+      "post": {
+        "summary": "reminder create",
+        "operationId": "createReminder",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/CreateReminderResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateReminderReq"
+            }
+          }
+        ],
+        "tags": [
+          "reminder"
+        ],
+        "security": [
+          {
+            "apiKey": []
+          }
+        ]
+      }
+    },
+    "/reminder/v1/reminder/delete": {
+      "post": {
+        "summary": "reminder delete",
+        "operationId": "deleteReminder",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/DeleteReminderResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/DeleteReminderReq"
+            }
+          }
+        ],
+        "tags": [
+          "reminder"
+        ],
+        "security": [
+          {
+            "apiKey": []
+          }
+        ]
+      }
+    },
+    "/reminder/v1/reminder/list": {
+      "get": {
+        "summary": "reminder list",
+        "operationId": "reminderList",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/ReminderListResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "lastId",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "status",
+            "description": "0待提醒，1已提醒，2已完成",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "reminder"
+        ],
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "security": [
+          {
+            "apiKey": []
+          }
+        ]
+      }
+    },
+    "/reminder/v1/reminder/modify": {
+      "post": {
+        "summary": "reminder modify",
+        "operationId": "modifyReminder",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/ModifyReminderResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ModifyReminderReq"
+            }
+          }
+        ],
+        "tags": [
+          "reminder"
+        ],
+        "security": [
+          {
+            "apiKey": []
+          }
+        ]
+      }
+    },
+    "/reminder/v1/reminder/reminderById": {
+      "get": {
+        "summary": "通过id获取reminder",
+        "operationId": "reminderById",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/ReminderByIdResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "tags": [
+          "reminder"
+        ],
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "security": [
+          {
+            "apiKey": []
+          }
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "CreateReminderReq": {
+      "type": "object",
+      "properties": {
+        "reminderTime": {
+          "type": "integer",
+          "format": "int64",
+          "description": "提醒时间"
+        },
+        "content": {
+          "type": "string",
+          "description": "提醒内容"
+        },
+        "member": {
+          "type": "integer",
+          "format": "int64",
+          "description": "0提醒自己，1提醒亲友，2共同提醒"
+        }
+      },
+      "title": "CreateReminderReq",
+      "required": [
+        "reminderTime",
+        "content",
+        "member"
+      ]
+    },
+    "CreateReminderResp": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int32"
+        }
+      },
+      "title": "CreateReminderResp",
+      "required": [
+        "id"
+      ]
+    },
+    "DeleteReminderReq": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int32"
+        }
+      },
+      "title": "DeleteReminderReq",
+      "required": [
+        "id"
+      ]
+    },
+    "DeleteReminderResp": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int32"
+        }
+      },
+      "title": "DeleteReminderResp",
+      "required": [
+        "id"
+      ]
+    },
+    "ModifyReminderReq": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "reminderTime": {
+          "type": "integer",
+          "format": "int64",
+          "description": "提醒时间"
+        },
+        "content": {
+          "type": "string",
+          "description": "提醒内容"
+        },
+        "member": {
+          "type": "integer",
+          "format": "int64",
+          "description": "0提醒自己，1提醒亲友，2共同提醒"
+        }
+      },
+      "title": "ModifyReminderReq",
+      "required": [
+        "id",
+        "reminderTime",
+        "content",
+        "member"
+      ]
+    },
+    "ModifyReminderResp": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int32"
+        }
+      },
+      "title": "ModifyReminderResp",
+      "required": [
+        "id"
+      ]
+    },
+    "Reminder": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "userId": {
+          "type": "integer",
+          "format": "int64",
+          "description": "发起提醒用户ID"
+        },
+        "reminderTime": {
+          "type": "integer",
+          "format": "int64",
+          "description": "提醒时间"
+        },
+        "content": {
+          "type": "string",
+          "description": "提醒内容"
+        },
+        "status": {
+          "type": "integer",
+          "format": "int64",
+          "description": "0待提醒，1已提醒，2已完成"
+        },
+        "member": {
+          "type": "integer",
+          "format": "int64",
+          "description": "0提醒自己，1提醒亲友，2共同提醒"
+        }
+      },
+      "title": "Reminder",
+      "required": [
+        "id",
+        "userId",
+        "reminderTime",
+        "content",
+        "status",
+        "member"
+      ]
+    },
+    "ReminderByIdReq": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int32"
+        }
+      },
+      "title": "ReminderByIdReq",
+      "required": [
+        "id"
+      ]
+    },
+    "ReminderByIdResp": {
+      "type": "object",
+      "properties": {
+        "reminder": {
+          "$ref": "#/definitions/Reminder"
+        }
+      },
+      "title": "ReminderByIdResp",
+      "required": [
+        "reminder"
+      ]
+    },
+    "ReminderListReq": {
+      "type": "object",
+      "properties": {
+        "lastId": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "page": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "pageSize": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "status": {
+          "type": "integer",
+          "format": "int64",
+          "description": "0待提醒，1已提醒，2已完成"
+        }
+      },
+      "title": "ReminderListReq",
+      "required": [
+        "lastId",
+        "page",
+        "pageSize",
+        "status"
+      ]
+    },
+    "ReminderListResp": {
+      "type": "object",
+      "properties": {
+        "list": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Reminder"
+          }
+        }
+      },
+      "title": "ReminderListResp",
+      "required": [
+        "list"
+      ]
+    }
+  },
+  "securityDefinitions": {
+    "apiKey": {
+      "type": "apiKey",
+      "description": "Enter JWT Bearer token **_only_**",
+      "name": "Authorization",
+      "in": "header"
+    }
+  }
+}

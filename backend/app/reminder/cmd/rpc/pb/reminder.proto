@@ -1,0 +1,100 @@
+syntax = "proto3";
+
+option go_package ="./pb";
+
+package pb;
+
+// ------------------------------------ 
+// Messages
+// ------------------------------------ 
+
+//--------------------------------reminder--------------------------------
+message Reminder {
+  int64 id = 1; //id
+  int64 userId = 2; //鍒涘缓鎻愰啋鐢ㄦ埛id
+  int64 createTime = 3; //createTime
+  int64 updateTime = 4; //updateTime
+  int64 reminderTime = 5; //鎻愰啋鏃堕棿
+  string content = 6; //鎻愰啋鍐呭
+  int64 status = 7; //0寰呮彁閱掞紝1宸叉彁閱掞紝2宸插畬鎴?  int64 member = 8; //0鎻愰啋鑷繁锛?鎻愰啋浜插弸锛?鍏卞悓鎻愰啋
+  int64 member = 8; // 成
+  string rereminder = 9; //閲嶅
+}
+
+message AddReminderReq {
+  int64 userId = 1; //鍒涘缓鎻愰啋鐢ㄦ埛id
+  int64 reminderTime = 2; //鎻愰啋鏃堕棿
+  string content = 3; //鎻愰啋鍐呭
+  int64 status = 4; //0寰呮彁閱掞紝1宸叉彁閱掞紝2宸插畬鎴?  int64 member = 5; //0鎻愰啋鑷繁锛?鎻愰啋浜插弸锛?鍏卞悓鎻愰啋
+  string rereminder = 6; //閲嶅
+  int64 member = 7; // 成
+}
+
+message AddReminderResp {
+    int64 id = 1;
+}
+
+message UpdateReminderReq {
+  int64 id = 1; //id
+  int64 userId = 2; //鍒涘缓鎻愰啋鐢ㄦ埛id
+  int64 reminderTime = 3; //鎻愰啋鏃堕棿
+  string content = 4; //鎻愰啋鍐呭
+  int64 status = 5; //0寰呮彁閱掞紝1宸叉彁閱掞紝2宸插畬鎴?  int64 member = 6; //0鎻愰啋鑷繁锛?鎻愰啋浜插弸锛?鍏卞悓鎻愰啋
+  string rereminder = 7; //閲嶅
+  int64 member = 8; // 成
+}
+
+message UpdateReminderResp {
+}
+
+message DelReminderReq {
+  int64 id = 1; //id
+  int64 userId = 2;
+}
+
+message DelReminderResp {
+}
+
+message GetReminderByIdReq {
+  int64 id = 1; //id
+}
+
+message GetReminderByIdResp {
+  Reminder reminder = 1; //reminder
+}
+
+message SearchReminderReq {
+  int64 page = 1; //page
+  int64 limit = 2; //limit
+  int64 id = 3; //id
+  int64 userId = 4; //鍒涘缓鎻愰啋鐢ㄦ埛id
+  int64 createTime = 5; //createTime
+  int64 updateTime = 6; //updateTime
+  int64 reminderTime = 7; //鎻愰啋鏃堕棿
+  string content = 8; //鎻愰啋鍐呭
+  int64 status = 9; //0寰呮彁閱掞紝1宸叉彁閱掞紝2宸插畬鎴?  int64 member = 10; //0鎻愰啋鑷繁锛?鎻愰啋浜插弸锛?鍏卞悓鎻愰啋
+  string rereminder = 11; //閲嶅
+  int64  lastId = 12; // 页面最后一条记录的id
+  int64  member = 13; // 页面最后一条记录的id
+}
+
+message SearchReminderResp {
+  repeated Reminder reminder = 1; //reminder
+}
+
+
+
+// ------------------------------------ 
+// Rpc Func
+// ------------------------------------ 
+
+service reminder{ 
+
+	 //-----------------------reminder----------------------- 
+	 rpc AddReminder(AddReminderReq) returns (AddReminderResp); 
+	 rpc UpdateReminder(UpdateReminderReq) returns (UpdateReminderResp); 
+	 rpc DelReminder(DelReminderReq) returns (DelReminderResp); 
+	 rpc GetReminderById(GetReminderByIdReq) returns (GetReminderByIdResp); 
+	 rpc SearchReminder(SearchReminderReq) returns (SearchReminderResp); 
+
+}

@@ -29,10 +29,10 @@ type (
 
 type (
     ReminderListReq {
-        LastId int64 `json:"lastId"`
-        Page int64 `json:"page"`
-        PageSize int64 `json:"pageSize"`
-        status int64 `json:"status"` //0待提醒，1已提醒，2已完成
+        LastId int64 `form:"lastId"`
+        Page int64 `form:"page"`
+        PageSize int64 `form:"pageSize"`
+        status int64 `form:"status"` //0待提醒，1已提醒，2已完成
     }
     ReminderListResp {
         List []Reminder `json:"list"`
@@ -45,6 +45,7 @@ type (
         ReminderTime int64 `json:"reminderTime"`    //提醒时间
         Content string `json:"content"`             //提醒内容
         member int64 `json:"member"`                //0提醒自己，1提醒亲友，2共同提醒
+        status int64   `json:"status"`
     }
     ModifyReminderResp {
         Id int `json:"id"`
@@ -57,5 +58,14 @@ type (
     }
     DeleteReminderResp {
         Id int `json:"id"`
+    }
+)
+
+type (
+    ReminderByIdReq {
+        Id int `form:"id"`
+    }
+    ReminderByIdResp {
+        reminder Reminder `json:"reminder"`
     }
 )

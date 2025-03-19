@@ -23,6 +23,10 @@ service lottery {
 	@handler reminderList
 	get /reminder/list (ReminderListReq) returns (ReminderListResp)
 
+	@doc "通过id获取reminder"
+	@handler reminderById
+	get /reminder/reminderById (ReminderByIdReq) returns (ReminderByIdResp)
+
 	@doc "reminder create"
 	@handler createReminder
 	post /reminder/create (CreateReminderReq) returns (CreateReminderResp)
