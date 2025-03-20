@@ -4,9 +4,9 @@ import (
 	"flag"
 	"fmt"
 
-	"looklook/app/reminder/cmd/api/internal/config"
-	"looklook/app/reminder/cmd/api/internal/handler"
-	"looklook/app/reminder/cmd/api/internal/svc"
+	"looklook/app/recode/cmd/api/internal/config"
+	"looklook/app/recode/cmd/api/internal/handler"
+	"looklook/app/recode/cmd/api/internal/svc"
 
 	"github.com/zeromicro/go-zero/core/conf"
 	"github.com/zeromicro/go-zero/rest"

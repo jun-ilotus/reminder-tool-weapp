@@ -1,0 +1,65 @@
+syntax = "v1"
+
+info(
+    title: "事项服务"
+    desc: "事项服务"
+    author: "ilotus"
+    version: "v1"
+)
+
+type Items {
+    Id int64 `json:"id"`
+    UserId int64 `json:"userId"`                //发起事项用户ID
+    Content string `json:"content"`             //事项名
+    member int64 `json:"member"`                //0自己，1贡献
+}
+
+type (
+    CreateItemsReq {
+        Content string `json:"content"`             //事项名
+        member int64 `json:"member"`                //0自己，1贡献
+    }
+    CreateItemsResp {
+        Id int `json:"id"`
+    }
+)
+
+type (
+    ItemsListReq {
+        LastId int64 `form:"lastId"`
+        Page int64 `form:"page"`
+        PageSize int64 `form:"pageSize"`
+    }
+    ItemsListResp {
+        List []Items `json:"list"`
+    }
+)
+
+type (
+    ModifyItemsReq {
+        Id int64 `json:"id"`
+        Content string `json:"content"`             //事项名
+        member int64 `json:"member"`                //0自己，1贡献
+    }
+    ModifyItemsResp {
+        Id int `json:"id"`
+    }
+)
+
+type (
+    DeleteItemsReq {
+        Id int `json:"id"`
+    }
+    DeleteItemsResp {
+        Id int `json:"id"`
+    }
+)
+
+type (
+    ItemsByIdReq {
+        Id int `form:"id"`
+    }
+    ItemsByIdResp {
+        recode Items `json:"items"`
+    }
+)

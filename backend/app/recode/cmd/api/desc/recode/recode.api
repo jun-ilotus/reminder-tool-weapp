@@ -1,0 +1,69 @@
+syntax = "v1"
+
+info(
+    title: "记录服务"
+    desc: "记录服务"
+    author: "ilotus"
+    version: "v1"
+)
+
+type Recode {
+    Id int64 `json:"id"`
+    UserId int64 `json:"userId"`                //发起事项用户ID
+    ItemsId int64 `json:"itemsId"`
+    Content string `json:"content"`             //事项名
+    RecodeTime int64 `json:"recodeTime"`
+}
+
+type (
+    CreateRecodeReq {
+        ItemsId int64 `json:"itemsId"`
+        Content string `json:"content"`
+        RecodeTime int64 `json:"recodeTime"`
+    }
+    CreateRecodeResp {
+        Id int `json:"id"`
+    }
+)
+
+type (
+    RecodeListReq {
+        LastId int64 `form:"lastId"`
+        Page int64 `form:"page"`
+        PageSize int64 `form:"pageSize"`
+        ItemsId int64 `form:"itemsId"`
+    }
+    RecodeListResp {
+        List []Recode `json:"list"`
+        recodeDayCount int64 `json:"recodeDayCount"`
+        recodeDaySpaced float32 `json:"recodeDaySpaced"`
+    }
+)
+
+type (
+    ModifyRecodeReq {
+        Id int64 `json:"id"`
+        Content string `json:"content"`             //事项名
+    }
+    ModifyRecodeResp {
+        Id int `json:"id"`
+    }
+)
+
+type (
+    DeleteRecodeReq {
+        Id int `json:"id"`
+    }
+    DeleteRecodeResp {
+        Id int `json:"id"`
+    }
+)
+
+type (
+    RecodeByIdReq {
+        Id int `form:"id"`
+    }
+    RecodeByIdResp {
+        recode Recode `json:"recode"`
+    }
+)

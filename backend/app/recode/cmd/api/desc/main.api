@@ -1,0 +1,70 @@
+syntax = "v1"
+
+info (
+	title:   "记录服务"
+	desc:    "记录服务"
+	author:  "ilotus"
+	version: "v1"
+)
+
+import (
+	"items/items.api"
+	"recode/recode.api"
+)
+
+//=====================================> lottery-lottery v1 <=================================
+//need login
+@server (
+	prefix: recode/v1
+	group:  items
+	jwt:    JwtAuth
+)
+service recode {
+	@doc "items list"
+	@handler itemsList
+	get /items/list (ItemsListReq) returns (ItemsListResp)
+
+	@doc "通过id获取items"
+	@handler itemsById
+	get /items/itemsById (ItemsByIdReq) returns (ItemsByIdResp)
+
+	@doc "items create"
+	@handler createItems
+	post /items/create (CreateItemsReq) returns (CreateItemsResp)
+
+	@doc "items modify"
+	@handler modifyItems
+	post /items/modify (ModifyItemsReq) returns (ModifyItemsResp)
+
+	@doc "items delete"
+	@handler deleteItems
+	post /items/delete (DeleteItemsReq) returns (DeleteItemsResp)
+}
+
+@server (
+	prefix: recode/v1
+	group:  recode
+	jwt:    JwtAuth
+)
+service recode {
+	@doc "recode list"
+	@handler recodeList
+	get /recode/list (RecodeListReq) returns (RecodeListResp)
+
+	@doc "通过id获取recode"
+	@handler recodeById
+	get /recode/recodeById (RecodeByIdReq) returns (RecodeByIdResp)
+
+	@doc "recode create"
+	@handler createRecode
+	post /recode/create (CreateRecodeReq) returns (CreateRecodeResp)
+
+	@doc "recode modify"
+	@handler modifyRecode
+	post /recode/modify (ModifyRecodeReq) returns (ModifyRecodeResp)
+
+	@doc "recode delete"
+	@handler deleteRecode
+	post /recode/delete (DeleteRecodeReq) returns (DeleteRecodeResp)
+}
+

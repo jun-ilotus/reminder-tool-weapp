@@ -1,0 +1,161 @@
+syntax = "proto3";
+
+option go_package ="./pb";
+
+package pb;
+
+// ------------------------------------ 
+// Messages
+// ------------------------------------ 
+
+//--------------------------------items--------------------------------
+message Items {
+  int64 id = 1; //id
+  int64 userId = 2; //鐢ㄦ埛id
+  int64 createTime = 3; //createTime
+  int64 updateTime = 4; //updateTime
+  string content = 5; //浜嬮」鍚?
+  int64 member = 6; //0鑷繁  1鍏辨湁
+}
+
+message AddItemsReq {
+  int64 userId = 1; //鐢ㄦ埛id
+  string content = 2; //浜嬮」鍚?
+  int64 member = 3; //0鑷繁  1鍏辨湁
+}
+
+message AddItemsResp {
+    int64 id = 1;
+}
+
+message UpdateItemsReq {
+  int64 id = 1; //id
+  int64 userId = 2; //鐢ㄦ埛id
+  string content = 3; //浜嬮」鍚?
+   int64 member = 4; //0鑷繁  1鍏辨湁
+}
+
+message UpdateItemsResp {
+}
+
+message DelItemsReq {
+  int64 id = 1; //id
+  int64 user_id = 2;
+}
+
+message DelItemsResp {
+}
+
+message GetItemsByIdReq {
+  int64 id = 1; //id
+}
+
+message GetItemsByIdResp {
+  Items items = 1; //items
+}
+
+message SearchItemsReq {
+  int64 page = 1; //page
+  int64 limit = 2; //limit
+  int64 id = 3; //id
+  int64 userId = 4; //鐢ㄦ埛id
+  int64 createTime = 5; //createTime
+  int64 updateTime = 6; //updateTime
+  string content = 7; //浜嬮」鍚?
+   int64 member = 8; //0鑷繁  1鍏辨湁
+}
+
+message SearchItemsResp {
+  repeated Items items = 1; //items
+}
+
+//--------------------------------recode--------------------------------
+message Recode {
+  int64 id = 1; //id
+  int64 userId = 2; //userId
+  int64 itemsId = 3; //鍏宠仈鐨刬tems_id
+  int64 createTime = 4; //createTime
+  int64 updateTime = 5; //updateTime
+  string content = 6; //澶囨敞
+  int64 recodeTime = 7;
+}
+
+message AddRecodeReq {
+  int64 userId = 1; //userId
+  int64 itemsId = 2; //鍏宠仈鐨刬tems_id
+  string content = 3; //澶囨敞
+  int64 recodeTime = 4;
+}
+
+message AddRecodeResp {
+    int64 id = 1;
+}
+
+message UpdateRecodeReq {
+  int64 id = 1; //id
+  int64 userId = 2; //userId
+  int64 itemsId = 3; //鍏宠仈鐨刬tems_id
+  string content = 4; //澶囨敞
+  int64 recodeTime = 7;
+}
+
+message UpdateRecodeResp {
+}
+
+message DelRecodeReq {
+  int64 id = 1; //id
+  int64 userId = 2;
+  int64 intimateId = 3;
+}
+
+message DelRecodeResp {
+}
+
+message GetRecodeByIdReq {
+  int64 id = 1; //id
+}
+
+message GetRecodeByIdResp {
+  Recode recode = 1; //recode
+}
+
+message SearchRecodeReq {
+  int64 page = 1; //page
+  int64 limit = 2; //limit
+  int64 id = 3; //id
+  int64 userId = 4; //userId
+  int64 itemsId = 5; //鍏宠仈鐨刬tems_id
+  int64 createTime = 6; //createTime
+  int64 updateTime = 7; //updateTime
+  string content = 8; //澶囨敞
+  int64 recodeTime = 9;
+}
+
+message SearchRecodeResp {
+  repeated Recode recode = 1; //recode
+  int64 recodeDayCount = 2;
+  float recodeDaySpaced = 3;
+}
+
+
+
+// ------------------------------------ 
+// Rpc Func
+// ------------------------------------ 
+
+service recode{
+
+	 //-----------------------items----------------------- 
+	 rpc AddItems(AddItemsReq) returns (AddItemsResp); 
+	 rpc UpdateItems(UpdateItemsReq) returns (UpdateItemsResp); 
+	 rpc DelItems(DelItemsReq) returns (DelItemsResp); 
+	 rpc GetItemsById(GetItemsByIdReq) returns (GetItemsByIdResp); 
+	 rpc SearchItems(SearchItemsReq) returns (SearchItemsResp); 
+	 //-----------------------recode----------------------- 
+	 rpc AddRecode(AddRecodeReq) returns (AddRecodeResp); 
+	 rpc UpdateRecode(UpdateRecodeReq) returns (UpdateRecodeResp); 
+	 rpc DelRecode(DelRecodeReq) returns (DelRecodeResp); 
+	 rpc GetRecodeById(GetRecodeByIdReq) returns (GetRecodeByIdResp); 
+	 rpc SearchRecode(SearchRecodeReq) returns (SearchRecodeResp); 
+
+}

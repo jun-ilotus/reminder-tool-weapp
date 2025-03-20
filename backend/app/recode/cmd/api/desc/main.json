@@ -1,0 +1,775 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "记录服务",
+    "description": "记录服务",
+    "version": "v1"
+  },
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/recode/v1/items/create": {
+      "post": {
+        "summary": "items create",
+        "operationId": "createItems",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/CreateItemsResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateItemsReq"
+            }
+          }
+        ],
+        "tags": [
+          "items"
+        ],
+        "security": [
+          {
+            "apiKey": []
+          }
+        ]
+      }
+    },
+    "/recode/v1/items/delete": {
+      "post": {
+        "summary": "items delete",
+        "operationId": "deleteItems",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/DeleteItemsResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/DeleteItemsReq"
+            }
+          }
+        ],
+        "tags": [
+          "items"
+        ],
+        "security": [
+          {
+            "apiKey": []
+          }
+        ]
+      }
+    },
+    "/recode/v1/items/itemsById": {
+      "get": {
+        "summary": "通过id获取items",
+        "operationId": "itemsById",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/ItemsByIdResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "tags": [
+          "items"
+        ],
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "security": [
+          {
+            "apiKey": []
+          }
+        ]
+      }
+    },
+    "/recode/v1/items/list": {
+      "get": {
+        "summary": "items list",
+        "operationId": "itemsList",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/ItemsListResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "lastId",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "items"
+        ],
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "security": [
+          {
+            "apiKey": []
+          }
+        ]
+      }
+    },
+    "/recode/v1/items/modify": {
+      "post": {
+        "summary": "items modify",
+        "operationId": "modifyItems",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/ModifyItemsResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ModifyItemsReq"
+            }
+          }
+        ],
+        "tags": [
+          "items"
+        ],
+        "security": [
+          {
+            "apiKey": []
+          }
+        ]
+      }
+    },
+    "/recode/v1/recode/create": {
+      "post": {
+        "summary": "recode create",
+        "operationId": "createRecode",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/CreateRecodeResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateRecodeReq"
+            }
+          }
+        ],
+        "tags": [
+          "recode"
+        ],
+        "security": [
+          {
+            "apiKey": []
+          }
+        ]
+      }
+    },
+    "/recode/v1/recode/delete": {
+      "post": {
+        "summary": "recode delete",
+        "operationId": "deleteRecode",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/DeleteRecodeResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/DeleteRecodeReq"
+            }
+          }
+        ],
+        "tags": [
+          "recode"
+        ],
+        "security": [
+          {
+            "apiKey": []
+          }
+        ]
+      }
+    },
+    "/recode/v1/recode/list": {
+      "get": {
+        "summary": "recode list",
+        "operationId": "recodeList",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/RecodeListResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "lastId",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "itemsId",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "recode"
+        ],
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "security": [
+          {
+            "apiKey": []
+          }
+        ]
+      }
+    },
+    "/recode/v1/recode/modify": {
+      "post": {
+        "summary": "recode modify",
+        "operationId": "modifyRecode",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/ModifyRecodeResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ModifyRecodeReq"
+            }
+          }
+        ],
+        "tags": [
+          "recode"
+        ],
+        "security": [
+          {
+            "apiKey": []
+          }
+        ]
+      }
+    },
+    "/recode/v1/recode/recodeById": {
+      "get": {
+        "summary": "通过id获取recode",
+        "operationId": "recodeById",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/RecodeByIdResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "tags": [
+          "recode"
+        ],
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "security": [
+          {
+            "apiKey": []
+          }
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "CreateItemsReq": {
+      "type": "object",
+      "properties": {
+        "content": {
+          "type": "string",
+          "description": "事项名"
+        },
+        "member": {
+          "type": "integer",
+          "format": "int64",
+          "description": "0自己，1贡献"
+        }
+      },
+      "title": "CreateItemsReq",
+      "required": [
+        "content",
+        "member"
+      ]
+    },
+    "CreateItemsResp": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int32"
+        }
+      },
+      "title": "CreateItemsResp",
+      "required": [
+        "id"
+      ]
+    },
+    "CreateRecodeReq": {
+      "type": "object",
+      "properties": {
+        "itemsId": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "content": {
+          "type": "string"
+        },
+        "recodeTime": {
+          "type": "integer",
+          "format": "int64"
+        }
+      },
+      "title": "CreateRecodeReq",
+      "required": [
+        "itemsId",
+        "content",
+        "recodeTime"
+      ]
+    },
+    "CreateRecodeResp": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int32"
+        }
+      },
+      "title": "CreateRecodeResp",
+      "required": [
+        "id"
+      ]
+    },
+    "DeleteItemsReq": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int32"
+        }
+      },
+      "title": "DeleteItemsReq",
+      "required": [
+        "id"
+      ]
+    },
+    "DeleteItemsResp": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int32"
+        }
+      },
+      "title": "DeleteItemsResp",
+      "required": [
+        "id"
+      ]
+    },
+    "DeleteRecodeReq": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int32"
+        }
+      },
+      "title": "DeleteRecodeReq",
+      "required": [
+        "id"
+      ]
+    },
+    "DeleteRecodeResp": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int32"
+        }
+      },
+      "title": "DeleteRecodeResp",
+      "required": [
+        "id"
+      ]
+    },
+    "Items": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "userId": {
+          "type": "integer",
+          "format": "int64",
+          "description": "发起事项用户ID"
+        },
+        "content": {
+          "type": "string",
+          "description": "事项名"
+        },
+        "member": {
+          "type": "integer",
+          "format": "int64",
+          "description": "0自己，1贡献"
+        }
+      },
+      "title": "Items",
+      "required": [
+        "id",
+        "userId",
+        "content",
+        "member"
+      ]
+    },
+    "ItemsByIdReq": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int32"
+        }
+      },
+      "title": "ItemsByIdReq",
+      "required": [
+        "id"
+      ]
+    },
+    "ItemsByIdResp": {
+      "type": "object",
+      "properties": {
+        "items": {
+          "$ref": "#/definitions/Items"
+        }
+      },
+      "title": "ItemsByIdResp",
+      "required": [
+        "items"
+      ]
+    },
+    "ItemsListReq": {
+      "type": "object",
+      "properties": {
+        "lastId": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "page": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "pageSize": {
+          "type": "integer",
+          "format": "int64"
+        }
+      },
+      "title": "ItemsListReq",
+      "required": [
+        "lastId",
+        "page",
+        "pageSize"
+      ]
+    },
+    "ItemsListResp": {
+      "type": "object",
+      "properties": {
+        "list": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Items"
+          }
+        }
+      },
+      "title": "ItemsListResp",
+      "required": [
+        "list"
+      ]
+    },
+    "ModifyItemsReq": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "content": {
+          "type": "string",
+          "description": "事项名"
+        },
+        "member": {
+          "type": "integer",
+          "format": "int64",
+          "description": "0自己，1贡献"
+        }
+      },
+      "title": "ModifyItemsReq",
+      "required": [
+        "id",
+        "content",
+        "member"
+      ]
+    },
+    "ModifyItemsResp": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int32"
+        }
+      },
+      "title": "ModifyItemsResp",
+      "required": [
+        "id"
+      ]
+    },
+    "ModifyRecodeReq": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "content": {
+          "type": "string",
+          "description": "事项名"
+        }
+      },
+      "title": "ModifyRecodeReq",
+      "required": [
+        "id",
+        "content"
+      ]
+    },
+    "ModifyRecodeResp": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int32"
+        }
+      },
+      "title": "ModifyRecodeResp",
+      "required": [
+        "id"
+      ]
+    },
+    "Recode": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "userId": {
+          "type": "integer",
+          "format": "int64",
+          "description": "发起事项用户ID"
+        },
+        "itemsId": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "content": {
+          "type": "string",
+          "description": "事项名"
+        },
+        "recodeTime": {
+          "type": "integer",
+          "format": "int64"
+        }
+      },
+      "title": "Recode",
+      "required": [
+        "id",
+        "userId",
+        "itemsId",
+        "content",
+        "recodeTime"
+      ]
+    },
+    "RecodeByIdReq": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int32"
+        }
+      },
+      "title": "RecodeByIdReq",
+      "required": [
+        "id"
+      ]
+    },
+    "RecodeByIdResp": {
+      "type": "object",
+      "properties": {
+        "recode": {
+          "$ref": "#/definitions/Recode"
+        }
+      },
+      "title": "RecodeByIdResp",
+      "required": [
+        "recode"
+      ]
+    },
+    "RecodeListReq": {
+      "type": "object",
+      "properties": {
+        "lastId": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "page": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "pageSize": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "itemsId": {
+          "type": "integer",
+          "format": "int64"
+        }
+      },
+      "title": "RecodeListReq",
+      "required": [
+        "lastId",
+        "page",
+        "pageSize",
+        "itemsId"
+      ]
+    },
+    "RecodeListResp": {
+      "type": "object",
+      "properties": {
+        "list": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Recode"
+          }
+        }
+      },
+      "title": "RecodeListResp",
+      "required": [
+        "list"
+      ]
+    }
+  },
+  "securityDefinitions": {
+    "apiKey": {
+      "type": "apiKey",
+      "description": "Enter JWT Bearer token **_only_**",
+      "name": "Authorization",
+      "in": "header"
+    }
+  }
+}
