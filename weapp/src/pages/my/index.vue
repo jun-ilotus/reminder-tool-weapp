@@ -76,6 +76,11 @@ interface LoginParams {
     iv: string;
     encryptedData: string;
 }
+interface ApiResponse {
+    success: boolean;
+    data?: any,
+    message?: string;
+}
 
 // 调用登录接口
 async function loginReq(params: LoginParams) {
@@ -83,11 +88,11 @@ async function loginReq(params: LoginParams) {
     const result = await postAction('/usercenter/v1/user/wxMiniAuth', params, {
       loadingTitle: '正在登录...', // 请求时显示的加载提示
       toastDuration: 1500 // 错误提示的显示时长
-    });
+    }, false) as ApiResponse;
 
     if (result.success) {
-    //   console.log('登录成功', result.data);
       store.setLogin({
+        is_login: true,
         accessToken: result.data.accessToken,
         accessExpire: result.data.accessExpire,
         refreshAfter: result.data.refreshAfter,

@@ -41,9 +41,8 @@ export function request (params: RequestParams) {
         if (res.data.code === 200) { // 具体逻辑可参考接口返回的数据结构
           resolve({...res.data, success: true })
         } else {
-          console.log('message', res.data.message.message)
-          resolve({ message: res.data.message.message, success: false })
-          showError(res.data.message.message, toastDuration)
+          resolve({ message: "失败", success: false })
+          // showError(res.data.message.message, toastDuration)
         }
       },
       fail: (res) => {

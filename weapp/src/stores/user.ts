@@ -18,6 +18,7 @@ const useUserStore = defineStore('user', {
     }),
     actions: {
       setLogin(value) {
+        this.is_login = value.is_login
         this.accessToken = value.accessToken
         this.accessExpire = value.accessExpire
         this.refreshAfter = value.refreshAfter

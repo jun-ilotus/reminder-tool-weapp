@@ -1,8 +1,17 @@
 import { request } from './request'
 import { useUserStore } from 'src/stores'
+import { useTabbarStore } from 'src/stores'
+import Taro from '@tarojs/taro'
 
-export function getAction (url: string, parameter = {}, args = {}, isToken: false) {
+export function getAction (url: string, parameter = {}, args = {}, isToken: boolean) {
     if (isToken) {
+        if (!useUserStore().getIsLogin) {
+            useTabbarStore().setTabbarSelectedName("my")
+            Taro.redirectTo({ url: '/pages/my/index' })
+            return new Promise(resolve =>
+                resolve({ message: '请先登录！', success: false })
+            )
+        }
         return request({
             url: url,
             method: 'GET',
@@ -23,6 +32,13 @@ export function getAction (url: string, parameter = {}, args = {}, isToken: fals
 }
 export function postAction (url: string, parameter = {}, args = {}, isToken: boolean) {
   if (isToken) {
+    if (!useUserStore().getIsLogin) {
+        useTabbarStore().setTabbarSelectedName("my")
+        Taro.redirectTo({ url: '/pages/my/index' })
+        return new Promise(resolve =>
+            resolve({ message: '请先登录！', success: false })
+        )
+    }
     return request({
         url: url,
         method: 'POST',

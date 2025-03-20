@@ -52,6 +52,10 @@
     "@tarojs/shared": "4.0.9",
     "@tarojs/taro": "4.0.9",
     "pinia": "^3.0.1",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "taro-ui": "^3.3.0",
+    "taro-ui-vue3": "^1.0.0-alpha.21",
     "vue": "^3.3.0"
   },
   "devDependencies": {
