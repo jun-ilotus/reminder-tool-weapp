@@ -38,5 +38,9 @@ service reminder {
 	@doc "reminder delete"
 	@handler deleteReminder
 	post /reminder/delete (DeleteReminderReq) returns (DeleteReminderResp)
+
+	@doc "修改提醒状态"
+	@handler DoneRemindered
+	post /reminder/done (DoneReminderedReq) returns (DoneReminderedResp)
 }
 

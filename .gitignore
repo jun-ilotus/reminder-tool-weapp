@@ -17,6 +17,8 @@ backend/data/*
 .vscode
 .vscode/
 
+*.yaml
+
 usercenter.yaml
 reminder.yaml
 mqueue.yaml

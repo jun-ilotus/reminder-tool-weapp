@@ -14,16 +14,19 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 	server.AddRoutes(
 		[]rest.Route{
 			{
+				// 登录
 				Method:  http.MethodPost,
 				Path:    "/user/login",
 				Handler: user.LoginHandler(serverCtx),
 			},
 			{
+				// 注册
 				Method:  http.MethodPost,
 				Path:    "/user/register",
 				Handler: user.RegisterHandler(serverCtx),
 			},
 			{
+				// 小程序注册登录
 				Method:  http.MethodPost,
 				Path:    "/user/wxMiniAuth",
 				Handler: user.WxMiniAuthHandler(serverCtx),
@@ -35,6 +38,7 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 	server.AddRoutes(
 		[]rest.Route{
 			{
+				// 获得用户数据
 				Method:  http.MethodPost,
 				Path:    "/user/detail",
 				Handler: user.DetailHandler(serverCtx),

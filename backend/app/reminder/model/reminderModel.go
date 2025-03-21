@@ -2,6 +2,7 @@ package model
 
 import (
 	"context"
+	"database/sql"
 	"fmt"
 	"github.com/pkg/errors"
 	"github.com/zeromicro/go-zero/core/stores/cache"
@@ -20,7 +21,7 @@ type (
 		// 自定义方法
 		GetLastId(ctx context.Context) (int64, error)
 		ReminderList(ctx context.Context, status, userId int64) ([]*Reminder, error)
-		DoneRemindered(ctx context.Context, reminderId int64) error
+		DoneRemindered(ctx context.Context, reminderId, status int64) error
 	}
 
 	customReminderModel struct {
@@ -51,17 +52,19 @@ func (c *customReminderModel) ReminderList(ctx context.Context, status, userId i
 	var resp []*Reminder
 	err := c.QueryRowsNoCacheCtx(ctx, &resp, query, status, userId)
 	if err != nil {
-		return nil, errors.Wrapf(xerr.NewErrCode(xerr.DB_ERROR), "QueryRowsNoCacheCtx, &resp:%v, query:%v, status:%v, userId:%v, error: %v", &resp, query, status, userId, err)
+		return nil, errors.Wrapf(xerr.NewErrCode(xerr.DB_ERROR), "ReminderList, &resp:%v, query:%v, status:%v, userId:%v, error: %v", &resp, query, status, userId, err)
 	}
 	return resp, nil
 }
 
-func (c *customReminderModel) DoneRemindered(ctx context.Context, reminderId int64) error {
-	var resp int64
-	query := fmt.Sprintf("update %s set `status` = 1 where `id` = ?", c.table)
-	err := c.QueryRowNoCacheCtx(ctx, &resp, query, reminderId)
+func (c *customReminderModel) DoneRemindered(ctx context.Context, reminderId, status int64) error {
+	query := fmt.Sprintf("update %s set `status` = ? where `id` = ?", c.table)
+
+	_, err := c.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (sql.Result, error) {
+		return conn.Exec(query, status, reminderId)
+	})
 	if err != nil {
-		return errors.Wrapf(xerr.NewErrCode(xerr.DB_ERROR), "GetLastId, error: %v", err)
+		return errors.Wrapf(xerr.NewErrCode(xerr.DB_ERROR), "DoneRemindered, reminderId:%v error: %v", reminderId, err)
 	}
 	return nil
 }

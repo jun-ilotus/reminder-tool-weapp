@@ -27,7 +27,7 @@ func NewDoneReminderedLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Do
 
 func (l *DoneReminderedLogic) DoneRemindered(in *pb.DoneReminderedReq) (*pb.DoneReminderedResp, error) {
 
-	err := l.svcCtx.ReminderModel.DoneRemindered(l.ctx, in.Id)
+	err := l.svcCtx.ReminderModel.DoneRemindered(l.ctx, in.Id, in.Status)
 	if err != nil {
 		return nil, errors.Wrapf(xerr.NewErrCode(xerr.DB_ERROR), "更新失败 err: %v", err)
 	}

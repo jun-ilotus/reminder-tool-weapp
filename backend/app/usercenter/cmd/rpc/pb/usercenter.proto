@@ -13,6 +13,7 @@ message User {
   int64  sex = 4;
   string avatar = 5;
   string info = 6;
+  int64 intimateId = 7;
 }
 
 message UserAuth {

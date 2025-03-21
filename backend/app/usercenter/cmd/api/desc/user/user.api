@@ -14,6 +14,7 @@ type User {
 	Sex      int64  `json:"sex"`
 	Avatar   string `json:"avatar"`
 	Info     string `json:"info"`
+	intimateId int64 `json:"intimateId"`
 }
 
 type (

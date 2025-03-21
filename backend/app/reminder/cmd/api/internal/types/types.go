@@ -19,6 +19,14 @@ type DeleteReminderResp struct {
 	Id int `json:"id"`
 }
 
+type DoneReminderedReq struct {
+	Id     int64 `json:"id"`
+	Status int64 `json:"status"`
+}
+
+type DoneReminderedResp struct {
+}
+
 type ModifyReminderReq struct {
 	Id           int64  `json:"id"`
 	ReminderTime int64  `json:"reminderTime"` //提醒时间

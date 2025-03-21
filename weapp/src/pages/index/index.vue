@@ -110,15 +110,9 @@ const choose = (item) => {
     })
   } else if (item.key === 1) {  //完成
     console.log(clickReminder.value)
-    modifyReq(
-      clickReminder.value.id, 
-      clickReminder.value.content,
-      clickReminder.value.reminderTimeStape,
-      clickReminder.value.member,
-      2
-    )
+    modifyReq(clickReminder.value.id, 2)
   } else if (item.key === 2) {  //删除
-
+    deleteReq(clickReminder.value.id)
   }
 }
 
@@ -189,12 +183,9 @@ const tabChange = () => {
   }
 }
 
-async function modifyReq(reminderId, content, reminderTime, member, status) {
+async function modifyReq(reminderId, status) {
   try {
-    const result = await postAction('/reminder/v1/reminder/modify', {
-        reminderTime: reminderTime,
-        content: content,
-        member: member,
+    const result = await postAction('/reminder/v1/reminder/done', {
         id: reminderId,
         status: status,
     }, {
@@ -212,6 +203,38 @@ async function modifyReq(reminderId, content, reminderTime, member, status) {
     } else {
         Taro.showToast({
             title: '修改失败！' + result.message,
+            icon: 'error', // 'error' 'success' 'loading' 'none'
+            duration: 1500
+        })
+    }
+  } catch (error) {
+    Taro.showToast({
+        title: '请求异常!',
+        icon: 'error', // 'error' 'success' 'loading' 'none'
+        duration: 1500
+    })
+  }
+}
+
+async function deleteReq(reminderId) {
+  try {
+    const result = await postAction('/reminder/v1/reminder/delete', {
+        id: reminderId,
+    }, {
+      loadingTitle: '正在删除...', // 请求时显示的加载提示
+      toastDuration: 1500 // 错误提示的显示时长
+    }, true) as ApiResponse;
+
+    if (result.success) {
+        Taro.showToast({
+            title: '删除成功！',
+            icon: 'success', // 'error' 'success' 'loading' 'none'
+            duration: 1000
+        })
+        getReminderList()
+    } else {
+        Taro.showToast({
+            title: '删除失败！' + result.message,
             icon: 'error', // 'error' 'success' 'loading' 'none'
             duration: 1500
         })

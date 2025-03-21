@@ -26,6 +26,12 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Handler: reminder.DeleteReminderHandler(serverCtx),
 			},
 			{
+				// 修改提醒状态
+				Method:  http.MethodPost,
+				Path:    "/reminder/done",
+				Handler: reminder.DoneReminderedHandler(serverCtx),
+			},
+			{
 				// reminder list
 				Method:  http.MethodGet,
 				Path:    "/reminder/list",

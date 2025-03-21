@@ -95,14 +95,14 @@ func (l *WxMiniProgramNotifyUserHandler) ProcessTask(ctx context.Context, t *asy
 	//	return nil
 	//}
 
-	// 修改了或者删除的该提醒
+	// 修改了或者删除的该提醒  查看状态是不是待提醒
 	reminderById, err := l.svcCtx.ReminderRpc.GetReminderById(ctx, &reminder.GetReminderByIdReq{
 		Id: int64(p.ReminderId),
 	})
 	if err != nil {
 		return nil
 	}
-	if reminderById.Reminder.ReminderTime != p.ReminderTime {
+	if reminderById.Reminder.ReminderTime != p.ReminderTime || reminderById.Reminder.Status != 0 {
 		return nil
 	}
 
@@ -137,7 +137,8 @@ func (l *WxMiniProgramNotifyUserHandler) ProcessTask(ctx context.Context, t *asy
 	}
 
 	_, err = l.svcCtx.ReminderRpc.DoneRemindered(ctx, &reminder.DoneReminderedReq{
-		Id: int64(p.ReminderId),
+		Id:     int64(p.ReminderId),
+		Status: 1,
 	})
 
 	return nil

@@ -69,3 +69,13 @@ type (
         reminder Reminder `json:"reminder"`
     }
 )
+
+type (
+    DoneReminderedReq {
+        Id int64 `json:"id"`
+        status int64 `json:"status"`
+    }
+    DoneReminderedResp {
+
+    }
+)

@@ -26,6 +26,8 @@
                 {{store.getNickName || '加载中...'}}
             </nut-grid-item>
         </nut-grid>
+        <nut-cell title="亲密好友" is-link></nut-cell>
+
     </div>
     <Tabbar></Tabbar>
 </template>

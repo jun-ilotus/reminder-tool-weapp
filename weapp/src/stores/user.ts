@@ -15,6 +15,7 @@ const useUserStore = defineStore('user', {
         sex: 0,
         avatar: "",
         info: "",
+        intimateId: 0,
     }),
     actions: {
       setLogin(value) {
@@ -43,6 +44,7 @@ const useUserStore = defineStore('user', {
                 this.sex = result.data.userInfo.sex
                 this.avatar = result.data.userInfo.avatar
                 this.info = result.data.userInfo.info
+                this.intimateId = result.data.userInfo.intimateId
             } else {
                 Taro.showToast({
                     title: '登录失败！' + result.message,
