@@ -10,6 +10,8 @@ type Config struct {
 	DB struct {
 		DataSource string
 	}
-	Cache           cache.CacheConf
-	ReminderRpcConf zrpc.RpcClientConf
+	Cache             cache.CacheConf
+	ReminderRpcConf   zrpc.RpcClientConf
+	UsercenterRpcConf zrpc.RpcClientConf
+	WxMiniConf        WxMiniConf
 }

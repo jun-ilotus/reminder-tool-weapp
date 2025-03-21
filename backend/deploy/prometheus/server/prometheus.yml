@@ -8,56 +8,6 @@ scrape_configs:
     scrape_interval: 5s  #global catch time
     static_configs:
       - targets: ['127.0.0.1:9090']
-
-  - job_name: 'order-api'
-    static_configs:
-      - targets: [ 'looklook:4001' ]
-        labels:
-          job: order-api
-          app: order-api
-          env: dev
-  - job_name: 'order-rpc'
-    static_configs:
-      - targets: [ 'looklook:4002' ]
-        labels:
-          job: order-rpc
-          app: order-rpc
-          env: dev
-  - job_name: 'order-mq'
-    static_configs:
-      - targets: [ 'looklook:4003' ]
-        labels:
-          job: order-mq
-          app: order-mq
-          env: dev
-  - job_name: 'payment-api'
-    static_configs:
-      - targets: [ 'looklook:4004' ]
-        labels:
-          job: payment-api
-          app: payment-api
-          env: dev
-  - job_name: 'payment-rpc'
-    static_configs:
-      - targets: [ 'looklook:4005' ]
-        labels:
-          job: payment-rpc
-          app: payment-rpc
-          env: dev
-  - job_name: 'travel-api'
-    static_configs:
-      - targets: [ 'looklook:4006' ]
-        labels:
-          job: travel-api
-          app: travel-api
-          env: dev
-  - job_name: 'travel-rpc'
-    static_configs:
-      - targets: [ 'looklook:4007' ]
-        labels:
-          job: travel-rpc
-          app: travel-rpc
-          env: dev
   - job_name: 'usercenter-api'
     static_configs:
       - targets: ['looklook:4008']
@@ -85,5 +35,34 @@ scrape_configs:
         labels:
           job: mqueue-scheduler
           app: mqueue-scheduler
+          env: dev
+
+  - job_name: 'reminder-api'
+    static_configs:
+      - targets: [ 'looklook:4012' ]
+        labels:
+          job: reminder-api
+          app: reminder-api
+          env: dev
+  - job_name: 'reminder-rpc'
+    static_configs:
+      - targets: [ 'looklook:4013' ]
+        labels:
+          job: reminder-rpc
+          app: reminder-rpc
+          env: dev
+  - job_name: 'recode-api'
+    static_configs:
+      - targets: [ 'looklook:4014' ]
+        labels:
+          job: recode-api
+          app: recode-api
+          env: dev
+  - job_name: 'recode-rpc'
+    static_configs:
+      - targets: [ 'looklook:4015' ]
+        labels:
+          job: recode-rpc
+          app: recode-rpc
           env: dev
 

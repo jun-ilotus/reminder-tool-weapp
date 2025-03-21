@@ -24,6 +24,7 @@ const (
 	Reminder_DelReminder_FullMethodName     = "/pb.reminder/DelReminder"
 	Reminder_GetReminderById_FullMethodName = "/pb.reminder/GetReminderById"
 	Reminder_SearchReminder_FullMethodName  = "/pb.reminder/SearchReminder"
+	Reminder_DoneRemindered_FullMethodName  = "/pb.reminder/DoneRemindered"
 )
 
 // ReminderClient is the client API for Reminder service.
@@ -36,6 +37,7 @@ type ReminderClient interface {
 	DelReminder(ctx context.Context, in *DelReminderReq, opts ...grpc.CallOption) (*DelReminderResp, error)
 	GetReminderById(ctx context.Context, in *GetReminderByIdReq, opts ...grpc.CallOption) (*GetReminderByIdResp, error)
 	SearchReminder(ctx context.Context, in *SearchReminderReq, opts ...grpc.CallOption) (*SearchReminderResp, error)
+	DoneRemindered(ctx context.Context, in *DoneReminderedReq, opts ...grpc.CallOption) (*DoneReminderedResp, error)
 }
 
 type reminderClient struct {
@@ -96,6 +98,16 @@ func (c *reminderClient) SearchReminder(ctx context.Context, in *SearchReminderR
 	return out, nil
 }
 
+func (c *reminderClient) DoneRemindered(ctx context.Context, in *DoneReminderedReq, opts ...grpc.CallOption) (*DoneReminderedResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(DoneReminderedResp)
+	err := c.cc.Invoke(ctx, Reminder_DoneRemindered_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ReminderServer is the server API for Reminder service.
 // All implementations must embed UnimplementedReminderServer
 // for forward compatibility.
@@ -106,6 +118,7 @@ type ReminderServer interface {
 	DelReminder(context.Context, *DelReminderReq) (*DelReminderResp, error)
 	GetReminderById(context.Context, *GetReminderByIdReq) (*GetReminderByIdResp, error)
 	SearchReminder(context.Context, *SearchReminderReq) (*SearchReminderResp, error)
+	DoneRemindered(context.Context, *DoneReminderedReq) (*DoneReminderedResp, error)
 	mustEmbedUnimplementedReminderServer()
 }
 
@@ -130,6 +143,9 @@ func (UnimplementedReminderServer) GetReminderById(context.Context, *GetReminder
 }
 func (UnimplementedReminderServer) SearchReminder(context.Context, *SearchReminderReq) (*SearchReminderResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SearchReminder not implemented")
+}
+func (UnimplementedReminderServer) DoneRemindered(context.Context, *DoneReminderedReq) (*DoneReminderedResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DoneRemindered not implemented")
 }
 func (UnimplementedReminderServer) mustEmbedUnimplementedReminderServer() {}
 func (UnimplementedReminderServer) testEmbeddedByValue()                  {}
@@ -242,6 +258,24 @@ func _Reminder_SearchReminder_Handler(srv interface{}, ctx context.Context, dec 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Reminder_DoneRemindered_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DoneReminderedReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ReminderServer).DoneRemindered(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Reminder_DoneRemindered_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ReminderServer).DoneRemindered(ctx, req.(*DoneReminderedReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Reminder_ServiceDesc is the grpc.ServiceDesc for Reminder service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -268,6 +302,10 @@ var Reminder_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "SearchReminder",
 			Handler:    _Reminder_SearchReminder_Handler,
+		},
+		{
+			MethodName: "DoneRemindered",
+			Handler:    _Reminder_DoneRemindered_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

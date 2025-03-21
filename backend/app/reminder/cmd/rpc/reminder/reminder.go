@@ -18,6 +18,8 @@ type (
 	AddReminderResp     = pb.AddReminderResp
 	DelReminderReq      = pb.DelReminderReq
 	DelReminderResp     = pb.DelReminderResp
+	DoneReminderedReq   = pb.DoneReminderedReq
+	DoneReminderedResp  = pb.DoneReminderedResp
 	GetReminderByIdReq  = pb.GetReminderByIdReq
 	GetReminderByIdResp = pb.GetReminderByIdResp
 	Reminder            = pb.Reminder
@@ -33,6 +35,7 @@ type (
 		DelReminder(ctx context.Context, in *DelReminderReq, opts ...grpc.CallOption) (*DelReminderResp, error)
 		GetReminderById(ctx context.Context, in *GetReminderByIdReq, opts ...grpc.CallOption) (*GetReminderByIdResp, error)
 		SearchReminder(ctx context.Context, in *SearchReminderReq, opts ...grpc.CallOption) (*SearchReminderResp, error)
+		DoneRemindered(ctx context.Context, in *DoneReminderedReq, opts ...grpc.CallOption) (*DoneReminderedResp, error)
 	}
 
 	defaultReminderZrpcClient struct {
@@ -70,4 +73,9 @@ func (m *defaultReminderZrpcClient) GetReminderById(ctx context.Context, in *Get
 func (m *defaultReminderZrpcClient) SearchReminder(ctx context.Context, in *SearchReminderReq, opts ...grpc.CallOption) (*SearchReminderResp, error) {
 	client := pb.NewReminderClient(m.cli.Conn())
 	return client.SearchReminder(ctx, in, opts...)
+}
+
+func (m *defaultReminderZrpcClient) DoneRemindered(ctx context.Context, in *DoneReminderedReq, opts ...grpc.CallOption) (*DoneReminderedResp, error) {
+	client := pb.NewReminderClient(m.cli.Conn())
+	return client.DoneRemindered(ctx, in, opts...)
 }

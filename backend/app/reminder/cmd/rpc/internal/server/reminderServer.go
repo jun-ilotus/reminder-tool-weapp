@@ -48,3 +48,8 @@ func (s *ReminderServer) SearchReminder(ctx context.Context, in *pb.SearchRemind
 	l := logic.NewSearchReminderLogic(ctx, s.svcCtx)
 	return l.SearchReminder(in)
 }
+
+func (s *ReminderServer) DoneRemindered(ctx context.Context, in *pb.DoneReminderedReq) (*pb.DoneReminderedResp, error) {
+	l := logic.NewDoneReminderedLogic(ctx, s.svcCtx)
+	return l.DoneRemindered(in)
+}

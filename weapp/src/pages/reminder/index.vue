@@ -1,6 +1,6 @@
 <template>
     <nut-form>
-        <nut-textarea v-model="content" limit-show :max-length="50" placeholder="提醒内容" />
+        <nut-textarea v-model="content" limit-show :max-length="20" placeholder="提醒内容" />
         <nut-form-item label="提醒时间">
             <nut-input v-model="reminderTimeString" readonly   @click="show = true" />
         </nut-form-item>
@@ -100,7 +100,16 @@ const reset = () => {
 
 const submit = () => {
     if (createOrModify === 0) {
-        createReq(content.value, reminderTime.value, member.value)
+      Taro.requestSubscribeMessage({
+        tmplIds:["T6iprDxSmNa_hmMQDSrfJAGxTulxZh3dkBTycKWpXlI"],
+        entityIds:["T6iprDxSmNa_hmMQDSrfJAGxTulxZh3dkBTycKWpXlI"],
+        success: function (res) { 
+          console.log(res)
+          if (res.T6iprDxSmNa_hmMQDSrfJAGxTulxZh3dkBTycKWpXlI === "accept") {
+            createReq(content.value, reminderTime.value, member.value)
+          }
+        }
+      })
     } else {
         modifyReq(content.value, reminderTime.value, member.value, status)
     }

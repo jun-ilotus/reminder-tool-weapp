@@ -14,6 +14,7 @@ type Config struct {
 	JwtAuth struct {
 		AccessSecret string
 	}
-	Cache           cache.CacheConf
-	ReminderRpcConf zrpc.RpcClientConf
+	Cache             cache.CacheConf
+	ReminderRpcConf   zrpc.RpcClientConf
+	UsercenterRpcConf zrpc.RpcClientConf
 }

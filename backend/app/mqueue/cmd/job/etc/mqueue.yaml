@@ -27,13 +27,17 @@ Redis:
 
 #WxMiniConf
 WxMiniConf:
-  AppId: wx2add729fadddddd
-  Secret: 20365395b3de9b2a9351ddddddd
+  AppId: wx7e8638c813ae725d
+  Secret: 7a1add871cbc05b13d88190f05104932
+
+WxMsgConf:
+  EventToken: RKeAteaxQU5zH16Wywq1v4nuOj2J4L6t
+  EncodingAESKey: aMVQyJiuml5AEZCJ4t8Vu6g6b1fJnoR9VQ7kd5vc0X4
 
 #rpc service.
-OrderRpcConf:
+ReminderRpcConf:
   Endpoints:
-    - 127.0.0.1:2001
+    - 127.0.0.1:2006
   NonBlock: true
 
 UsercenterRpcConf:

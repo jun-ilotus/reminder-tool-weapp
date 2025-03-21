@@ -7,7 +7,6 @@ import (
 	"looklook/app/mqueue/cmd/job/jobtype"
 )
 
-
 type CronJob struct {
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
@@ -25,16 +24,16 @@ func (l *CronJob) Register() *asynq.ServeMux {
 
 	mux := asynq.NewServeMux()
 
-	//scheduler job
-	mux.Handle(jobtype.ScheduleSettleRecord,NewSettleRecordHandler(l.svcCtx))
+	////scheduler job
+	//mux.Handle(jobtype.ScheduleSettleRecord,NewSettleRecordHandler(l.svcCtx))
+	//
+	////defer job
+	//mux.Handle(jobtype.DeferCloseHomestayOrder,NewCloseHomestayOrderHandler(l.svcCtx))
 
-	//defer job
-	mux.Handle(jobtype.DeferCloseHomestayOrder,NewCloseHomestayOrderHandler(l.svcCtx))
+	mux.Handle(jobtype.MsgWxMiniProgramNotifyUser, NewWxMiniProgramNotifyUserHandler(l.svcCtx))
 
 	//queue job , asynq support queue job
 	// wait you fill..
 
 	return mux
 }
-
-

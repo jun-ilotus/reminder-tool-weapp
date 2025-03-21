@@ -20,6 +20,7 @@ type (
 		// 自定义方法
 		GetLastId(ctx context.Context) (int64, error)
 		ReminderList(ctx context.Context, status, userId int64) ([]*Reminder, error)
+		DoneRemindered(ctx context.Context, reminderId int64) error
 	}
 
 	customReminderModel struct {
@@ -53,4 +54,14 @@ func (c *customReminderModel) ReminderList(ctx context.Context, status, userId i
 		return nil, errors.Wrapf(xerr.NewErrCode(xerr.DB_ERROR), "QueryRowsNoCacheCtx, &resp:%v, query:%v, status:%v, userId:%v, error: %v", &resp, query, status, userId, err)
 	}
 	return resp, nil
+}
+
+func (c *customReminderModel) DoneRemindered(ctx context.Context, reminderId int64) error {
+	var resp int64
+	query := fmt.Sprintf("update %s set `status` = 1 where `id` = ?", c.table)
+	err := c.QueryRowNoCacheCtx(ctx, &resp, query, reminderId)
+	if err != nil {
+		return errors.Wrapf(xerr.NewErrCode(xerr.DB_ERROR), "GetLastId, error: %v", err)
+	}
+	return nil
 }

@@ -13,10 +13,10 @@ Log:
   Level: error
 
 #监控
-#Prometheus:
-#  Host: 0.0.0.0
-#  Port: 4012
-#  Path: /metrics
+Prometheus:
+  Host: 0.0.0.0
+  Port: 4012
+  Path: /metrics
 
 #链路追踪
 #Telemetry:

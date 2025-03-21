@@ -18,7 +18,7 @@ import (
 	group:  reminder
 	jwt:    JwtAuth
 )
-service lottery {
+service reminder {
 	@doc "reminder list"
 	@handler reminderList
 	get /reminder/list (ReminderListReq) returns (ReminderListResp)

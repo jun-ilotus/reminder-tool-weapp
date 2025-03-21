@@ -82,6 +82,11 @@ message SearchReminderResp {
   repeated Reminder reminder = 1; //reminder
 }
 
+message doneReminderedReq {
+    int64 id = 1;
+}
+message doneReminderedResp {
+}
 
 
 // ------------------------------------ 
@@ -96,5 +101,5 @@ service reminder{
 	 rpc DelReminder(DelReminderReq) returns (DelReminderResp); 
 	 rpc GetReminderById(GetReminderByIdReq) returns (GetReminderByIdResp); 
 	 rpc SearchReminder(SearchReminderReq) returns (SearchReminderResp); 
-
+     rpc DoneRemindered(doneReminderedReq) returns (doneReminderedResp);
 }
