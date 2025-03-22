@@ -15,6 +15,8 @@ type User {
 	Avatar   string `json:"avatar"`
 	Info     string `json:"info"`
 	intimateId int64 `json:"intimateId"`
+	intimateNickname string `json:"intimateNickname"`
+	intimateAvatar string `json:"intimateAvatar"`
 }
 
 type (
@@ -59,5 +61,31 @@ type (
 	}
 	UserInfoResp {
 		UserInfo User `json:"userInfo"`
+	}
+)
+
+type (
+	BindIntimateReq {
+		IntimateAccessToken string `json:"intimateAccessToken"`
+	}
+	BindIntimateResp {
+		IntimateUserId int64 `json:"intimateUserId"`
+	}
+)
+
+type (
+	CancelBindIntimateReq {
+	}
+	CancelBindIntimateResp {
+	}
+)
+
+type (
+	modifyUserInfoReq {
+		Avatar string `json:"avatar"`
+		Nickname string `json:"nickname"`
+	}
+	modifyUserInfoResp {
+
 	}
 )

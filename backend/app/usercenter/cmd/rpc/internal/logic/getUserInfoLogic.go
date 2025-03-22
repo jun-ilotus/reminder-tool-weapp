@@ -32,7 +32,7 @@ func NewGetUserInfoLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetUs
 
 func (l *GetUserInfoLogic) GetUserInfo(in *pb.GetUserInfoReq) (*pb.GetUserInfoResp, error) {
 
-	user, err := l.svcCtx.UserModel.FindOne(l.ctx,in.Id)
+	user, err := l.svcCtx.UserModel.FindUserById(l.ctx, in.Id)
 	if err != nil && err != model.ErrNotFound {
 		return nil, errors.Wrapf(xerr.NewErrCode(xerr.DB_ERROR), "GetUserInfo find user db err , id:%d , err:%v", in.Id, err)
 	}
@@ -41,6 +41,15 @@ func (l *GetUserInfoLogic) GetUserInfo(in *pb.GetUserInfoReq) (*pb.GetUserInfoRe
 	}
 	var respUser usercenter.User
 	_ = copier.Copy(&respUser, user)
+
+	if respUser.IntimateId != 0 {
+		intimateUser, err := l.svcCtx.UserModel.FindUserById(l.ctx, respUser.IntimateId)
+		if err != nil {
+			return nil, errors.Wrapf(xerr.NewErrCode(xerr.DB_ERROR), "GetUserInfo find intimateUser db err , id:%d , err:%v", respUser.IntimateId, err)
+		}
+		respUser.IntimateNickname = intimateUser.Nickname
+		respUser.IntimateAvatar = intimateUser.Avatar
+	}
 
 	return &usercenter.GetUserInfoResp{
 		User: &respUser,

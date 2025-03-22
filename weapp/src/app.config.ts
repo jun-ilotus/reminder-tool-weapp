@@ -6,6 +6,8 @@ export default {
     'pages/recode/index',
     'pages/addRecode/index',
     'pages/calendar/index',
+    'pages/intimate/index',
+    'pages/userinfo/index',
   ],
   window: {
     backgroundTextStyle: 'light',

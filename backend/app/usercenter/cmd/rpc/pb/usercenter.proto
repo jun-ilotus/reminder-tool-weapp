@@ -14,6 +14,8 @@ message User {
   string avatar = 5;
   string info = 6;
   int64 intimateId = 7;
+  string intimateNickname = 8;
+  string intimateAvatar = 9;
 }
 
 message UserAuth {
@@ -82,6 +84,30 @@ message GenerateTokenResp {
   int64  refreshAfter = 3;
 }
 
+message BindIntimateReq {
+    int64 userId = 1;
+    int64 intimateUserId = 2;
+}
+message BindIntimateResp {
+
+}
+
+message CancelBindIntimateReq {
+    int64 userId = 1;
+    int64 intimateUserId = 2;
+}
+message CancelBindIntimateResp {
+
+}
+
+message ModifyUserInfoReq {
+    string avatar = 1;
+    string nickname = 2;
+    int64 userId = 3;
+}
+message ModifyUserInfoResp {
+}
+
 //service
 service usercenter {
   rpc login(LoginReq) returns(LoginResp);
@@ -90,4 +116,7 @@ service usercenter {
   rpc getUserAuthByAuthKey(GetUserAuthByAuthKeyReq) returns(GetUserAuthByAuthKeyResp);
   rpc getUserAuthByUserId(GetUserAuthByUserIdReq) returns(GetUserAuthyUserIdResp);
   rpc generateToken(GenerateTokenReq) returns(GenerateTokenResp);
+  rpc BindIntimate(BindIntimateReq) returns (BindIntimateResp);
+  rpc CancelBindIntimate(CancelBindIntimateReq) returns (CancelBindIntimateResp);
+  rpc ModifyUserInfo(ModifyUserInfoReq) returns (ModifyUserInfoResp);
 }

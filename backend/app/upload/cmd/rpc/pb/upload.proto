@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+option go_package = "./pb";
+
+package pb;
+
+//req 、resp
+message FileUploadReq {
+  int64 userId = 1;
+  string fileName = 2;
+  string ext = 3;
+  int64 size = 4;
+  bytes fileData = 5;
+}
+message FileUploadResp {
+  string  url = 1;
+}
+
+
+//service
+service upload {
+  rpc upload(FileUploadReq) returns(FileUploadResp);
+}

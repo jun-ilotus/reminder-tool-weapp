@@ -42,5 +42,17 @@ service usercenter {
 	@doc "获得用户数据"
 	@handler detail
 	post /user/detail (UserInfoReq) returns (UserInfoResp)
+
+	@doc "绑定亲密好友"
+	@handler bindIntimate
+	post /user/bindIntimate (BindIntimateReq) returns (BindIntimateResp)
+
+	@doc "取消绑定亲密好友"
+	@handler cancelbindIntimate
+	post /user/cancelBindIntimate (CancelBindIntimateReq) returns (CancelBindIntimateResp)
+
+	@doc "修改用户信息"
+	@handler modifyInfo
+	post /user/modifyInfo (modifyUserInfoReq) returns (modifyUserInfoResp)
 }
 

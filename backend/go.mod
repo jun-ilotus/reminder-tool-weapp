@@ -15,10 +15,12 @@ require (
 require (
 	github.com/ArtisanCloud/PowerWeChat/v3 v3.4.2
 	github.com/Masterminds/squirrel v1.5.2
+	github.com/aliyun/aliyun-oss-go-sdk v3.0.2+incompatible
 	github.com/go-playground/locales v0.14.1
 	github.com/go-playground/universal-translator v0.18.1
 	github.com/go-playground/validator/v10 v10.25.0
 	github.com/golang-module/carbon/v2 v2.0.1
+	github.com/satori/go.uuid v1.2.0
 	k8s.io/apimachinery v0.27.0-alpha.3
 )
 

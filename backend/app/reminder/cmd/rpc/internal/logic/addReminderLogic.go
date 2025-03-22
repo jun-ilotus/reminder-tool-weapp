@@ -43,6 +43,12 @@ func (l *AddReminderLogic) AddReminder(in *pb.AddReminderReq) (*pb.AddReminderRe
 	reminder.ReminderTime = time.Unix(in.ReminderTime, 0)
 	reminder.Content = in.Content
 	reminder.Member = in.Member
+	userInfo, err := l.svcCtx.UsercenterRpc.GetUserInfo(l.ctx, &usercenter.GetUserInfoReq{
+		Id: in.UserId,
+	})
+	if err != nil {
+		return nil, errors.Wrapf(xerr.NewErrCode(xerr.DB_ERROR), "usercenter rpc Exception user_id : %+v , err: %v", in.UserId, err)
+	}
 
 	// 获取用户openID
 	userAuth, err := l.svcCtx.UsercenterRpc.GetUserAuthByUserId(l.ctx, &usercenter.GetUserAuthByUserIdReq{
@@ -96,7 +102,15 @@ func (l *AddReminderLogic) AddReminder(in *pb.AddReminderReq) (*pb.AddReminderRe
 			return errors.Wrapf(xerr.NewErrCode(xerr.DB_ERROR), "Reminder Database Exception reminder : %+v , err: %v", reminder, err)
 		}
 		id, _ = insert.LastInsertId()
-		// todo  if member == 1 2 给亲友加
+		// todo  if member == 1 2 给亲友加   一次性订阅暂时无法完成
+
+		if reminder.Member == 1 || reminder.Member == 2 {
+			reminder.UserId = userInfo.User.IntimateId
+			_, err = l.svcCtx.ReminderModel.TransInsert(l.ctx, session, reminder)
+			if err != nil {
+				return errors.Wrapf(xerr.NewErrCode(xerr.DB_ERROR), "Reminder Database Exception reminder : %+v , err: %v", reminder, err)
+			}
+		}
 
 		return nil
 	})

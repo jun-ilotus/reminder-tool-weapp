@@ -13,5 +13,4 @@ type Config struct {
 	Cache             cache.CacheConf
 	ReminderRpcConf   zrpc.RpcClientConf
 	UsercenterRpcConf zrpc.RpcClientConf
-	WxMiniConf        WxMiniConf
 }

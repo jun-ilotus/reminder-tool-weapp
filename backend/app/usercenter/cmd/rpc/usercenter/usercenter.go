@@ -14,6 +14,10 @@ import (
 )
 
 type (
+	BindIntimateReq          = pb.BindIntimateReq
+	BindIntimateResp         = pb.BindIntimateResp
+	CancelBindIntimateReq    = pb.CancelBindIntimateReq
+	CancelBindIntimateResp   = pb.CancelBindIntimateResp
 	GenerateTokenReq         = pb.GenerateTokenReq
 	GenerateTokenResp        = pb.GenerateTokenResp
 	GetUserAuthByAuthKeyReq  = pb.GetUserAuthByAuthKeyReq
@@ -24,6 +28,8 @@ type (
 	GetUserInfoResp          = pb.GetUserInfoResp
 	LoginReq                 = pb.LoginReq
 	LoginResp                = pb.LoginResp
+	ModifyUserInfoReq        = pb.ModifyUserInfoReq
+	ModifyUserInfoResp       = pb.ModifyUserInfoResp
 	RegisterReq              = pb.RegisterReq
 	RegisterResp             = pb.RegisterResp
 	User                     = pb.User
@@ -36,6 +42,9 @@ type (
 		GetUserAuthByAuthKey(ctx context.Context, in *GetUserAuthByAuthKeyReq, opts ...grpc.CallOption) (*GetUserAuthByAuthKeyResp, error)
 		GetUserAuthByUserId(ctx context.Context, in *GetUserAuthByUserIdReq, opts ...grpc.CallOption) (*GetUserAuthyUserIdResp, error)
 		GenerateToken(ctx context.Context, in *GenerateTokenReq, opts ...grpc.CallOption) (*GenerateTokenResp, error)
+		BindIntimate(ctx context.Context, in *BindIntimateReq, opts ...grpc.CallOption) (*BindIntimateResp, error)
+		CancelBindIntimate(ctx context.Context, in *CancelBindIntimateReq, opts ...grpc.CallOption) (*CancelBindIntimateResp, error)
+		ModifyUserInfo(ctx context.Context, in *ModifyUserInfoReq, opts ...grpc.CallOption) (*ModifyUserInfoResp, error)
 	}
 
 	defaultUsercenter struct {
@@ -77,4 +86,19 @@ func (m *defaultUsercenter) GetUserAuthByUserId(ctx context.Context, in *GetUser
 func (m *defaultUsercenter) GenerateToken(ctx context.Context, in *GenerateTokenReq, opts ...grpc.CallOption) (*GenerateTokenResp, error) {
 	client := pb.NewUsercenterClient(m.cli.Conn())
 	return client.GenerateToken(ctx, in, opts...)
+}
+
+func (m *defaultUsercenter) BindIntimate(ctx context.Context, in *BindIntimateReq, opts ...grpc.CallOption) (*BindIntimateResp, error) {
+	client := pb.NewUsercenterClient(m.cli.Conn())
+	return client.BindIntimate(ctx, in, opts...)
+}
+
+func (m *defaultUsercenter) CancelBindIntimate(ctx context.Context, in *CancelBindIntimateReq, opts ...grpc.CallOption) (*CancelBindIntimateResp, error) {
+	client := pb.NewUsercenterClient(m.cli.Conn())
+	return client.CancelBindIntimate(ctx, in, opts...)
+}
+
+func (m *defaultUsercenter) ModifyUserInfo(ctx context.Context, in *ModifyUserInfoReq, opts ...grpc.CallOption) (*ModifyUserInfoResp, error) {
+	client := pb.NewUsercenterClient(m.cli.Conn())
+	return client.ModifyUserInfo(ctx, in, opts...)
 }

@@ -2,9 +2,11 @@ package logic
 
 import (
 	"context"
-	"errors"
 	"github.com/jinzhu/copier"
+	"github.com/pkg/errors"
 	"looklook/app/recode/model"
+	"looklook/app/usercenter/cmd/rpc/usercenter"
+	"looklook/common/xerr"
 
 	"looklook/app/recode/cmd/rpc/internal/svc"
 	"looklook/app/recode/cmd/rpc/pb"
@@ -27,11 +29,24 @@ func NewSearchItemsLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Searc
 }
 
 func (l *SearchItemsLogic) SearchItems(in *pb.SearchItemsReq) (*pb.SearchItemsResp, error) {
+	userInfo, err := l.svcCtx.UsercenterRpc.GetUserInfo(l.ctx, &usercenter.GetUserInfoReq{Id: in.UserId})
+	if err != nil {
+		return nil, errors.Wrapf(xerr.NewErrCode(xerr.DB_ERROR), "查询事项失败 err: %v", err)
+	}
+
 	list, err := l.svcCtx.ItemsModel.ItemsList(l.ctx, in.UserId)
 	if err != nil && !errors.Is(err, model.ErrNotFound) {
-		return nil, err
+		return nil, errors.Wrapf(xerr.NewErrCode(xerr.DB_ERROR), "查询事项失败 err: %v", err)
 	}
-	// todo 查询出共享的事项
+
+	if userInfo.User.IntimateId != 0 {
+		list1, err := l.svcCtx.ItemsModel.ItemsList(l.ctx, userInfo.User.IntimateId)
+		if err != nil {
+			return nil, errors.Wrapf(xerr.NewErrCode(xerr.DB_ERROR), "查询事项失败 err: %v", err)
+		}
+		list = append(list, list1...)
+	}
+
 	var resp []*pb.Items
 	if len(list) > 0 {
 		for _, reminder := range list {

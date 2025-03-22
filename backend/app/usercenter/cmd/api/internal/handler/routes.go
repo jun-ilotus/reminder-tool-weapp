@@ -38,10 +38,28 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 	server.AddRoutes(
 		[]rest.Route{
 			{
+				// 绑定亲密好友
+				Method:  http.MethodPost,
+				Path:    "/user/bindIntimate",
+				Handler: user.BindIntimateHandler(serverCtx),
+			},
+			{
+				// 取消绑定亲密好友
+				Method:  http.MethodPost,
+				Path:    "/user/cancelBindIntimate",
+				Handler: user.CancelbindIntimateHandler(serverCtx),
+			},
+			{
 				// 获得用户数据
 				Method:  http.MethodPost,
 				Path:    "/user/detail",
 				Handler: user.DetailHandler(serverCtx),
+			},
+			{
+				// 修改用户信息
+				Method:  http.MethodPost,
+				Path:    "/user/modifyInfo",
+				Handler: user.ModifyInfoHandler(serverCtx),
 			},
 		},
 		rest.WithJwt(serverCtx.Config.JwtAuth.AccessSecret),

@@ -2,11 +2,13 @@ package logic
 
 import (
 	"context"
-	"errors"
 	"github.com/jinzhu/copier"
+	"github.com/pkg/errors"
 	"looklook/app/recode/cmd/rpc/internal/svc"
 	"looklook/app/recode/cmd/rpc/pb"
 	"looklook/app/recode/model"
+	"looklook/app/usercenter/cmd/rpc/usercenter"
+	"looklook/common/xerr"
 	"time"
 
 	"github.com/zeromicro/go-zero/core/logx"
@@ -27,11 +29,24 @@ func NewSearchRecodeLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Sear
 }
 
 func (l *SearchRecodeLogic) SearchRecode(in *pb.SearchRecodeReq) (*pb.SearchRecodeResp, error) {
+	userInfo, err := l.svcCtx.UsercenterRpc.GetUserInfo(l.ctx, &usercenter.GetUserInfoReq{Id: in.UserId})
+	if err != nil {
+		return nil, errors.Wrapf(xerr.NewErrCode(xerr.DB_ERROR), "查询记录失败 err: %v", err)
+	}
+
 	list, err := l.svcCtx.RecodeModel.RecodeList(l.ctx, in.UserId, in.ItemsId)
 	if err != nil && !errors.Is(err, model.ErrNotFound) {
-		return nil, err
+		return nil, errors.Wrapf(xerr.NewErrCode(xerr.DB_ERROR), "查询记录失败 err: %v", err)
 	}
-	// todo 查询出共享的记录
+
+	if userInfo.User.IntimateId != 0 {
+		list1, err := l.svcCtx.RecodeModel.RecodeList(l.ctx, userInfo.User.IntimateId, in.ItemsId)
+		if err != nil {
+			return nil, errors.Wrapf(xerr.NewErrCode(xerr.DB_ERROR), "查询记录失败 err: %v", err)
+		}
+		list = append(list, list1...)
+	}
+
 	recodeDayCount := 0
 	var recodeDaySpaced float32
 	var resp []*pb.Recode

@@ -25,6 +25,9 @@ const (
 	Usercenter_GetUserAuthByAuthKey_FullMethodName = "/pb.usercenter/getUserAuthByAuthKey"
 	Usercenter_GetUserAuthByUserId_FullMethodName  = "/pb.usercenter/getUserAuthByUserId"
 	Usercenter_GenerateToken_FullMethodName        = "/pb.usercenter/generateToken"
+	Usercenter_BindIntimate_FullMethodName         = "/pb.usercenter/BindIntimate"
+	Usercenter_CancelBindIntimate_FullMethodName   = "/pb.usercenter/CancelBindIntimate"
+	Usercenter_ModifyUserInfo_FullMethodName       = "/pb.usercenter/ModifyUserInfo"
 )
 
 // UsercenterClient is the client API for Usercenter service.
@@ -39,6 +42,9 @@ type UsercenterClient interface {
 	GetUserAuthByAuthKey(ctx context.Context, in *GetUserAuthByAuthKeyReq, opts ...grpc.CallOption) (*GetUserAuthByAuthKeyResp, error)
 	GetUserAuthByUserId(ctx context.Context, in *GetUserAuthByUserIdReq, opts ...grpc.CallOption) (*GetUserAuthyUserIdResp, error)
 	GenerateToken(ctx context.Context, in *GenerateTokenReq, opts ...grpc.CallOption) (*GenerateTokenResp, error)
+	BindIntimate(ctx context.Context, in *BindIntimateReq, opts ...grpc.CallOption) (*BindIntimateResp, error)
+	CancelBindIntimate(ctx context.Context, in *CancelBindIntimateReq, opts ...grpc.CallOption) (*CancelBindIntimateResp, error)
+	ModifyUserInfo(ctx context.Context, in *ModifyUserInfoReq, opts ...grpc.CallOption) (*ModifyUserInfoResp, error)
 }
 
 type usercenterClient struct {
@@ -109,6 +115,36 @@ func (c *usercenterClient) GenerateToken(ctx context.Context, in *GenerateTokenR
 	return out, nil
 }
 
+func (c *usercenterClient) BindIntimate(ctx context.Context, in *BindIntimateReq, opts ...grpc.CallOption) (*BindIntimateResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(BindIntimateResp)
+	err := c.cc.Invoke(ctx, Usercenter_BindIntimate_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *usercenterClient) CancelBindIntimate(ctx context.Context, in *CancelBindIntimateReq, opts ...grpc.CallOption) (*CancelBindIntimateResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(CancelBindIntimateResp)
+	err := c.cc.Invoke(ctx, Usercenter_CancelBindIntimate_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *usercenterClient) ModifyUserInfo(ctx context.Context, in *ModifyUserInfoReq, opts ...grpc.CallOption) (*ModifyUserInfoResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ModifyUserInfoResp)
+	err := c.cc.Invoke(ctx, Usercenter_ModifyUserInfo_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // UsercenterServer is the server API for Usercenter service.
 // All implementations must embed UnimplementedUsercenterServer
 // for forward compatibility.
@@ -121,6 +157,9 @@ type UsercenterServer interface {
 	GetUserAuthByAuthKey(context.Context, *GetUserAuthByAuthKeyReq) (*GetUserAuthByAuthKeyResp, error)
 	GetUserAuthByUserId(context.Context, *GetUserAuthByUserIdReq) (*GetUserAuthyUserIdResp, error)
 	GenerateToken(context.Context, *GenerateTokenReq) (*GenerateTokenResp, error)
+	BindIntimate(context.Context, *BindIntimateReq) (*BindIntimateResp, error)
+	CancelBindIntimate(context.Context, *CancelBindIntimateReq) (*CancelBindIntimateResp, error)
+	ModifyUserInfo(context.Context, *ModifyUserInfoReq) (*ModifyUserInfoResp, error)
 	mustEmbedUnimplementedUsercenterServer()
 }
 
@@ -148,6 +187,15 @@ func (UnimplementedUsercenterServer) GetUserAuthByUserId(context.Context, *GetUs
 }
 func (UnimplementedUsercenterServer) GenerateToken(context.Context, *GenerateTokenReq) (*GenerateTokenResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GenerateToken not implemented")
+}
+func (UnimplementedUsercenterServer) BindIntimate(context.Context, *BindIntimateReq) (*BindIntimateResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method BindIntimate not implemented")
+}
+func (UnimplementedUsercenterServer) CancelBindIntimate(context.Context, *CancelBindIntimateReq) (*CancelBindIntimateResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CancelBindIntimate not implemented")
+}
+func (UnimplementedUsercenterServer) ModifyUserInfo(context.Context, *ModifyUserInfoReq) (*ModifyUserInfoResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ModifyUserInfo not implemented")
 }
 func (UnimplementedUsercenterServer) mustEmbedUnimplementedUsercenterServer() {}
 func (UnimplementedUsercenterServer) testEmbeddedByValue()                    {}
@@ -278,6 +326,60 @@ func _Usercenter_GenerateToken_Handler(srv interface{}, ctx context.Context, dec
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Usercenter_BindIntimate_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(BindIntimateReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UsercenterServer).BindIntimate(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Usercenter_BindIntimate_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UsercenterServer).BindIntimate(ctx, req.(*BindIntimateReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Usercenter_CancelBindIntimate_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CancelBindIntimateReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UsercenterServer).CancelBindIntimate(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Usercenter_CancelBindIntimate_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UsercenterServer).CancelBindIntimate(ctx, req.(*CancelBindIntimateReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Usercenter_ModifyUserInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ModifyUserInfoReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UsercenterServer).ModifyUserInfo(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Usercenter_ModifyUserInfo_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UsercenterServer).ModifyUserInfo(ctx, req.(*ModifyUserInfoReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Usercenter_ServiceDesc is the grpc.ServiceDesc for Usercenter service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -308,6 +410,18 @@ var Usercenter_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "generateToken",
 			Handler:    _Usercenter_GenerateToken_Handler,
+		},
+		{
+			MethodName: "BindIntimate",
+			Handler:    _Usercenter_BindIntimate_Handler,
+		},
+		{
+			MethodName: "CancelBindIntimate",
+			Handler:    _Usercenter_CancelBindIntimate_Handler,
+		},
+		{
+			MethodName: "ModifyUserInfo",
+			Handler:    _Usercenter_ModifyUserInfo_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

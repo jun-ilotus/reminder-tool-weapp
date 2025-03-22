@@ -9,10 +9,10 @@
 
     <nut-form>
         <nut-form-item label="备注">
-            <nut-input v-model="recodeContent"  />
+            <nut-input v-model="recodeContent"  type="text" ></nut-input>
         </nut-form-item>
         <nut-form-item label="记录时间">
-            <nut-input v-model="recodeTimeString" readonly />
+            <nut-input v-model="recodeTimeString" readonly  ></nut-input>
         </nut-form-item>
 
         <nut-space v-if="addOrModify" style="margin-left: 40vw; margin-top: 10px; margin-bottom: 10px;">
@@ -26,12 +26,12 @@
 
     </nut-form>
 
-    <nut-form>
+    <nut-form disabled>
         <nut-form-item label="记录天数">
-            <nut-input v-model="recodeDayCount" readonly />
+            <nut-input v-model="recodeDayCount"  />
         </nut-form-item>
         <nut-form-item label="平均间隔天数">
-            <nut-input v-model="recodeDaySpaced" readonly />
+            <nut-input v-model="recodeDaySpaced"  />
         </nut-form-item>
     </nut-form>
 </template>

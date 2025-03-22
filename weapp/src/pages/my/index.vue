@@ -26,7 +26,8 @@
                 {{store.getNickName || '加载中...'}}
             </nut-grid-item>
         </nut-grid>
-        <nut-cell title="亲密好友" is-link></nut-cell>
+        <nut-cell title="个人信息" is-link @click="userinfo"></nut-cell>
+        <nut-cell title="亲密好友" is-link @click="intimatePage"></nut-cell>
 
     </div>
     <Tabbar></Tabbar>
@@ -40,6 +41,14 @@ import { useUserStore } from "../../stores/user";
 import logoUrl from "../../assets/images/anonymous.png";
 
 const store = useUserStore()
+
+const intimatePage = () => {
+    Taro.navigateTo({ url: '/pages/intimate/index' })
+}
+
+const userinfo = () => {
+    Taro.navigateTo({ url: '/pages/userinfo/index' })
+}
 
 const getInfo = () => {
     Taro.getUserProfile({

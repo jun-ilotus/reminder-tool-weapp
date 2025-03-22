@@ -38,9 +38,3 @@ UsercenterRpcConf:
   Endpoints:
     - 127.0.0.1:2004
   NonBlock: true
-
-#WxMiniConf
-WxMiniConf:
-  AppId: wx7e8638c813ae725d
-  Secret: 7a1add871cbc05b13d88190f05104932
-  ReminderTemplateID: T6iprDxSmNa_hmMQDSrfJAGxTulxZh3dkBTycKWpXlI

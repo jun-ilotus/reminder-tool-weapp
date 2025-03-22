@@ -52,3 +52,18 @@ func (s *UsercenterServer) GenerateToken(ctx context.Context, in *pb.GenerateTok
 	l := logic.NewGenerateTokenLogic(ctx, s.svcCtx)
 	return l.GenerateToken(in)
 }
+
+func (s *UsercenterServer) BindIntimate(ctx context.Context, in *pb.BindIntimateReq) (*pb.BindIntimateResp, error) {
+	l := logic.NewBindIntimateLogic(ctx, s.svcCtx)
+	return l.BindIntimate(in)
+}
+
+func (s *UsercenterServer) CancelBindIntimate(ctx context.Context, in *pb.CancelBindIntimateReq) (*pb.CancelBindIntimateResp, error) {
+	l := logic.NewCancelBindIntimateLogic(ctx, s.svcCtx)
+	return l.CancelBindIntimate(in)
+}
+
+func (s *UsercenterServer) ModifyUserInfo(ctx context.Context, in *pb.ModifyUserInfoReq) (*pb.ModifyUserInfoResp, error) {
+	l := logic.NewModifyUserInfoLogic(ctx, s.svcCtx)
+	return l.ModifyUserInfo(in)
+}

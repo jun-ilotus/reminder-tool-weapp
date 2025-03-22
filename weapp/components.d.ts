@@ -12,12 +12,14 @@ declare module 'vue' {
     NutButton: typeof import('@nutui/nutui-taro')['Button']
     NutCell: typeof import('@nutui/nutui-taro')['Cell']
     NutDatePicker: typeof import('@nutui/nutui-taro')['DatePicker']
+    NutDialog: typeof import('@nutui/nutui-taro')['Dialog']
     NutForm: typeof import('@nutui/nutui-taro')['Form']
     NutFormItem: typeof import('@nutui/nutui-taro')['FormItem']
     NutGrid: typeof import('@nutui/nutui-taro')['Grid']
     NutGridItem: typeof import('@nutui/nutui-taro')['GridItem']
     NutInput: typeof import('@nutui/nutui-taro')['Input']
     NutNavbar: typeof import('@nutui/nutui-taro')['Navbar']
+    NutNotify: typeof import('@nutui/nutui-taro')['Notify']
     NutPopup: typeof import('@nutui/nutui-taro')['Popup']
     NutSpace: typeof import('@nutui/nutui-taro')['Space']
     NutSwipe: typeof import('@nutui/nutui-taro')['Swipe']
@@ -28,6 +30,7 @@ declare module 'vue' {
     NutTabPane: typeof import('@nutui/nutui-taro')['TabPane']
     NutTabs: typeof import('@nutui/nutui-taro')['Tabs']
     NutTextarea: typeof import('@nutui/nutui-taro')['Textarea']
+    NutUploader: typeof import('@nutui/nutui-taro')['Uploader']
     Tabbar: typeof import('./src/components/Tabbar.vue')['default']
   }
 }

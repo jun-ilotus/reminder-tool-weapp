@@ -20,6 +20,7 @@ backend/data/*
 *.yaml
 
 usercenter.yaml
+upload.yaml
 reminder.yaml
 mqueue.yaml
 backend/common/wxnotice

@@ -34,7 +34,7 @@ Cache:
     Pass: G62m50oigInC30sf
 
 #rpc
-#UsercenterRpcConf:
-#  Endpoints:
-#    - 127.0.0.1:2004
-#  NonBlock: true
+UsercenterRpcConf:
+  Endpoints:
+    - 127.0.0.1:2004
+  NonBlock: true

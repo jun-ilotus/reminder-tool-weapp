@@ -16,7 +16,71 @@
     "application/json"
   ],
   "paths": {
-    "usercenter/v1/user/detail": {
+    "/usercenter/v1/user/bindIntimate": {
+      "post": {
+        "summary": "绑定亲密好友",
+        "operationId": "bindIntimate",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BindIntimateResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/BindIntimateReq"
+            }
+          }
+        ],
+        "tags": [
+          "user"
+        ],
+        "security": [
+          {
+            "apiKey": []
+          }
+        ]
+      }
+    },
+    "/usercenter/v1/user/cancelBindIntimate": {
+      "post": {
+        "summary": "取消绑定亲密好友",
+        "operationId": "cancelbindIntimate",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/CancelBindIntimateResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CancelBindIntimateReq"
+            }
+          }
+        ],
+        "tags": [
+          "user"
+        ],
+        "security": [
+          {
+            "apiKey": []
+          }
+        ]
+      }
+    },
+    "/usercenter/v1/user/detail": {
       "post": {
         "summary": "获得用户数据",
         "operationId": "detail",
@@ -38,13 +102,17 @@
             }
           }
         ],
-        "requestBody": {},
         "tags": [
           "user"
+        ],
+        "security": [
+          {
+            "apiKey": []
+          }
         ]
       }
     },
-    "usercenter/v1/user/login": {
+    "/usercenter/v1/user/login": {
       "post": {
         "summary": "登录",
         "operationId": "login",
@@ -66,13 +134,12 @@
             }
           }
         ],
-        "requestBody": {},
         "tags": [
           "user"
         ]
       }
     },
-    "usercenter/v1/user/register": {
+    "/usercenter/v1/user/register": {
       "post": {
         "summary": "注册",
         "operationId": "register",
@@ -94,13 +161,12 @@
             }
           }
         ],
-        "requestBody": {},
         "tags": [
           "user"
         ]
       }
     },
-    "usercenter/v1/user/wxMiniAuth": {
+    "/usercenter/v1/user/wxMiniAuth": {
       "post": {
         "summary": "小程序注册登录",
         "operationId": "wxMiniAuth",
@@ -122,7 +188,6 @@
             }
           }
         ],
-        "requestBody": {},
         "tags": [
           "user"
         ]
@@ -130,6 +195,39 @@
     }
   },
   "definitions": {
+    "BindIntimateReq": {
+      "type": "object",
+      "properties": {
+        "intimateAccessToken": {
+          "type": "string"
+        }
+      },
+      "title": "BindIntimateReq",
+      "required": [
+        "intimateAccessToken"
+      ]
+    },
+    "BindIntimateResp": {
+      "type": "object",
+      "properties": {
+        "intimateUserId": {
+          "type": "integer",
+          "format": "int64"
+        }
+      },
+      "title": "BindIntimateResp",
+      "required": [
+        "intimateUserId"
+      ]
+    },
+    "CancelBindIntimateReq": {
+      "type": "object",
+      "title": "CancelBindIntimateReq"
+    },
+    "CancelBindIntimateResp": {
+      "type": "object",
+      "title": "CancelBindIntimateResp"
+    },
     "LoginReq": {
       "type": "object",
       "properties": {
@@ -228,6 +326,16 @@
         },
         "info": {
           "type": "string"
+        },
+        "intimateId": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "intimateNickname": {
+          "type": "string"
+        },
+        "intimateAvatar": {
+          "type": "string"
         }
       },
       "title": "User",
@@ -237,7 +345,10 @@
         "nickname",
         "sex",
         "avatar",
-        "info"
+        "info",
+        "intimateId",
+        "intimateNickname",
+        "intimateAvatar"
       ]
     },
     "UserInfoReq": {
@@ -306,10 +417,5 @@
       "name": "Authorization",
       "in": "header"
     }
-  },
-  "security": [
-    {
-      "apiKey": []
-    }
-  ]
+  }
 }
