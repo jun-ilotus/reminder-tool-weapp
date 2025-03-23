@@ -10,6 +10,7 @@ import (
 	"looklook/app/usercenter/model"
 	"looklook/common/tool"
 	"looklook/common/xerr"
+	"time"
 )
 
 var ErrUserAlreadyRegisterError = xerr.NewErrMsg("user has been registered")
@@ -42,6 +43,7 @@ func (l *RegisterLogic) Register(in *usercenter.RegisterReq) (*usercenter.Regist
 	if err := l.svcCtx.UserModel.Trans(l.ctx, func(ctx context.Context, session sqlx.Session) error {
 		user := new(model.User)
 		user.Mobile = in.Mobile
+		user.DeleteTime = time.Unix(0, 0)
 		if len(user.Nickname) == 0 {
 			user.Nickname = tool.Krand(8, tool.KC_RAND_KIND_ALL)
 		}

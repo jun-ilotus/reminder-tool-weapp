@@ -50,6 +50,29 @@ func (l *AddReminderLogic) AddReminder(in *pb.AddReminderReq) (*pb.AddReminderRe
 		return nil, errors.Wrapf(xerr.NewErrCode(xerr.DB_ERROR), "usercenter rpc Exception user_id : %+v , err: %v", in.UserId, err)
 	}
 
+	// 添加进数据库
+	err = l.svcCtx.ReminderModel.Trans(l.ctx, func(context context.Context, session sqlx.Session) error {
+		insert, err := l.svcCtx.ReminderModel.TransInsert(l.ctx, session, reminder)
+		if err != nil {
+			return errors.Wrapf(xerr.NewErrCode(xerr.DB_ERROR), "Reminder Database Exception reminder : %+v , err: %v", reminder, err)
+		}
+		id, _ = insert.LastInsertId()
+		// todo  if member == 1 2 给亲友加   一次性订阅暂时无法完成
+
+		if reminder.Member == 1 || reminder.Member == 2 {
+			reminder.UserId = userInfo.User.IntimateId
+			_, err = l.svcCtx.ReminderModel.TransInsert(l.ctx, session, reminder)
+			if err != nil {
+				return errors.Wrapf(xerr.NewErrCode(xerr.DB_ERROR), "Reminder Database Exception reminder : %+v , err: %v", reminder, err)
+			}
+		}
+
+		return nil
+	})
+	if err != nil {
+		return nil, err
+	}
+
 	// 获取用户openID
 	userAuth, err := l.svcCtx.UsercenterRpc.GetUserAuthByUserId(l.ctx, &usercenter.GetUserAuthByUserIdReq{
 		UserId:   in.UserId,
@@ -76,7 +99,7 @@ func (l *AddReminderLogic) AddReminder(in *pb.AddReminderReq) (*pb.AddReminderRe
 		OpenId:       userAuth.UserAuth.AuthKey, //必选，接收者（用户）的 openid
 		PageAddr:     pageAddr,                  //可选，点击模板卡片后的跳转页面，仅限本小程序内的页面。支持带参数,（示例index?foo=bar）。该字段不填则模板无跳转。
 		Data:         string(marshal),
-		ReminderId:   int(reminder.Id),
+		ReminderId:   int(id),
 		ReminderTime: reminder.ReminderTime.Unix(),
 	}
 	payload, err := json.Marshal(p)
@@ -93,29 +116,6 @@ func (l *AddReminderLogic) AddReminder(in *pb.AddReminderReq) (*pb.AddReminderRe
 	_, err = l.svcCtx.AsynqClient.Enqueue(asynq.NewTask(jobtype.MsgWxMiniProgramNotifyUser, payload), asynq.ProcessIn(subTime))
 	if err != nil {
 		return nil, errors.Wrapf(xerr.NewErrCode(xerr.SERVER_COMMON_ERROR), "NoticeLotteryStart payload json marshal err:%+v, payload:%+v", err, p)
-	}
-
-	// 添加进数据库
-	err = l.svcCtx.ReminderModel.Trans(l.ctx, func(context context.Context, session sqlx.Session) error {
-		insert, err := l.svcCtx.ReminderModel.TransInsert(l.ctx, session, reminder)
-		if err != nil {
-			return errors.Wrapf(xerr.NewErrCode(xerr.DB_ERROR), "Reminder Database Exception reminder : %+v , err: %v", reminder, err)
-		}
-		id, _ = insert.LastInsertId()
-		// todo  if member == 1 2 给亲友加   一次性订阅暂时无法完成
-
-		if reminder.Member == 1 || reminder.Member == 2 {
-			reminder.UserId = userInfo.User.IntimateId
-			_, err = l.svcCtx.ReminderModel.TransInsert(l.ctx, session, reminder)
-			if err != nil {
-				return errors.Wrapf(xerr.NewErrCode(xerr.DB_ERROR), "Reminder Database Exception reminder : %+v , err: %v", reminder, err)
-			}
-		}
-
-		return nil
-	})
-	if err != nil {
-		return nil, err
 	}
 
 	return &pb.AddReminderResp{
