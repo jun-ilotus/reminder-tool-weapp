@@ -54,7 +54,7 @@ const onCancel = () => {
     bindDialog.value = false
 }
 
-useShareAppMessage((res) => {
+useShareAppMessage(() => {
     // if (res.from === 'menu') {
     //   // 来自页面内转发按钮
     //   console.log(res.target)
@@ -80,7 +80,7 @@ useReady(() => {
 
 const okBind = () => {
     if (!store.getIsLogin) {
-        getInfo()
+        login()
     } else {
         bindReq()
     }
@@ -96,25 +96,12 @@ const okCancel = () => {
 }
 
 
-const getInfo = () => {
-    Taro.getUserProfile({
-        desc: '用于完善用户资料',
-        success: (res) => {
-            if (res.iv) {
-                login(res.iv, res.encryptedData)
-            }
-        }
-    })
-}
-
-const login = (iv, encryptedData) => {
+const login = () => {
     Taro.login({
         success: function (res) {
             if (res.code) {
                 loginReq({
                     code: res.code,
-                    iv: iv,
-                    encryptedData: encryptedData,
                 });
             } else {
                 Taro.showToast({
@@ -126,20 +113,19 @@ const login = (iv, encryptedData) => {
         }
     })
 }
+
 // 用户登录接口的参数
 interface LoginParams {
     code: string;
-    iv: string;
-    encryptedData: string;
 }
 interface ApiResponse {
     success: boolean;
     data?: any,
     message?: string;
 }
+
 // 调用登录接口
 async function loginReq(params: LoginParams) {
-  try {
     const result = await postAction('/usercenter/v1/user/wxMiniAuth', params, {
       loadingTitle: '正在登录...', // 请求时显示的加载提示
       toastDuration: 1500 // 错误提示的显示时长
@@ -153,21 +139,7 @@ async function loginReq(params: LoginParams) {
         refreshAfter: result.data.refreshAfter,
       })
       store.infoReq()
-      bindReq()
-    } else {
-        Taro.showToast({
-            title: '登录失败！' + result.message,
-            icon: 'none', // 'error' 'success' 'loading' 'none'
-            duration: 1500
-        })
-    }
-  } catch (error) {
-    Taro.showToast({
-        title: '请求异常!',
-        icon: 'none', // 'error' 'success' 'loading' 'none'
-        duration: 1500
-    })
-  }
+    } 
 }
 
 // 调用绑定接口

@@ -6,7 +6,9 @@ import (
 	"looklook/app/usercenter/cmd/api/internal/types"
 	"looklook/app/usercenter/cmd/rpc/usercenter"
 	usercenterModel "looklook/app/usercenter/model"
+	"looklook/common/tool"
 	"looklook/common/xerr"
+	"strings"
 
 	"github.com/pkg/errors"
 	wechat "github.com/silenceper/wechat/v2"
@@ -45,10 +47,10 @@ func (l *WxMiniAuthLogic) WxMiniAuth(req types.WXMiniAuthReq) (*types.WXMiniAuth
 		return nil, errors.Wrapf(ErrWxMiniAuthFailError, "发起授权请求失败 err : %v , code : %s  , authResult : %+v", err, req.Code, authResult)
 	}
 	//2、Parsing WeChat-Mini return data
-	userData, err := miniprogram.GetEncryptor().Decrypt(authResult.SessionKey, req.EncryptedData, req.IV)
-	if err != nil {
-		return nil, errors.Wrapf(ErrWxMiniAuthFailError, "解析数据失败 req : %+v , err: %v , authResult:%+v ", req, err, authResult)
-	}
+	//userData, err := miniprogram.GetEncryptor().Decrypt(authResult.SessionKey, req.EncryptedData, req.IV)
+	//if err != nil {
+	//	return nil, errors.Wrapf(ErrWxMiniAuthFailError, "解析数据失败 req : %+v , err: %v , authResult:%+v ", req, err, authResult)
+	//}
 
 	//3、bind user or login.
 	var userId int64
@@ -61,11 +63,12 @@ func (l *WxMiniAuthLogic) WxMiniAuth(req types.WXMiniAuthReq) (*types.WXMiniAuth
 	}
 	if rpcRsp.UserAuth == nil || rpcRsp.UserAuth.Id == 0 {
 		//bind user.
+		nicknameArr := []string{"用户", tool.Krand(6, tool.KC_RAND_KIND_NUM)}
 
 		//Wechat-Mini Decrypted data
-		mobile := userData.PhoneNumber
-		nickName := userData.NickName
-		avatarURL := userData.AvatarURL
+		mobile := ""
+		nickName := strings.Join(nicknameArr, "")
+		avatarURL := "http://image.jilotus.cn/anonymous.png"
 		registerRsp, err := l.svcCtx.UsercenterRpc.Register(l.ctx, &usercenter.RegisterReq{
 			AuthKey:   authResult.OpenID,
 			AuthType:  usercenterModel.UserAuthTypeSmallWX,

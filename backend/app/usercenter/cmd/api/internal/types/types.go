@@ -58,8 +58,8 @@ type UserInfoResp struct {
 
 type WXMiniAuthReq struct {
 	Code          string `json:"code"`
-	IV            string `json:"iv"`
-	EncryptedData string `json:"encryptedData"`
+	IV            string `json:"iv,optional"`
+	EncryptedData string `json:"encryptedData,optional"`
 }
 
 type WXMiniAuthResp struct {
