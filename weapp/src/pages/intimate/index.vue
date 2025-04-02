@@ -68,6 +68,7 @@ useShareAppMessage(() => {
 
 // 页面显示时 获取reminder数据
 useReady(() => {
+    login()
     const router = useRouter()
     const intimateAccessToken = router.params.accessToken
     diglogContent.value = `你的好友，${router.params.nickname}，请求与你绑定亲密好友关系。`
@@ -79,11 +80,7 @@ useReady(() => {
 })
 
 const okBind = () => {
-    if (!store.getIsLogin) {
-        login()
-    } else {
-        bindReq()
-    }
+    bindReq()
     bindDialog.value = false
 }
 

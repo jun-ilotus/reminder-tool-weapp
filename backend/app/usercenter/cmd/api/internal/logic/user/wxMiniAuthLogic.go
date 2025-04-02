@@ -66,13 +66,11 @@ func (l *WxMiniAuthLogic) WxMiniAuth(req types.WXMiniAuthReq) (*types.WXMiniAuth
 		nicknameArr := []string{"用户", tool.Krand(6, tool.KC_RAND_KIND_NUM)}
 
 		//Wechat-Mini Decrypted data
-		mobile := ""
 		nickName := strings.Join(nicknameArr, "")
 		avatarURL := "http://image.jilotus.cn/anonymous.png"
 		registerRsp, err := l.svcCtx.UsercenterRpc.Register(l.ctx, &usercenter.RegisterReq{
 			AuthKey:   authResult.OpenID,
 			AuthType:  usercenterModel.UserAuthTypeSmallWX,
-			Mobile:    mobile,
 			Nickname:  nickName,
 			AvatarURL: avatarURL,
 		})
