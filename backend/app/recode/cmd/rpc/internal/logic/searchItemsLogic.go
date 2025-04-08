@@ -40,7 +40,7 @@ func (l *SearchItemsLogic) SearchItems(in *pb.SearchItemsReq) (*pb.SearchItemsRe
 	}
 
 	if userInfo.User.IntimateId != 0 {
-		list1, err := l.svcCtx.ItemsModel.ItemsList(l.ctx, userInfo.User.IntimateId)
+		list1, err := l.svcCtx.ItemsModel.ItemsIntimateList(l.ctx, userInfo.User.IntimateId)
 		if err != nil {
 			return nil, errors.Wrapf(xerr.NewErrCode(xerr.DB_ERROR), "查询事项失败 err: %v", err)
 		}

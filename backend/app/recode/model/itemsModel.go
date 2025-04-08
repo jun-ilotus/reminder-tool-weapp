@@ -20,6 +20,7 @@ type (
 		// 自定义方法
 		GetLastId(ctx context.Context) (int64, error)
 		ItemsList(ctx context.Context, userId int64) ([]*Items, error)
+		ItemsIntimateList(ctx context.Context, userId int64) ([]*Items, error)
 	}
 
 	customItemsModel struct {
@@ -47,6 +48,17 @@ func (c *customItemsModel) GetLastId(ctx context.Context) (int64, error) {
 func (c *customItemsModel) ItemsList(ctx context.Context, userId int64) ([]*Items, error) {
 	var query string
 	query = fmt.Sprintf("select %s from %s where user_id = ? order by create_time desc", itemsRows, c.table)
+	var resp []*Items
+	err := c.QueryRowsNoCacheCtx(ctx, &resp, query, userId)
+	if err != nil {
+		return nil, errors.Wrapf(xerr.NewErrCode(xerr.DB_ERROR), "QueryRowsNoCacheCtx, &resp:%v, query:%v, userId:%v, error: %v", &resp, query, userId, err)
+	}
+	return resp, nil
+}
+
+func (c *customItemsModel) ItemsIntimateList(ctx context.Context, userId int64) ([]*Items, error) {
+	var query string
+	query = fmt.Sprintf("select %s from %s where user_id = ? and member = 1 order by create_time desc", itemsRows, c.table)
 	var resp []*Items
 	err := c.QueryRowsNoCacheCtx(ctx, &resp, query, userId)
 	if err != nil {

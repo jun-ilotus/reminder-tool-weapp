@@ -39,7 +39,12 @@ func (l *SearchRecodeLogic) SearchRecode(in *pb.SearchRecodeReq) (*pb.SearchReco
 		return nil, errors.Wrapf(xerr.NewErrCode(xerr.DB_ERROR), "查询记录失败 err: %v", err)
 	}
 
-	if userInfo.User.IntimateId != 0 {
+	item, err := l.svcCtx.ItemsModel.FindOne(l.ctx, in.ItemsId)
+	if err != nil {
+		return nil, errors.Wrapf(xerr.NewErrCode(xerr.DB_ERROR), "查询记录失败 err: %v", err)
+	}
+
+	if userInfo.User.IntimateId != 0 && item.Member == 1 {
 		list1, err := l.svcCtx.RecodeModel.RecodeList(l.ctx, userInfo.User.IntimateId, in.ItemsId)
 		if err != nil {
 			return nil, errors.Wrapf(xerr.NewErrCode(xerr.DB_ERROR), "查询记录失败 err: %v", err)
