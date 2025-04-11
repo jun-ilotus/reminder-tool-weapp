@@ -1,0 +1,36 @@
+syntax = "v1"
+
+info(
+    title: "签到记录实例"
+    desc: "签到记录实例"
+    author: "ilotus"
+)
+
+type Recode {
+    Id       int64  `json:"id"`
+    UserId   string `json:"userId"`
+    sign_date int64 `json:"signDate"`
+}
+
+type (
+    AddRecodeTodayReq {
+
+    }
+    AddRecodeTodayResp {
+        Id int64 `json:"id"`
+    }
+)
+
+type (
+    TestReq {
+        Age        int64  `json:"age" validate:"gte=1,lte=130"`
+        Name       string `json:"name" validate:"required"`
+        Email      string `json:"email" validate:"required,email"`
+        Password   string `json:"password" validate:"required"`
+        RePassword string `json:"re_password" validate:"required"`
+        // 需要使用自定义校验方法checkDate做参数校验的字段Date
+        Date       string `json:"date" validate:"required,datetime=2006-01-02,checkDate"`
+    }
+    TestResp {
+    }
+)

@@ -20,6 +20,7 @@ type (
 
 		ModifyIntimateId(ctx context.Context, userId, intimateId int64) error
 		FindUserById(ctx context.Context, userId int64) (*User, error)
+		TransUpdatePoints(ctx context.Context, session sqlx.Session, userId, points int64) error
 	}
 
 	customUserModel struct {
@@ -56,4 +57,13 @@ func (c *customUserModel) FindUserById(ctx context.Context, userId int64) (*User
 		return nil, errors.Wrapf(xerr.NewErrCode(xerr.DB_ERROR), "FindUserById, &resp:%v, query:%v, userId:%v, error: %v", &resp, query, userId, err)
 	}
 	return &resp, nil
+}
+
+func (c *customUserModel) TransUpdatePoints(ctx context.Context, session sqlx.Session, userId, points int64) error {
+	looklookUsercenterPointsRecodeIdKey := fmt.Sprintf("%s%v", cacheLooklookUsercenterPointsRecodeIdPrefix, userId)
+	_, err := c.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
+		query := fmt.Sprintf("update %s set points = points + ? where `id` = ?", c.table)
+		return session.ExecCtx(ctx, query, points, userId)
+	}, looklookUsercenterPointsRecodeIdKey)
+	return err
 }

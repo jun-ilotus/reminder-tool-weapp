@@ -79,4 +79,17 @@ scrape_configs:
           job: upload-rpc
           app: upload-rpc
           env: dev
-
+  - job_name: 'signin-api'
+    static_configs:
+      - targets: [ 'looklook:4018' ]
+        labels:
+          job: signin-api
+          app: signin-api
+          env: dev
+  - job_name: 'signin-rpc'
+    static_configs:
+      - targets: [ 'looklook:4019' ]
+        labels:
+          job: signin-rpc
+          app: signin-rpc
+          env: dev

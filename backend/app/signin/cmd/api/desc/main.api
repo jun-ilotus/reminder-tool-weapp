@@ -1,0 +1,30 @@
+syntax = "v1"
+
+info (
+	title:   "签到服务"
+	desc:    "签到服务"
+	author:  "ilotus"
+	version: "v1"
+)
+
+import (
+	"recode/recode.api"
+)
+
+//=====================================> lottery-lottery v1 <=================================
+//need login
+@server (
+	prefix: signin/v1
+	group:  recode
+	jwt:    JwtAuth
+)
+service signin {
+	@doc "测试Validator"
+	@handler TestValidator
+	post /lottery/TestValidator (TestReq) returns (TestResp)
+
+	@doc "recode addToday"
+	@handler addToday
+	post /recode/addToday (AddRecodeTodayReq) returns (AddRecodeTodayResp)
+}
+

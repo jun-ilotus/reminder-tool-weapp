@@ -14,6 +14,8 @@ import (
 )
 
 type (
+	AddPointsRecodeReq       = pb.AddPointsRecodeReq
+	AddPointsRecodeResp      = pb.AddPointsRecodeResp
 	BindIntimateReq          = pb.BindIntimateReq
 	BindIntimateResp         = pb.BindIntimateResp
 	CancelBindIntimateReq    = pb.CancelBindIntimateReq
@@ -30,6 +32,7 @@ type (
 	LoginResp                = pb.LoginResp
 	ModifyUserInfoReq        = pb.ModifyUserInfoReq
 	ModifyUserInfoResp       = pb.ModifyUserInfoResp
+	PointsRecode             = pb.PointsRecode
 	RegisterReq              = pb.RegisterReq
 	RegisterResp             = pb.RegisterResp
 	User                     = pb.User
@@ -45,6 +48,7 @@ type (
 		BindIntimate(ctx context.Context, in *BindIntimateReq, opts ...grpc.CallOption) (*BindIntimateResp, error)
 		CancelBindIntimate(ctx context.Context, in *CancelBindIntimateReq, opts ...grpc.CallOption) (*CancelBindIntimateResp, error)
 		ModifyUserInfo(ctx context.Context, in *ModifyUserInfoReq, opts ...grpc.CallOption) (*ModifyUserInfoResp, error)
+		AddPointsRecode(ctx context.Context, in *AddPointsRecodeReq, opts ...grpc.CallOption) (*AddPointsRecodeResp, error)
 	}
 
 	defaultUsercenter struct {
@@ -101,4 +105,9 @@ func (m *defaultUsercenter) CancelBindIntimate(ctx context.Context, in *CancelBi
 func (m *defaultUsercenter) ModifyUserInfo(ctx context.Context, in *ModifyUserInfoReq, opts ...grpc.CallOption) (*ModifyUserInfoResp, error) {
 	client := pb.NewUsercenterClient(m.cli.Conn())
 	return client.ModifyUserInfo(ctx, in, opts...)
+}
+
+func (m *defaultUsercenter) AddPointsRecode(ctx context.Context, in *AddPointsRecodeReq, opts ...grpc.CallOption) (*AddPointsRecodeResp, error) {
+	client := pb.NewUsercenterClient(m.cli.Conn())
+	return client.AddPointsRecode(ctx, in, opts...)
 }

@@ -25,7 +25,7 @@ var (
 	recodeRowsExpectAutoSet   = strings.Join(stringx.Remove(recodeFieldNames, "`id`", "`create_at`", "`create_time`", "`created_at`", "`update_at`", "`update_time`", "`updated_at`"), ",")
 	recodeRowsWithPlaceHolder = strings.Join(stringx.Remove(recodeFieldNames, "`id`", "`create_at`", "`create_time`", "`created_at`", "`update_at`", "`update_time`", "`updated_at`"), "=?,") + "=?"
 
-	cacheRecodeRecodeIdPrefix = "cache:recode:recode:id:"
+	cacheSigninRecodeIdPrefix = "cache:signin:recode:id:"
 )
 
 type (
@@ -54,13 +54,10 @@ type (
 	}
 
 	Recode struct {
-		Id         int64     `db:"id"`
-		UserId     int64     `db:"user_id"`
-		ItemsId    int64     `db:"items_id"` // 关联的items_id
+		Id         int64     `db:"id"`      // 签到记录主键id
+		UserId     int64     `db:"user_id"` // 用户id
 		CreateTime time.Time `db:"create_time"`
-		UpdateTime time.Time `db:"update_time"`
-		Content    string    `db:"content"`     // 备注
-		RecodeTime time.Time `db:"recode_time"` // 记录的日期
+		SignDate   time.Time `db:"sign_date"` // 打卡日期
 	}
 )
 
@@ -72,18 +69,18 @@ func newRecodeModel(conn sqlx.SqlConn, c cache.CacheConf, opts ...cache.Option) 
 }
 
 func (m *defaultRecodeModel) Delete(ctx context.Context, id int64) error {
-	recodeRecodeIdKey := fmt.Sprintf("%s%v", cacheRecodeRecodeIdPrefix, id)
+	signinRecodeIdKey := fmt.Sprintf("%s%v", cacheSigninRecodeIdPrefix, id)
 	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("delete from %s where `id` = ?", m.table)
 		return conn.ExecCtx(ctx, query, id)
-	}, recodeRecodeIdKey)
+	}, signinRecodeIdKey)
 	return err
 }
 
 func (m *defaultRecodeModel) FindOne(ctx context.Context, id int64) (*Recode, error) {
-	recodeRecodeIdKey := fmt.Sprintf("%s%v", cacheRecodeRecodeIdPrefix, id)
+	signinRecodeIdKey := fmt.Sprintf("%s%v", cacheSigninRecodeIdPrefix, id)
 	var resp Recode
-	err := m.QueryRowCtx(ctx, &resp, recodeRecodeIdKey, func(ctx context.Context, conn sqlx.SqlConn, v any) error {
+	err := m.QueryRowCtx(ctx, &resp, signinRecodeIdKey, func(ctx context.Context, conn sqlx.SqlConn, v any) error {
 		query := fmt.Sprintf("select %s from %s where `id` = ? limit 1", recodeRows, m.table)
 		return conn.QueryRowCtx(ctx, v, query, id)
 	})
@@ -98,37 +95,37 @@ func (m *defaultRecodeModel) FindOne(ctx context.Context, id int64) (*Recode, er
 }
 
 func (m *defaultRecodeModel) Insert(ctx context.Context, data *Recode) (sql.Result, error) {
-	recodeRecodeIdKey := fmt.Sprintf("%s%v", cacheRecodeRecodeIdPrefix, data.Id)
+	signinRecodeIdKey := fmt.Sprintf("%s%v", cacheSigninRecodeIdPrefix, data.Id)
 	ret, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
-		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?)", m.table, recodeRowsExpectAutoSet)
-		return conn.ExecCtx(ctx, query, data.UserId, data.ItemsId, data.Content, data.RecodeTime)
-	}, recodeRecodeIdKey)
+		query := fmt.Sprintf("insert into %s (%s) values (?, ?)", m.table, recodeRowsExpectAutoSet)
+		return conn.ExecCtx(ctx, query, data.UserId, data.SignDate)
+	}, signinRecodeIdKey)
 	return ret, err
 }
 
 func (m *defaultRecodeModel) TransInsert(ctx context.Context, session sqlx.Session, data *Recode) (sql.Result, error) {
-	recodeRecodeIdKey := fmt.Sprintf("%s%v", cacheRecodeRecodeIdPrefix, data.Id)
+	signinRecodeIdKey := fmt.Sprintf("%s%v", cacheSigninRecodeIdPrefix, data.Id)
 	ret, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
-		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?)", m.table, recodeRowsExpectAutoSet)
-		return session.ExecCtx(ctx, query, data.UserId, data.ItemsId, data.Content, data.RecodeTime)
-	}, recodeRecodeIdKey)
+		query := fmt.Sprintf("insert into %s (%s) values (?, ?)", m.table, recodeRowsExpectAutoSet)
+		return session.ExecCtx(ctx, query, data.UserId, data.SignDate)
+	}, signinRecodeIdKey)
 	return ret, err
 }
 func (m *defaultRecodeModel) Update(ctx context.Context, data *Recode) error {
-	recodeRecodeIdKey := fmt.Sprintf("%s%v", cacheRecodeRecodeIdPrefix, data.Id)
+	signinRecodeIdKey := fmt.Sprintf("%s%v", cacheSigninRecodeIdPrefix, data.Id)
 	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("update %s set %s where `id` = ?", m.table, recodeRowsWithPlaceHolder)
-		return conn.ExecCtx(ctx, query, data.UserId, data.ItemsId, data.Content, data.RecodeTime, data.Id)
-	}, recodeRecodeIdKey)
+		return conn.ExecCtx(ctx, query, data.UserId, data.SignDate, data.Id)
+	}, signinRecodeIdKey)
 	return err
 }
 
 func (m *defaultRecodeModel) TransUpdate(ctx context.Context, session sqlx.Session, data *Recode) error {
-	recodeRecodeIdKey := fmt.Sprintf("%s%v", cacheRecodeRecodeIdPrefix, data.Id)
+	signinRecodeIdKey := fmt.Sprintf("%s%v", cacheSigninRecodeIdPrefix, data.Id)
 	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("update %s set %s where `id` = ?", m.table, recodeRowsWithPlaceHolder)
-		return session.ExecCtx(ctx, query, data.UserId, data.ItemsId, data.Content, data.RecodeTime, data.Id)
-	}, recodeRecodeIdKey)
+		return session.ExecCtx(ctx, query, data.UserId, data.SignDate, data.Id)
+	}, signinRecodeIdKey)
 	return err
 }
 
@@ -333,7 +330,7 @@ func (m *defaultRecodeModel) SelectBuilder() squirrel.SelectBuilder {
 }
 
 func (m *defaultRecodeModel) formatPrimary(primary any) string {
-	return fmt.Sprintf("%s%v", cacheRecodeRecodeIdPrefix, primary)
+	return fmt.Sprintf("%s%v", cacheSigninRecodeIdPrefix, primary)
 }
 
 func (m *defaultRecodeModel) queryPrimary(ctx context.Context, conn sqlx.SqlConn, v, primary any) error {

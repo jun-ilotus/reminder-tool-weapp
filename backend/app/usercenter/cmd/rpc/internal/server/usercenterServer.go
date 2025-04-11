@@ -67,3 +67,8 @@ func (s *UsercenterServer) ModifyUserInfo(ctx context.Context, in *pb.ModifyUser
 	l := logic.NewModifyUserInfoLogic(ctx, s.svcCtx)
 	return l.ModifyUserInfo(in)
 }
+
+func (s *UsercenterServer) AddPointsRecode(ctx context.Context, in *pb.AddPointsRecodeReq) (*pb.AddPointsRecodeResp, error) {
+	l := logic.NewAddPointsRecodeLogic(ctx, s.svcCtx)
+	return l.AddPointsRecode(in)
+}

@@ -28,6 +28,7 @@ const (
 	Usercenter_BindIntimate_FullMethodName         = "/pb.usercenter/BindIntimate"
 	Usercenter_CancelBindIntimate_FullMethodName   = "/pb.usercenter/CancelBindIntimate"
 	Usercenter_ModifyUserInfo_FullMethodName       = "/pb.usercenter/ModifyUserInfo"
+	Usercenter_AddPointsRecode_FullMethodName      = "/pb.usercenter/AddPointsRecode"
 )
 
 // UsercenterClient is the client API for Usercenter service.
@@ -45,6 +46,7 @@ type UsercenterClient interface {
 	BindIntimate(ctx context.Context, in *BindIntimateReq, opts ...grpc.CallOption) (*BindIntimateResp, error)
 	CancelBindIntimate(ctx context.Context, in *CancelBindIntimateReq, opts ...grpc.CallOption) (*CancelBindIntimateResp, error)
 	ModifyUserInfo(ctx context.Context, in *ModifyUserInfoReq, opts ...grpc.CallOption) (*ModifyUserInfoResp, error)
+	AddPointsRecode(ctx context.Context, in *AddPointsRecodeReq, opts ...grpc.CallOption) (*AddPointsRecodeResp, error)
 }
 
 type usercenterClient struct {
@@ -145,6 +147,16 @@ func (c *usercenterClient) ModifyUserInfo(ctx context.Context, in *ModifyUserInf
 	return out, nil
 }
 
+func (c *usercenterClient) AddPointsRecode(ctx context.Context, in *AddPointsRecodeReq, opts ...grpc.CallOption) (*AddPointsRecodeResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(AddPointsRecodeResp)
+	err := c.cc.Invoke(ctx, Usercenter_AddPointsRecode_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // UsercenterServer is the server API for Usercenter service.
 // All implementations must embed UnimplementedUsercenterServer
 // for forward compatibility.
@@ -160,6 +172,7 @@ type UsercenterServer interface {
 	BindIntimate(context.Context, *BindIntimateReq) (*BindIntimateResp, error)
 	CancelBindIntimate(context.Context, *CancelBindIntimateReq) (*CancelBindIntimateResp, error)
 	ModifyUserInfo(context.Context, *ModifyUserInfoReq) (*ModifyUserInfoResp, error)
+	AddPointsRecode(context.Context, *AddPointsRecodeReq) (*AddPointsRecodeResp, error)
 	mustEmbedUnimplementedUsercenterServer()
 }
 
@@ -196,6 +209,9 @@ func (UnimplementedUsercenterServer) CancelBindIntimate(context.Context, *Cancel
 }
 func (UnimplementedUsercenterServer) ModifyUserInfo(context.Context, *ModifyUserInfoReq) (*ModifyUserInfoResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ModifyUserInfo not implemented")
+}
+func (UnimplementedUsercenterServer) AddPointsRecode(context.Context, *AddPointsRecodeReq) (*AddPointsRecodeResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AddPointsRecode not implemented")
 }
 func (UnimplementedUsercenterServer) mustEmbedUnimplementedUsercenterServer() {}
 func (UnimplementedUsercenterServer) testEmbeddedByValue()                    {}
@@ -380,6 +396,24 @@ func _Usercenter_ModifyUserInfo_Handler(srv interface{}, ctx context.Context, de
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Usercenter_AddPointsRecode_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AddPointsRecodeReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UsercenterServer).AddPointsRecode(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Usercenter_AddPointsRecode_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UsercenterServer).AddPointsRecode(ctx, req.(*AddPointsRecodeReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Usercenter_ServiceDesc is the grpc.ServiceDesc for Usercenter service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -422,6 +456,10 @@ var Usercenter_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ModifyUserInfo",
 			Handler:    _Usercenter_ModifyUserInfo_Handler,
+		},
+		{
+			MethodName: "AddPointsRecode",
+			Handler:    _Usercenter_AddPointsRecode_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

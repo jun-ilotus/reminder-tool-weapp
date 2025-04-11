@@ -1,0 +1,220 @@
+syntax = "proto3";
+
+option go_package ="./pb";
+
+package pb;
+
+// ------------------------------------ 
+// Messages
+// ------------------------------------ 
+
+//--------------------------------recode--------------------------------
+message Recode {
+  int64 id = 1; //绛惧埌璁板綍涓婚敭id
+  int64 userId = 2; //鐢ㄦ埛id
+  int64 createTime = 3; //createTime
+  int64 signDate = 4; //鎵撳崱鏃ユ湡
+}
+
+message AddRecodeReq {
+  int64 userId = 1; //鐢ㄦ埛id
+  int64 signDate = 2; //鎵撳崱鏃ユ湡
+}
+
+message AddRecodeResp {
+    int64 id = 1;
+}
+
+message UpdateRecodeReq {
+  int64 id = 1; //绛惧埌璁板綍涓婚敭id
+  int64 userId = 2; //鐢ㄦ埛id
+  int64 signDate = 3; //鎵撳崱鏃ユ湡
+}
+
+message UpdateRecodeResp {
+}
+
+message DelRecodeReq {
+  int64 id = 1; //id
+}
+
+message DelRecodeResp {
+}
+
+message GetRecodeByIdReq {
+  int64 id = 1; //id
+}
+
+message GetRecodeByIdResp {
+  Recode recode = 1; //recode
+}
+
+message SearchRecodeReq {
+  int64 page = 1; //page
+  int64 limit = 2; //limit
+  int64 id = 3; //绛惧埌璁板綍涓婚敭id
+  int64 userId = 4; //鐢ㄦ埛id
+  int64 createTime = 5; //createTime
+  int64 signDate = 6; //鎵撳崱鏃ユ湡
+}
+
+message SearchRecodeResp {
+  repeated Recode recode = 1; //recode
+}
+
+//--------------------------------task--------------------------------
+message Task {
+  int64 id = 1; //id
+  int64 createTime = 2; //createTime
+  int64 updateTime = 3; //updateTime
+  string title = 4; //浠诲姟鏍囬
+  int64 type = 5; //浠诲姟绫诲瀷锛?杩炵画绛惧埌
+  int64 value = 6; //浠诲姟鍊硷紝渚濇嵁type鏉ョ‘瀹氾細涓?鏃舵槸杩炵画澶╂暟
+  string content = 7; //澶囨敞
+  int64 points = 8; //鑾峰緱鐨勭Н鍒嗗€?
+}
+
+message AddTaskReq {
+  string title = 1; //浠诲姟鏍囬
+  int64 type = 2; //浠诲姟绫诲瀷锛?杩炵画绛惧埌
+  int64 value = 3; //浠诲姟鍊硷紝渚濇嵁type鏉ョ‘瀹氾細涓?鏃舵槸杩炵画澶╂暟
+  string content = 4; //澶囨敞
+  int64 points = 5; //鑾峰緱鐨勭Н鍒嗗€?
+}
+
+message AddTaskResp {
+}
+
+message UpdateTaskReq {
+  int64 id = 1; //id
+  string title = 2; //浠诲姟鏍囬
+  int64 type = 3; //浠诲姟绫诲瀷锛?杩炵画绛惧埌
+  int64 value = 4; //浠诲姟鍊硷紝渚濇嵁type鏉ョ‘瀹氾細涓?鏃舵槸杩炵画澶╂暟
+  string content = 5; //澶囨敞
+  int64 points = 6; //鑾峰緱鐨勭Н鍒嗗€?
+}
+
+message UpdateTaskResp {
+}
+
+message DelTaskReq {
+  int64 id = 1; //id
+}
+
+message DelTaskResp {
+}
+
+message GetTaskByIdReq {
+  int64 id = 1; //id
+}
+
+message GetTaskByIdResp {
+  Task task = 1; //task
+}
+
+message SearchTaskReq {
+  int64 page = 1; //page
+  int64 limit = 2; //limit
+  int64 id = 3; //id
+  int64 createTime = 4; //createTime
+  int64 updateTime = 5; //updateTime
+  string title = 6; //浠诲姟鏍囬
+  int64 type = 7; //浠诲姟绫诲瀷锛?杩炵画绛惧埌
+  int64 value = 8; //浠诲姟鍊硷紝渚濇嵁type鏉ョ‘瀹氾細涓?鏃舵槸杩炵画澶╂暟
+  string content = 9; //澶囨敞
+  int64 points = 10; //鑾峰緱鐨勭Н鍒嗗€?
+}
+
+message SearchTaskResp {
+  repeated Task task = 1; //task
+}
+
+//--------------------------------taskFinish--------------------------------
+message TaskFinish {
+  int64 id = 1; //id
+  int64 taskId = 2; //浠诲姟id
+  int64 userId = 3; //userId
+  int64 createTime = 4; //createTime
+  int64 finishDate = 5; //瀹屾垚鏃ユ湡
+  int64 points = 6; //鑾峰緱鐨勭Н鍒?
+}
+
+message AddTaskFinishReq {
+  int64 taskId = 1; //浠诲姟id
+  int64 userId = 2; //userId
+  int64 finishDate = 3; //瀹屾垚鏃ユ湡
+  int64 points = 4; //鑾峰緱鐨勭Н鍒?
+}
+
+message AddTaskFinishResp {
+}
+
+message UpdateTaskFinishReq {
+  int64 id = 1; //id
+  int64 taskId = 2; //浠诲姟id
+  int64 userId = 3; //userId
+  int64 finishDate = 4; //瀹屾垚鏃ユ湡
+  int64 points = 5; //鑾峰緱鐨勭Н鍒?
+}
+
+message UpdateTaskFinishResp {
+}
+
+message DelTaskFinishReq {
+  int64 id = 1; //id
+}
+
+message DelTaskFinishResp {
+}
+
+message GetTaskFinishByIdReq {
+  int64 id = 1; //id
+}
+
+message GetTaskFinishByIdResp {
+  TaskFinish taskFinish = 1; //taskFinish
+}
+
+message SearchTaskFinishReq {
+  int64 page = 1; //page
+  int64 limit = 2; //limit
+  int64 id = 3; //id
+  int64 taskId = 4; //浠诲姟id
+  int64 userId = 5; //userId
+  int64 createTime = 6; //createTime
+  int64 finishDate = 7; //瀹屾垚鏃ユ湡
+  int64 points = 8; //鑾峰緱鐨勭Н鍒?
+}
+
+message SearchTaskFinishResp {
+  repeated TaskFinish taskFinish = 1; //taskFinish
+}
+
+
+
+// ------------------------------------ 
+// Rpc Func
+// ------------------------------------ 
+
+service signin {
+
+	 //-----------------------recode----------------------- 
+	 rpc AddRecode(AddRecodeReq) returns (AddRecodeResp); 
+	 rpc UpdateRecode(UpdateRecodeReq) returns (UpdateRecodeResp); 
+	 rpc DelRecode(DelRecodeReq) returns (DelRecodeResp); 
+	 rpc GetRecodeById(GetRecodeByIdReq) returns (GetRecodeByIdResp); 
+	 rpc SearchRecode(SearchRecodeReq) returns (SearchRecodeResp); 
+	 //-----------------------task----------------------- 
+	 rpc AddTask(AddTaskReq) returns (AddTaskResp); 
+	 rpc UpdateTask(UpdateTaskReq) returns (UpdateTaskResp); 
+	 rpc DelTask(DelTaskReq) returns (DelTaskResp); 
+	 rpc GetTaskById(GetTaskByIdReq) returns (GetTaskByIdResp); 
+	 rpc SearchTask(SearchTaskReq) returns (SearchTaskResp); 
+	 //-----------------------taskFinish----------------------- 
+	 rpc AddTaskFinish(AddTaskFinishReq) returns (AddTaskFinishResp); 
+	 rpc UpdateTaskFinish(UpdateTaskFinishReq) returns (UpdateTaskFinishResp); 
+	 rpc DelTaskFinish(DelTaskFinishReq) returns (DelTaskFinishResp); 
+	 rpc GetTaskFinishById(GetTaskFinishByIdReq) returns (GetTaskFinishByIdResp); 
+	 rpc SearchTaskFinish(SearchTaskFinishReq) returns (SearchTaskFinishResp); 
+
+}
