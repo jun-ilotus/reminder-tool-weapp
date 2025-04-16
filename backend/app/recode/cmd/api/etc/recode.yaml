@@ -38,6 +38,8 @@ Cache:
 #  NonBlock: true
 
 RecodeRpcConf:
-  Endpoints:
-    - 127.0.0.1:2007
+  Etcd:
+    Hosts:
+      - etcd:2379
+    key: recode.rpc
   NonBlock: true

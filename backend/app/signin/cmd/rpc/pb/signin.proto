@@ -23,6 +23,7 @@ message AddRecodeReq {
 
 message AddRecodeResp {
     int64 id = 1;
+    repeated Task task = 2;
 }
 
 message UpdateRecodeReq {
@@ -144,9 +145,11 @@ message AddTaskFinishReq {
   int64 userId = 2; //userId
   int64 finishDate = 3; //瀹屾垚鏃ユ湡
   int64 points = 4; //鑾峰緱鐨勭Н鍒?
+  repeated Task task = 5;
 }
 
 message AddTaskFinishResp {
+    int64 points = 1;
 }
 
 message UpdateTaskFinishReq {
@@ -199,7 +202,8 @@ message SearchTaskFinishResp {
 service signin {
 
 	 //-----------------------recode----------------------- 
-	 rpc AddRecode(AddRecodeReq) returns (AddRecodeResp); 
+	 rpc AddRecode(AddRecodeReq) returns (AddRecodeResp);
+	 rpc AddRecodeRollback(AddRecodeReq) returns (AddRecodeResp);
 	 rpc UpdateRecode(UpdateRecodeReq) returns (UpdateRecodeResp); 
 	 rpc DelRecode(DelRecodeReq) returns (DelRecodeResp); 
 	 rpc GetRecodeById(GetRecodeByIdReq) returns (GetRecodeByIdResp); 
@@ -211,7 +215,8 @@ service signin {
 	 rpc GetTaskById(GetTaskByIdReq) returns (GetTaskByIdResp); 
 	 rpc SearchTask(SearchTaskReq) returns (SearchTaskResp); 
 	 //-----------------------taskFinish----------------------- 
-	 rpc AddTaskFinish(AddTaskFinishReq) returns (AddTaskFinishResp); 
+	 rpc AddTaskFinish(AddTaskFinishReq) returns (AddTaskFinishResp);
+	 rpc AddTaskFinishRollback(AddTaskFinishReq) returns (AddTaskFinishResp);
 	 rpc UpdateTaskFinish(UpdateTaskFinishReq) returns (UpdateTaskFinishResp); 
 	 rpc DelTaskFinish(DelTaskFinishReq) returns (DelTaskFinishResp); 
 	 rpc GetTaskFinishById(GetTaskFinishByIdReq) returns (GetTaskFinishByIdResp); 

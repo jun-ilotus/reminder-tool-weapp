@@ -19,16 +19,17 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	Usercenter_Login_FullMethodName                = "/pb.usercenter/login"
-	Usercenter_Register_FullMethodName             = "/pb.usercenter/register"
-	Usercenter_GetUserInfo_FullMethodName          = "/pb.usercenter/getUserInfo"
-	Usercenter_GetUserAuthByAuthKey_FullMethodName = "/pb.usercenter/getUserAuthByAuthKey"
-	Usercenter_GetUserAuthByUserId_FullMethodName  = "/pb.usercenter/getUserAuthByUserId"
-	Usercenter_GenerateToken_FullMethodName        = "/pb.usercenter/generateToken"
-	Usercenter_BindIntimate_FullMethodName         = "/pb.usercenter/BindIntimate"
-	Usercenter_CancelBindIntimate_FullMethodName   = "/pb.usercenter/CancelBindIntimate"
-	Usercenter_ModifyUserInfo_FullMethodName       = "/pb.usercenter/ModifyUserInfo"
-	Usercenter_AddPointsRecode_FullMethodName      = "/pb.usercenter/AddPointsRecode"
+	Usercenter_Login_FullMethodName                   = "/pb.usercenter/login"
+	Usercenter_Register_FullMethodName                = "/pb.usercenter/register"
+	Usercenter_GetUserInfo_FullMethodName             = "/pb.usercenter/getUserInfo"
+	Usercenter_GetUserAuthByAuthKey_FullMethodName    = "/pb.usercenter/getUserAuthByAuthKey"
+	Usercenter_GetUserAuthByUserId_FullMethodName     = "/pb.usercenter/getUserAuthByUserId"
+	Usercenter_GenerateToken_FullMethodName           = "/pb.usercenter/generateToken"
+	Usercenter_BindIntimate_FullMethodName            = "/pb.usercenter/BindIntimate"
+	Usercenter_CancelBindIntimate_FullMethodName      = "/pb.usercenter/CancelBindIntimate"
+	Usercenter_ModifyUserInfo_FullMethodName          = "/pb.usercenter/ModifyUserInfo"
+	Usercenter_AddPointsRecode_FullMethodName         = "/pb.usercenter/AddPointsRecode"
+	Usercenter_AddPointsRecodeRollback_FullMethodName = "/pb.usercenter/AddPointsRecodeRollback"
 )
 
 // UsercenterClient is the client API for Usercenter service.
@@ -47,6 +48,7 @@ type UsercenterClient interface {
 	CancelBindIntimate(ctx context.Context, in *CancelBindIntimateReq, opts ...grpc.CallOption) (*CancelBindIntimateResp, error)
 	ModifyUserInfo(ctx context.Context, in *ModifyUserInfoReq, opts ...grpc.CallOption) (*ModifyUserInfoResp, error)
 	AddPointsRecode(ctx context.Context, in *AddPointsRecodeReq, opts ...grpc.CallOption) (*AddPointsRecodeResp, error)
+	AddPointsRecodeRollback(ctx context.Context, in *AddPointsRecodeReq, opts ...grpc.CallOption) (*AddPointsRecodeResp, error)
 }
 
 type usercenterClient struct {
@@ -157,6 +159,16 @@ func (c *usercenterClient) AddPointsRecode(ctx context.Context, in *AddPointsRec
 	return out, nil
 }
 
+func (c *usercenterClient) AddPointsRecodeRollback(ctx context.Context, in *AddPointsRecodeReq, opts ...grpc.CallOption) (*AddPointsRecodeResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(AddPointsRecodeResp)
+	err := c.cc.Invoke(ctx, Usercenter_AddPointsRecodeRollback_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // UsercenterServer is the server API for Usercenter service.
 // All implementations must embed UnimplementedUsercenterServer
 // for forward compatibility.
@@ -173,6 +185,7 @@ type UsercenterServer interface {
 	CancelBindIntimate(context.Context, *CancelBindIntimateReq) (*CancelBindIntimateResp, error)
 	ModifyUserInfo(context.Context, *ModifyUserInfoReq) (*ModifyUserInfoResp, error)
 	AddPointsRecode(context.Context, *AddPointsRecodeReq) (*AddPointsRecodeResp, error)
+	AddPointsRecodeRollback(context.Context, *AddPointsRecodeReq) (*AddPointsRecodeResp, error)
 	mustEmbedUnimplementedUsercenterServer()
 }
 
@@ -212,6 +225,9 @@ func (UnimplementedUsercenterServer) ModifyUserInfo(context.Context, *ModifyUser
 }
 func (UnimplementedUsercenterServer) AddPointsRecode(context.Context, *AddPointsRecodeReq) (*AddPointsRecodeResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AddPointsRecode not implemented")
+}
+func (UnimplementedUsercenterServer) AddPointsRecodeRollback(context.Context, *AddPointsRecodeReq) (*AddPointsRecodeResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AddPointsRecodeRollback not implemented")
 }
 func (UnimplementedUsercenterServer) mustEmbedUnimplementedUsercenterServer() {}
 func (UnimplementedUsercenterServer) testEmbeddedByValue()                    {}
@@ -414,6 +430,24 @@ func _Usercenter_AddPointsRecode_Handler(srv interface{}, ctx context.Context, d
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Usercenter_AddPointsRecodeRollback_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AddPointsRecodeReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UsercenterServer).AddPointsRecodeRollback(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Usercenter_AddPointsRecodeRollback_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UsercenterServer).AddPointsRecodeRollback(ctx, req.(*AddPointsRecodeReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Usercenter_ServiceDesc is the grpc.ServiceDesc for Usercenter service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -460,6 +494,10 @@ var Usercenter_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "AddPointsRecode",
 			Handler:    _Usercenter_AddPointsRecode_Handler,
+		},
+		{
+			MethodName: "AddPointsRecodeRollback",
+			Handler:    _Usercenter_AddPointsRecodeRollback_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

@@ -51,6 +51,7 @@ type (
 	Signin interface {
 		// -----------------------recode-----------------------
 		AddRecode(ctx context.Context, in *AddRecodeReq, opts ...grpc.CallOption) (*AddRecodeResp, error)
+		AddRecodeRollback(ctx context.Context, in *AddRecodeReq, opts ...grpc.CallOption) (*AddRecodeResp, error)
 		UpdateRecode(ctx context.Context, in *UpdateRecodeReq, opts ...grpc.CallOption) (*UpdateRecodeResp, error)
 		DelRecode(ctx context.Context, in *DelRecodeReq, opts ...grpc.CallOption) (*DelRecodeResp, error)
 		GetRecodeById(ctx context.Context, in *GetRecodeByIdReq, opts ...grpc.CallOption) (*GetRecodeByIdResp, error)
@@ -63,6 +64,7 @@ type (
 		SearchTask(ctx context.Context, in *SearchTaskReq, opts ...grpc.CallOption) (*SearchTaskResp, error)
 		// -----------------------taskFinish-----------------------
 		AddTaskFinish(ctx context.Context, in *AddTaskFinishReq, opts ...grpc.CallOption) (*AddTaskFinishResp, error)
+		AddTaskFinishRollback(ctx context.Context, in *AddTaskFinishReq, opts ...grpc.CallOption) (*AddTaskFinishResp, error)
 		UpdateTaskFinish(ctx context.Context, in *UpdateTaskFinishReq, opts ...grpc.CallOption) (*UpdateTaskFinishResp, error)
 		DelTaskFinish(ctx context.Context, in *DelTaskFinishReq, opts ...grpc.CallOption) (*DelTaskFinishResp, error)
 		GetTaskFinishById(ctx context.Context, in *GetTaskFinishByIdReq, opts ...grpc.CallOption) (*GetTaskFinishByIdResp, error)
@@ -84,6 +86,11 @@ func NewSignin(cli zrpc.Client) Signin {
 func (m *defaultSignin) AddRecode(ctx context.Context, in *AddRecodeReq, opts ...grpc.CallOption) (*AddRecodeResp, error) {
 	client := pb.NewSigninClient(m.cli.Conn())
 	return client.AddRecode(ctx, in, opts...)
+}
+
+func (m *defaultSignin) AddRecodeRollback(ctx context.Context, in *AddRecodeReq, opts ...grpc.CallOption) (*AddRecodeResp, error) {
+	client := pb.NewSigninClient(m.cli.Conn())
+	return client.AddRecodeRollback(ctx, in, opts...)
 }
 
 func (m *defaultSignin) UpdateRecode(ctx context.Context, in *UpdateRecodeReq, opts ...grpc.CallOption) (*UpdateRecodeResp, error) {
@@ -136,6 +143,11 @@ func (m *defaultSignin) SearchTask(ctx context.Context, in *SearchTaskReq, opts 
 func (m *defaultSignin) AddTaskFinish(ctx context.Context, in *AddTaskFinishReq, opts ...grpc.CallOption) (*AddTaskFinishResp, error) {
 	client := pb.NewSigninClient(m.cli.Conn())
 	return client.AddTaskFinish(ctx, in, opts...)
+}
+
+func (m *defaultSignin) AddTaskFinishRollback(ctx context.Context, in *AddTaskFinishReq, opts ...grpc.CallOption) (*AddTaskFinishResp, error) {
+	client := pb.NewSigninClient(m.cli.Conn())
+	return client.AddTaskFinishRollback(ctx, in, opts...)
 }
 
 func (m *defaultSignin) UpdateTaskFinish(ctx context.Context, in *UpdateTaskFinishReq, opts ...grpc.CallOption) (*UpdateTaskFinishResp, error) {

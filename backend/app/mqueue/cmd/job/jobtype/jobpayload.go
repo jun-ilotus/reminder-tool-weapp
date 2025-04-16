@@ -1,9 +1,5 @@
 package jobtype
 
-import (
-	"looklook/app/order/model"
-)
-
 // DeferCloseHomestayOrderPayload defer close homestay order
 type DeferCloseHomestayOrderPayload struct {
 	Sn string
@@ -11,7 +7,6 @@ type DeferCloseHomestayOrderPayload struct {
 
 // PaySuccessNotifyUserPayload pay success notify user
 type PaySuccessNotifyUserPayload struct {
-	Order *model.HomestayOrder
 }
 
 // WxMiniProgramNotifyUserPayload mini program notify user

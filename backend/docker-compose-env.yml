@@ -226,6 +226,45 @@ services:
     networks:
       - looklook_net
 
+  # etcd服务发现与注册
+  Etcd:
+    image: bitnami/etcd:latest
+    container_name: etcd
+    environment:
+      - ALLOW_NONE_AUTHENTICATION=yes
+      - ETCD_ADVERTISE_CLIENT_URLS=http://etcd:2379
+      - ETCD_LISTEN_CLIENT_URLS=http://0.0.0.0:2379
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+    ports:
+      - "2379:2379"
+      - "2380:2380"
+    volumes:
+      - ./data/etcd/data:/bitnami/etcd/data
+    restart: always
+    networks:
+      - looklook_net
+
+  # 分布式事务  依赖etcd
+  dtm:
+    image: yedf/dtm
+    container_name: dtm
+    environment:
+      TZ: Asia/Shanghai
+    ports:
+      - "36789:36789"  # DTM HTTP 协议端口号
+      - "36790:36790"  # DTM gRPC 协议端口号
+    privileged: true
+    entrypoint:
+      - "/app/dtm/dtm"
+      - "-c=/app/dtm/configs/config.yaml"
+    volumes: #把本地文件挂载到容器里的指定的目录
+      - ./deploy/dtm/config.yml:/app/dtm/configs/config.yaml # 将 dtm 配置文件挂载到容器里
+    restart: always
+    networks:
+      - looklook_net
 
 networks:
   looklook_net:

@@ -13,3 +13,15 @@ type Recode struct {
 	UserId    string `json:"userId"`
 	Sign_date int64  `json:"signDate"`
 }
+
+type TestReq struct {
+	Age        int64  `json:"age" validate:"gte=1,lte=130"`
+	Name       string `json:"name" validate:"required"`
+	Email      string `json:"email" validate:"required,email"`
+	Password   string `json:"password" validate:"required"`
+	RePassword string `json:"re_password" validate:"required"`
+	Date       string `json:"date" validate:"required,datetime=2006-01-02,checkDate"`
+}
+
+type TestResp struct {
+}

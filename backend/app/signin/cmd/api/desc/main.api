@@ -16,7 +16,7 @@ import (
 @server (
 	prefix: signin/v1
 	group:  recode
-	jwt:    JwtAuth
+// jwt:    JwtAuth
 )
 service signin {
 	@doc "测试Validator"
@@ -27,4 +27,3 @@ service signin {
 	@handler addToday
 	post /recode/addToday (AddRecodeTodayReq) returns (AddRecodeTodayResp)
 }
-

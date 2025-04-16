@@ -49,6 +49,7 @@ type (
 		CancelBindIntimate(ctx context.Context, in *CancelBindIntimateReq, opts ...grpc.CallOption) (*CancelBindIntimateResp, error)
 		ModifyUserInfo(ctx context.Context, in *ModifyUserInfoReq, opts ...grpc.CallOption) (*ModifyUserInfoResp, error)
 		AddPointsRecode(ctx context.Context, in *AddPointsRecodeReq, opts ...grpc.CallOption) (*AddPointsRecodeResp, error)
+		AddPointsRecodeRollback(ctx context.Context, in *AddPointsRecodeReq, opts ...grpc.CallOption) (*AddPointsRecodeResp, error)
 	}
 
 	defaultUsercenter struct {
@@ -110,4 +111,9 @@ func (m *defaultUsercenter) ModifyUserInfo(ctx context.Context, in *ModifyUserIn
 func (m *defaultUsercenter) AddPointsRecode(ctx context.Context, in *AddPointsRecodeReq, opts ...grpc.CallOption) (*AddPointsRecodeResp, error) {
 	client := pb.NewUsercenterClient(m.cli.Conn())
 	return client.AddPointsRecode(ctx, in, opts...)
+}
+
+func (m *defaultUsercenter) AddPointsRecodeRollback(ctx context.Context, in *AddPointsRecodeReq, opts ...grpc.CallOption) (*AddPointsRecodeResp, error) {
+	client := pb.NewUsercenterClient(m.cli.Conn())
+	return client.AddPointsRecodeRollback(ctx, in, opts...)
 }

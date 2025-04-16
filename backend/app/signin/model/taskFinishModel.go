@@ -1,6 +1,9 @@
 package model
 
 import (
+	"context"
+	"database/sql"
+	"fmt"
 	"github.com/zeromicro/go-zero/core/stores/cache"
 	"github.com/zeromicro/go-zero/core/stores/sqlx"
 )
@@ -12,6 +15,8 @@ type (
 	// and implement the added methods in customTaskFinishModel.
 	TaskFinishModel interface {
 		taskFinishModel
+
+		DeleteByUserIdTaskId(ctx context.Context, userId, taskId int64) error
 	}
 
 	customTaskFinishModel struct {
@@ -24,4 +29,13 @@ func NewTaskFinishModel(conn sqlx.SqlConn, c cache.CacheConf, opts ...cache.Opti
 	return &customTaskFinishModel{
 		defaultTaskFinishModel: newTaskFinishModel(conn, c, opts...),
 	}
+}
+
+func (m *customTaskFinishModel) DeleteByUserIdTaskId(ctx context.Context, userId, taskId int64) error {
+	signinTaskFinishIdKey := fmt.Sprintf("%s%v", cacheSigninTaskFinishIdPrefix, userId)
+	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
+		query := fmt.Sprintf("delete from %s where `user_id` = ? and task_id = ?", m.table)
+		return conn.ExecCtx(ctx, query, userId, taskId)
+	}, signinTaskFinishIdKey)
+	return err
 }

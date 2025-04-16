@@ -31,6 +31,7 @@ message PointsRecode {
     int64 userId = 2;
     int64 points = 3;
     string content = 4;
+    int64 taskId = 5;
 }
 
 
@@ -120,6 +121,7 @@ message AddPointsRecodeReq {
     int64 userId = 1;
     int64 points = 2;
     string content = 3;
+    int64 taskId = 4;
 }
 
 message AddPointsRecodeResp {
@@ -138,4 +140,5 @@ service usercenter {
   rpc CancelBindIntimate(CancelBindIntimateReq) returns (CancelBindIntimateResp);
   rpc ModifyUserInfo(ModifyUserInfoReq) returns (ModifyUserInfoResp);
   rpc AddPointsRecode(AddPointsRecodeReq) returns (AddPointsRecodeResp);
+  rpc AddPointsRecodeRollback(AddPointsRecodeReq) returns (AddPointsRecodeResp);
 }

@@ -29,6 +29,11 @@ func (s *SigninServer) AddRecode(ctx context.Context, in *pb.AddRecodeReq) (*pb.
 	return l.AddRecode(in)
 }
 
+func (s *SigninServer) AddRecodeRollback(ctx context.Context, in *pb.AddRecodeReq) (*pb.AddRecodeResp, error) {
+	l := logic.NewAddRecodeRollbackLogic(ctx, s.svcCtx)
+	return l.AddRecodeRollback(in)
+}
+
 func (s *SigninServer) UpdateRecode(ctx context.Context, in *pb.UpdateRecodeReq) (*pb.UpdateRecodeResp, error) {
 	l := logic.NewUpdateRecodeLogic(ctx, s.svcCtx)
 	return l.UpdateRecode(in)
@@ -79,6 +84,11 @@ func (s *SigninServer) SearchTask(ctx context.Context, in *pb.SearchTaskReq) (*p
 func (s *SigninServer) AddTaskFinish(ctx context.Context, in *pb.AddTaskFinishReq) (*pb.AddTaskFinishResp, error) {
 	l := logic.NewAddTaskFinishLogic(ctx, s.svcCtx)
 	return l.AddTaskFinish(in)
+}
+
+func (s *SigninServer) AddTaskFinishRollback(ctx context.Context, in *pb.AddTaskFinishReq) (*pb.AddTaskFinishResp, error) {
+	l := logic.NewAddTaskFinishRollbackLogic(ctx, s.svcCtx)
+	return l.AddTaskFinishRollback(in)
 }
 
 func (s *SigninServer) UpdateTaskFinish(ctx context.Context, in *pb.UpdateTaskFinishReq) (*pb.UpdateTaskFinishResp, error) {

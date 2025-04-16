@@ -33,8 +33,15 @@ Cache:
   - Host: redis:6379
     Pass: G62m50oigInC30sf
 
+Etcd:
+  Hosts:
+    - etcd:2379
+  key: reminder.rpc
+
 #rpc
 UsercenterRpcConf:
-  Endpoints:
-    - 127.0.0.1:2004
+  Etcd:
+    Hosts:
+      - etcd:2379
+    key: usercenter.rpc
   NonBlock: true

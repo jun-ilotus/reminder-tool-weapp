@@ -36,11 +36,15 @@ WxMsgConf:
 
 #rpc service.
 ReminderRpcConf:
-  Endpoints:
-    - 127.0.0.1:2006
+  Etcd:
+    Hosts:
+      - etcd:2379
+    key: reminder.rpc
   NonBlock: true
 
 UsercenterRpcConf:
-  Endpoints:
-    - 127.0.0.1:2004
+  Etcd:
+    Hosts:
+      - etcd:2379
+    key: usercenter.rpc
   NonBlock: true

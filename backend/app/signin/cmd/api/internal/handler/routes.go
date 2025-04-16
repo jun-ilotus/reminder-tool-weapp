@@ -14,13 +14,18 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 	server.AddRoutes(
 		[]rest.Route{
 			{
+				// 测试Validator
+				Method:  http.MethodPost,
+				Path:    "/lottery/TestValidator",
+				Handler: recode.TestValidatorHandler(serverCtx),
+			},
+			{
 				// recode addToday
 				Method:  http.MethodPost,
 				Path:    "/recode/addToday",
 				Handler: recode.AddTodayHandler(serverCtx),
 			},
 		},
-		rest.WithJwt(serverCtx.Config.JwtAuth.AccessSecret),
 		rest.WithPrefix("/signin/v1"),
 	)
 }

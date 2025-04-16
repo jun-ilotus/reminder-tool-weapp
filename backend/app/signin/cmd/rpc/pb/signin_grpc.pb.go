@@ -19,21 +19,23 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	Signin_AddRecode_FullMethodName         = "/pb.signin/AddRecode"
-	Signin_UpdateRecode_FullMethodName      = "/pb.signin/UpdateRecode"
-	Signin_DelRecode_FullMethodName         = "/pb.signin/DelRecode"
-	Signin_GetRecodeById_FullMethodName     = "/pb.signin/GetRecodeById"
-	Signin_SearchRecode_FullMethodName      = "/pb.signin/SearchRecode"
-	Signin_AddTask_FullMethodName           = "/pb.signin/AddTask"
-	Signin_UpdateTask_FullMethodName        = "/pb.signin/UpdateTask"
-	Signin_DelTask_FullMethodName           = "/pb.signin/DelTask"
-	Signin_GetTaskById_FullMethodName       = "/pb.signin/GetTaskById"
-	Signin_SearchTask_FullMethodName        = "/pb.signin/SearchTask"
-	Signin_AddTaskFinish_FullMethodName     = "/pb.signin/AddTaskFinish"
-	Signin_UpdateTaskFinish_FullMethodName  = "/pb.signin/UpdateTaskFinish"
-	Signin_DelTaskFinish_FullMethodName     = "/pb.signin/DelTaskFinish"
-	Signin_GetTaskFinishById_FullMethodName = "/pb.signin/GetTaskFinishById"
-	Signin_SearchTaskFinish_FullMethodName  = "/pb.signin/SearchTaskFinish"
+	Signin_AddRecode_FullMethodName             = "/pb.signin/AddRecode"
+	Signin_AddRecodeRollback_FullMethodName     = "/pb.signin/AddRecodeRollback"
+	Signin_UpdateRecode_FullMethodName          = "/pb.signin/UpdateRecode"
+	Signin_DelRecode_FullMethodName             = "/pb.signin/DelRecode"
+	Signin_GetRecodeById_FullMethodName         = "/pb.signin/GetRecodeById"
+	Signin_SearchRecode_FullMethodName          = "/pb.signin/SearchRecode"
+	Signin_AddTask_FullMethodName               = "/pb.signin/AddTask"
+	Signin_UpdateTask_FullMethodName            = "/pb.signin/UpdateTask"
+	Signin_DelTask_FullMethodName               = "/pb.signin/DelTask"
+	Signin_GetTaskById_FullMethodName           = "/pb.signin/GetTaskById"
+	Signin_SearchTask_FullMethodName            = "/pb.signin/SearchTask"
+	Signin_AddTaskFinish_FullMethodName         = "/pb.signin/AddTaskFinish"
+	Signin_AddTaskFinishRollback_FullMethodName = "/pb.signin/AddTaskFinishRollback"
+	Signin_UpdateTaskFinish_FullMethodName      = "/pb.signin/UpdateTaskFinish"
+	Signin_DelTaskFinish_FullMethodName         = "/pb.signin/DelTaskFinish"
+	Signin_GetTaskFinishById_FullMethodName     = "/pb.signin/GetTaskFinishById"
+	Signin_SearchTaskFinish_FullMethodName      = "/pb.signin/SearchTaskFinish"
 )
 
 // SigninClient is the client API for Signin service.
@@ -42,6 +44,7 @@ const (
 type SigninClient interface {
 	// -----------------------recode-----------------------
 	AddRecode(ctx context.Context, in *AddRecodeReq, opts ...grpc.CallOption) (*AddRecodeResp, error)
+	AddRecodeRollback(ctx context.Context, in *AddRecodeReq, opts ...grpc.CallOption) (*AddRecodeResp, error)
 	UpdateRecode(ctx context.Context, in *UpdateRecodeReq, opts ...grpc.CallOption) (*UpdateRecodeResp, error)
 	DelRecode(ctx context.Context, in *DelRecodeReq, opts ...grpc.CallOption) (*DelRecodeResp, error)
 	GetRecodeById(ctx context.Context, in *GetRecodeByIdReq, opts ...grpc.CallOption) (*GetRecodeByIdResp, error)
@@ -54,6 +57,7 @@ type SigninClient interface {
 	SearchTask(ctx context.Context, in *SearchTaskReq, opts ...grpc.CallOption) (*SearchTaskResp, error)
 	// -----------------------taskFinish-----------------------
 	AddTaskFinish(ctx context.Context, in *AddTaskFinishReq, opts ...grpc.CallOption) (*AddTaskFinishResp, error)
+	AddTaskFinishRollback(ctx context.Context, in *AddTaskFinishReq, opts ...grpc.CallOption) (*AddTaskFinishResp, error)
 	UpdateTaskFinish(ctx context.Context, in *UpdateTaskFinishReq, opts ...grpc.CallOption) (*UpdateTaskFinishResp, error)
 	DelTaskFinish(ctx context.Context, in *DelTaskFinishReq, opts ...grpc.CallOption) (*DelTaskFinishResp, error)
 	GetTaskFinishById(ctx context.Context, in *GetTaskFinishByIdReq, opts ...grpc.CallOption) (*GetTaskFinishByIdResp, error)
@@ -72,6 +76,16 @@ func (c *signinClient) AddRecode(ctx context.Context, in *AddRecodeReq, opts ...
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(AddRecodeResp)
 	err := c.cc.Invoke(ctx, Signin_AddRecode_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *signinClient) AddRecodeRollback(ctx context.Context, in *AddRecodeReq, opts ...grpc.CallOption) (*AddRecodeResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(AddRecodeResp)
+	err := c.cc.Invoke(ctx, Signin_AddRecodeRollback_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -178,6 +192,16 @@ func (c *signinClient) AddTaskFinish(ctx context.Context, in *AddTaskFinishReq, 
 	return out, nil
 }
 
+func (c *signinClient) AddTaskFinishRollback(ctx context.Context, in *AddTaskFinishReq, opts ...grpc.CallOption) (*AddTaskFinishResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(AddTaskFinishResp)
+	err := c.cc.Invoke(ctx, Signin_AddTaskFinishRollback_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *signinClient) UpdateTaskFinish(ctx context.Context, in *UpdateTaskFinishReq, opts ...grpc.CallOption) (*UpdateTaskFinishResp, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(UpdateTaskFinishResp)
@@ -224,6 +248,7 @@ func (c *signinClient) SearchTaskFinish(ctx context.Context, in *SearchTaskFinis
 type SigninServer interface {
 	// -----------------------recode-----------------------
 	AddRecode(context.Context, *AddRecodeReq) (*AddRecodeResp, error)
+	AddRecodeRollback(context.Context, *AddRecodeReq) (*AddRecodeResp, error)
 	UpdateRecode(context.Context, *UpdateRecodeReq) (*UpdateRecodeResp, error)
 	DelRecode(context.Context, *DelRecodeReq) (*DelRecodeResp, error)
 	GetRecodeById(context.Context, *GetRecodeByIdReq) (*GetRecodeByIdResp, error)
@@ -236,6 +261,7 @@ type SigninServer interface {
 	SearchTask(context.Context, *SearchTaskReq) (*SearchTaskResp, error)
 	// -----------------------taskFinish-----------------------
 	AddTaskFinish(context.Context, *AddTaskFinishReq) (*AddTaskFinishResp, error)
+	AddTaskFinishRollback(context.Context, *AddTaskFinishReq) (*AddTaskFinishResp, error)
 	UpdateTaskFinish(context.Context, *UpdateTaskFinishReq) (*UpdateTaskFinishResp, error)
 	DelTaskFinish(context.Context, *DelTaskFinishReq) (*DelTaskFinishResp, error)
 	GetTaskFinishById(context.Context, *GetTaskFinishByIdReq) (*GetTaskFinishByIdResp, error)
@@ -252,6 +278,9 @@ type UnimplementedSigninServer struct{}
 
 func (UnimplementedSigninServer) AddRecode(context.Context, *AddRecodeReq) (*AddRecodeResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AddRecode not implemented")
+}
+func (UnimplementedSigninServer) AddRecodeRollback(context.Context, *AddRecodeReq) (*AddRecodeResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AddRecodeRollback not implemented")
 }
 func (UnimplementedSigninServer) UpdateRecode(context.Context, *UpdateRecodeReq) (*UpdateRecodeResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateRecode not implemented")
@@ -282,6 +311,9 @@ func (UnimplementedSigninServer) SearchTask(context.Context, *SearchTaskReq) (*S
 }
 func (UnimplementedSigninServer) AddTaskFinish(context.Context, *AddTaskFinishReq) (*AddTaskFinishResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AddTaskFinish not implemented")
+}
+func (UnimplementedSigninServer) AddTaskFinishRollback(context.Context, *AddTaskFinishReq) (*AddTaskFinishResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AddTaskFinishRollback not implemented")
 }
 func (UnimplementedSigninServer) UpdateTaskFinish(context.Context, *UpdateTaskFinishReq) (*UpdateTaskFinishResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateTaskFinish not implemented")
@@ -330,6 +362,24 @@ func _Signin_AddRecode_Handler(srv interface{}, ctx context.Context, dec func(in
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(SigninServer).AddRecode(ctx, req.(*AddRecodeReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Signin_AddRecodeRollback_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AddRecodeReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SigninServer).AddRecodeRollback(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Signin_AddRecodeRollback_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SigninServer).AddRecodeRollback(ctx, req.(*AddRecodeReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -514,6 +564,24 @@ func _Signin_AddTaskFinish_Handler(srv interface{}, ctx context.Context, dec fun
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Signin_AddTaskFinishRollback_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AddTaskFinishReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SigninServer).AddTaskFinishRollback(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Signin_AddTaskFinishRollback_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SigninServer).AddTaskFinishRollback(ctx, req.(*AddTaskFinishReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Signin_UpdateTaskFinish_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(UpdateTaskFinishReq)
 	if err := dec(in); err != nil {
@@ -598,6 +666,10 @@ var Signin_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Signin_AddRecode_Handler,
 		},
 		{
+			MethodName: "AddRecodeRollback",
+			Handler:    _Signin_AddRecodeRollback_Handler,
+		},
+		{
 			MethodName: "UpdateRecode",
 			Handler:    _Signin_UpdateRecode_Handler,
 		},
@@ -636,6 +708,10 @@ var Signin_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "AddTaskFinish",
 			Handler:    _Signin_AddTaskFinish_Handler,
+		},
+		{
+			MethodName: "AddTaskFinishRollback",
+			Handler:    _Signin_AddTaskFinishRollback_Handler,
 		},
 		{
 			MethodName: "UpdateTaskFinish",
