@@ -8,10 +8,42 @@ type AddRecodeTodayResp struct {
 	Id int64 `json:"id"`
 }
 
+type ListRecodeReq struct {
+	LastId   int64 `form:"lastId"`
+	Page     int64 `form:"page"`
+	PageSize int64 `form:"pageSize"`
+}
+
+type ListRecodeResp struct {
+	List    []Recode `json:"list"`
+	Days    int64    `json:"days"`
+	IsToday int64    `json:"isToday"`
+}
+
+type ListTaskReq struct {
+	LastId   int64 `form:"lastId"`
+	Page     int64 `form:"page"`
+	PageSize int64 `form:"pageSize"`
+}
+
+type ListTaskResp struct {
+	List []Task `json:"list"`
+}
+
 type Recode struct {
-	Id        int64  `json:"id"`
-	UserId    string `json:"userId"`
-	Sign_date int64  `json:"signDate"`
+	Id       int64 `json:"id"`
+	UserId   int64 `json:"userId"`
+	SignDate int64 `json:"signDate"`
+}
+
+type Task struct {
+	Id         int64  `json:"id"`
+	Title      string `json:"title"`      // 任务标题
+	Type       int64  `json:"type"`       // 任务类型：1连续签到
+	Value      int64  `json:"value"`      // 任务值，依据type来确定：为1时是连续天数
+	Content    string `json:"content"`    // 备注
+	Points     int64  `json:"points"`     // 获得的积分值
+	IsFinished int64  `json:"isFinished"` // 1为完成
 }
 
 type TestReq struct {

@@ -61,6 +61,7 @@ message SearchRecodeReq {
 
 message SearchRecodeResp {
   repeated Recode recode = 1; //recode
+  int64 days = 2;
 }
 
 //--------------------------------task--------------------------------
@@ -73,6 +74,7 @@ message Task {
   int64 value = 6; //浠诲姟鍊硷紝渚濇嵁type鏉ョ‘瀹氾細涓?鏃舵槸杩炵画澶╂暟
   string content = 7; //澶囨敞
   int64 points = 8; //鑾峰緱鐨勭Н鍒嗗€?
+  int64 isFinished = 9;
 }
 
 message AddTaskReq {
@@ -124,6 +126,7 @@ message SearchTaskReq {
   int64 value = 8; //浠诲姟鍊硷紝渚濇嵁type鏉ョ‘瀹氾細涓?鏃舵槸杩炵画澶╂暟
   string content = 9; //澶囨敞
   int64 points = 10; //鑾峰緱鐨勭Н鍒嗗€?
+  int64 userId = 11;
 }
 
 message SearchTaskResp {

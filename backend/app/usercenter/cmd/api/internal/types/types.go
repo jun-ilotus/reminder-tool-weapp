@@ -26,6 +26,13 @@ type LoginResp struct {
 	RefreshAfter int64  `json:"refreshAfter"`
 }
 
+type PointsRecode struct {
+	Id      int64  `json:"id"`
+	UserId  int64  `json:"userId"`
+	Content string `json:"content"`
+	Points  int64  `json:"points"`
+}
+
 type RegisterReq struct {
 	Mobile   string `json:"mobile"`
 	Password string `json:"password"`
@@ -47,6 +54,7 @@ type User struct {
 	IntimateId       int64  `json:"intimateId"`
 	IntimateNickname string `json:"intimateNickname"`
 	IntimateAvatar   string `json:"intimateAvatar"`
+	Points           int64  `json:"points"`
 }
 
 type UserInfoReq struct {
@@ -74,4 +82,11 @@ type ModifyUserInfoReq struct {
 }
 
 type ModifyUserInfoResp struct {
+}
+
+type PointsRecodeListReq struct {
+}
+
+type PointsRecodeListResp struct {
+	List []PointsRecode `json:"pointsRecode"`
 }

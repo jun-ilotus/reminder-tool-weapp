@@ -1,14 +1,14 @@
 <template>
   <nut-grid :column-num="2" style="margin-top: 20vh;">
     <nut-grid-item text="提醒待办" @click="toReminder"><Order /></nut-grid-item>
-    <nut-grid-item text="text"><Dongdong /></nut-grid-item>
+    <nut-grid-item text="签到" @click="toSignin"><Check /></nut-grid-item>
   </nut-grid>
 
   <Tabbar></Tabbar>
 </template>
 
 <script lang="ts" setup>
-import { Order } from '@nutui/icons-vue-taro'
+import { Order, Check } from '@nutui/icons-vue-taro'
 import Taro from '@tarojs/taro';
 import Tabbar from "../../components/Tabbar.vue";
 import { useDidShow } from '@tarojs/taro'
@@ -20,6 +20,12 @@ const store = useUserStore()
 const toReminder = () => {
   Taro.navigateTo({ 
       url: '/pages/reminderIndex/index'
+  })
+}
+
+const toSignin = () => {
+  Taro.navigateTo({ 
+      url: '/pages/signin/index/index'
   })
 }
 

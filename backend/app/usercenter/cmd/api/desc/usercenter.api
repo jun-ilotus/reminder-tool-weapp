@@ -10,6 +10,7 @@ info (
 
 import (
 	"user/user.api"
+	"pointsRecode/pointsRecode.api"
 )
 
 //============================> usercenter v1 <============================
@@ -54,5 +55,17 @@ service usercenter {
 	@doc "修改用户信息"
 	@handler modifyInfo
 	post /user/modifyInfo (modifyUserInfoReq) returns (modifyUserInfoResp)
+}
+
+//need login
+@server (
+	prefix: usercenter/v1
+	group:  pointsRecode
+	jwt:    JwtAuth
+)
+service usercenter {
+	@doc "获取积分记录"
+	@handler list
+	get /pointsRecode/list (pointsRecodeListReq) returns (pointsRecodeListResp)
 }
 

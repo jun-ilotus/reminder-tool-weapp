@@ -77,3 +77,8 @@ func (s *UsercenterServer) AddPointsRecodeRollback(ctx context.Context, in *pb.A
 	l := logic.NewAddPointsRecodeRollbackLogic(ctx, s.svcCtx)
 	return l.AddPointsRecodeRollback(in)
 }
+
+func (s *UsercenterServer) PointsRecodeList(ctx context.Context, in *pb.PointsRecodeListReq) (*pb.PointRecodeListResp, error) {
+	l := logic.NewPointsRecodeListLogic(ctx, s.svcCtx)
+	return l.PointsRecodeList(in)
+}

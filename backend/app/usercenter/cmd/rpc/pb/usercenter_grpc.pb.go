@@ -30,6 +30,7 @@ const (
 	Usercenter_ModifyUserInfo_FullMethodName          = "/pb.usercenter/ModifyUserInfo"
 	Usercenter_AddPointsRecode_FullMethodName         = "/pb.usercenter/AddPointsRecode"
 	Usercenter_AddPointsRecodeRollback_FullMethodName = "/pb.usercenter/AddPointsRecodeRollback"
+	Usercenter_PointsRecodeList_FullMethodName        = "/pb.usercenter/PointsRecodeList"
 )
 
 // UsercenterClient is the client API for Usercenter service.
@@ -49,6 +50,7 @@ type UsercenterClient interface {
 	ModifyUserInfo(ctx context.Context, in *ModifyUserInfoReq, opts ...grpc.CallOption) (*ModifyUserInfoResp, error)
 	AddPointsRecode(ctx context.Context, in *AddPointsRecodeReq, opts ...grpc.CallOption) (*AddPointsRecodeResp, error)
 	AddPointsRecodeRollback(ctx context.Context, in *AddPointsRecodeReq, opts ...grpc.CallOption) (*AddPointsRecodeResp, error)
+	PointsRecodeList(ctx context.Context, in *PointsRecodeListReq, opts ...grpc.CallOption) (*PointRecodeListResp, error)
 }
 
 type usercenterClient struct {
@@ -169,6 +171,16 @@ func (c *usercenterClient) AddPointsRecodeRollback(ctx context.Context, in *AddP
 	return out, nil
 }
 
+func (c *usercenterClient) PointsRecodeList(ctx context.Context, in *PointsRecodeListReq, opts ...grpc.CallOption) (*PointRecodeListResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(PointRecodeListResp)
+	err := c.cc.Invoke(ctx, Usercenter_PointsRecodeList_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // UsercenterServer is the server API for Usercenter service.
 // All implementations must embed UnimplementedUsercenterServer
 // for forward compatibility.
@@ -186,6 +198,7 @@ type UsercenterServer interface {
 	ModifyUserInfo(context.Context, *ModifyUserInfoReq) (*ModifyUserInfoResp, error)
 	AddPointsRecode(context.Context, *AddPointsRecodeReq) (*AddPointsRecodeResp, error)
 	AddPointsRecodeRollback(context.Context, *AddPointsRecodeReq) (*AddPointsRecodeResp, error)
+	PointsRecodeList(context.Context, *PointsRecodeListReq) (*PointRecodeListResp, error)
 	mustEmbedUnimplementedUsercenterServer()
 }
 
@@ -228,6 +241,9 @@ func (UnimplementedUsercenterServer) AddPointsRecode(context.Context, *AddPoints
 }
 func (UnimplementedUsercenterServer) AddPointsRecodeRollback(context.Context, *AddPointsRecodeReq) (*AddPointsRecodeResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AddPointsRecodeRollback not implemented")
+}
+func (UnimplementedUsercenterServer) PointsRecodeList(context.Context, *PointsRecodeListReq) (*PointRecodeListResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method PointsRecodeList not implemented")
 }
 func (UnimplementedUsercenterServer) mustEmbedUnimplementedUsercenterServer() {}
 func (UnimplementedUsercenterServer) testEmbeddedByValue()                    {}
@@ -448,6 +464,24 @@ func _Usercenter_AddPointsRecodeRollback_Handler(srv interface{}, ctx context.Co
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Usercenter_PointsRecodeList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(PointsRecodeListReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UsercenterServer).PointsRecodeList(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Usercenter_PointsRecodeList_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UsercenterServer).PointsRecodeList(ctx, req.(*PointsRecodeListReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Usercenter_ServiceDesc is the grpc.ServiceDesc for Usercenter service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -498,6 +532,10 @@ var Usercenter_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "AddPointsRecodeRollback",
 			Handler:    _Usercenter_AddPointsRecodeRollback_Handler,
+		},
+		{
+			MethodName: "PointsRecodeList",
+			Handler:    _Usercenter_PointsRecodeList_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

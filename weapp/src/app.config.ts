@@ -9,6 +9,8 @@ export default {
     'pages/calendar/index',
     'pages/intimate/index',
     'pages/userinfo/index',
+    'pages/signin/index/index',
+    'pages/points/recode/index',
   ],
   window: {
     backgroundTextStyle: 'light',

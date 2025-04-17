@@ -35,11 +35,19 @@ func NewAddRecodeLogic(ctx context.Context, svcCtx *svc.ServiceContext) *AddReco
 func (l *AddRecodeLogic) AddRecode(in *pb.AddRecodeReq) (*pb.AddRecodeResp, error) {
 	id := int64(0)
 	taskList := make([]*pb.Task, 0)
-	err := l.svcCtx.RecodeModel.Trans(l.ctx, func(ctx context.Context, session sqlx.Session) error {
-		recode := &model.Recode{
-			UserId:   in.UserId,
-			SignDate: time.Unix(in.SignDate, 0),
-		}
+	recode := &model.Recode{
+		UserId:   in.UserId,
+		SignDate: time.Unix(in.SignDate, 0),
+	}
+	date, err := l.svcCtx.RecodeModel.FindLastOneByUserIdSignDate(l.ctx, recode.UserId)
+	if err != nil && err != model.ErrNotFound {
+		return nil, errors.Wrapf(xerr.NewErrCode(xerr.DB_ERROR), "AddRecode recode Database Exception AddRecode : %+v , err: %v", recode, err)
+	}
+	if date != nil {
+		return nil, errors.Wrapf(xerr.NewErrCode(xerr.DB_ERROR), "今天签过到了")
+	}
+
+	err = l.svcCtx.RecodeModel.Trans(l.ctx, func(ctx context.Context, session sqlx.Session) error {
 		insert, err := l.svcCtx.RecodeModel.TransInsert(l.ctx, session, recode)
 		if err != nil {
 			return errors.Wrapf(xerr.NewErrCode(xerr.DB_ERROR), "AddRecode recode Database Exception AddRecode : %+v , err: %v", recode, err)
@@ -61,7 +69,7 @@ func (l *AddRecodeLogic) AddRecode(in *pb.AddRecodeReq) (*pb.AddRecodeResp, erro
 		if tasks != nil && len(tasks) > 0 {
 			for _, task := range tasks {
 				var pbTask pb.Task
-				_ = copier.Copy(&pbTask, task)
+				_ = copier.Copy(&pbTask, &task)
 				taskList = append(taskList, &pbTask)
 			}
 		}

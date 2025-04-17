@@ -128,6 +128,14 @@ message AddPointsRecodeResp {
     int64 id = 1;
 }
 
+message PointsRecodeListReq {
+    int64 userId = 1;
+}
+
+message PointRecodeListResp {
+    repeated PointsRecode pointsRecode = 1;
+}
+
 //service
 service usercenter {
   rpc login(LoginReq) returns(LoginResp);
@@ -141,4 +149,5 @@ service usercenter {
   rpc ModifyUserInfo(ModifyUserInfoReq) returns (ModifyUserInfoResp);
   rpc AddPointsRecode(AddPointsRecodeReq) returns (AddPointsRecodeResp);
   rpc AddPointsRecodeRollback(AddPointsRecodeReq) returns (AddPointsRecodeResp);
+    rpc PointsRecodeList(PointsRecodeListReq) returns (PointRecodeListResp);
 }

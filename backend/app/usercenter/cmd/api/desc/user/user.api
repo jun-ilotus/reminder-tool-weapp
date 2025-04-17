@@ -17,6 +17,7 @@ type User {
 	intimateId int64 `json:"intimateId"`
 	intimateNickname string `json:"intimateNickname"`
 	intimateAvatar string `json:"intimateAvatar"`
+	points int64 `json:"points"`
 }
 
 type (

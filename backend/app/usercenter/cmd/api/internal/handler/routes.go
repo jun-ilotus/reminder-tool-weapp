@@ -4,6 +4,7 @@ package handler
 import (
 	"net/http"
 
+	pointsRecode "looklook/app/usercenter/cmd/api/internal/handler/pointsRecode"
 	user "looklook/app/usercenter/cmd/api/internal/handler/user"
 	"looklook/app/usercenter/cmd/api/internal/svc"
 
@@ -11,6 +12,19 @@ import (
 )
 
 func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
+	server.AddRoutes(
+		[]rest.Route{
+			{
+				// 获取积分记录
+				Method:  http.MethodGet,
+				Path:    "/pointsRecode/list",
+				Handler: pointsRecode.ListHandler(serverCtx),
+			},
+		},
+		rest.WithJwt(serverCtx.Config.JwtAuth.AccessSecret),
+		rest.WithPrefix("/usercenter/v1"),
+	)
+
 	server.AddRoutes(
 		[]rest.Route{
 			{

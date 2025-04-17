@@ -8,8 +8,8 @@ info(
 
 type Recode {
     Id       int64  `json:"id"`
-    UserId   string `json:"userId"`
-    sign_date int64 `json:"signDate"`
+    UserId   int64 `json:"userId"`
+    signDate int64 `json:"signDate"`
 }
 
 type (
@@ -18,6 +18,16 @@ type (
     }
     AddRecodeTodayResp {
         Id int64 `json:"id"`
+    }
+    ListRecodeReq {
+        LastId int64 `form:"lastId"`
+        Page int64 `form:"page"`
+        PageSize int64 `form:"pageSize"`
+    }
+    ListRecodeResp {
+        list []Recode `json:"list"`
+        days int64 `json:"days"`
+        isToday int64 `json:"isToday"`
     }
 )
 

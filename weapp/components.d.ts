@@ -13,6 +13,7 @@ declare module 'vue' {
     NutCell: typeof import('@nutui/nutui-taro')['Cell']
     NutDatePicker: typeof import('@nutui/nutui-taro')['DatePicker']
     NutDialog: typeof import('@nutui/nutui-taro')['Dialog']
+    NutDivider: typeof import('@nutui/nutui-taro')['Divider']
     NutForm: typeof import('@nutui/nutui-taro')['Form']
     NutFormItem: typeof import('@nutui/nutui-taro')['FormItem']
     NutGrid: typeof import('@nutui/nutui-taro')['Grid']

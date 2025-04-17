@@ -54,14 +54,14 @@ type (
 	}
 
 	Task struct {
-		Id         int64          `db:"id"`
-		CreateTime time.Time      `db:"create_time"`
-		UpdateTime time.Time      `db:"update_time"`
-		Title      string         `db:"title"`   // 任务标题
-		Type       int64          `db:"type"`    // 任务类型：1连续签到
-		Value      sql.NullInt64  `db:"value"`   // 任务值，依据type来确定：为1时是连续天数
-		Content    sql.NullString `db:"content"` // 备注
-		Points     int64          `db:"points"`  // 获得的积分值
+		Id         int64     `db:"id"`
+		CreateTime time.Time `db:"create_time"`
+		UpdateTime time.Time `db:"update_time"`
+		Title      string    `db:"title"`   // 任务标题
+		Type       int64     `db:"type"`    // 任务类型：1连续签到
+		Value      int64     `db:"value"`   // 任务值，依据type来确定：为1时是连续天数
+		Content    string    `db:"content"` // 备注
+		Points     int64     `db:"points"`  // 获得的积分值
 	}
 )
 

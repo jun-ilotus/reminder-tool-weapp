@@ -18,6 +18,7 @@ const useUserStore = defineStore('user', {
         intimateId: 0,
         intimateNickname: "",
         intimateAvatar: "",
+        points: 0,
     }),
     actions: {
       setLogin(value) {
@@ -37,6 +38,7 @@ const useUserStore = defineStore('user', {
         this.intimateId = value.intimateId
         this.intimateNickname = value.intimateNickname
         this.intimateAvatar = value.intimateAvatar
+        this.points = value.points
       },
       async infoReq() {
         try {
@@ -52,6 +54,7 @@ const useUserStore = defineStore('user', {
                 this.intimateId = result.data.userInfo.intimateId
                 this.intimateNickname = result.data.userInfo.intimateNickname
                 this.intimateAvatar = result.data.userInfo.intimateAvatar
+                this.points = result.data.userInfo.points
             } else {
                 Taro.showToast({
                     title: '登录失败！' + result.message,

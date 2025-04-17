@@ -8,7 +8,6 @@ import (
 	"github.com/zeromicro/go-zero/core/stores/sqlc"
 	"github.com/zeromicro/go-zero/core/stores/sqlx"
 	"looklook/common/xerr"
-	"time"
 )
 
 var _ RecodeModel = (*customRecodeModel)(nil)
@@ -20,7 +19,8 @@ type (
 		recodeModel
 
 		FindCountUserNowConRecodeDays(ctx context.Context, userId int64) (*int, error)
-		FindLastOneByUserIdSignDate(ctx context.Context, userId int64, SignDate time.Time) (*Recode, error)
+		FindLastOneByUserIdSignDate(ctx context.Context, userId int64) (*Recode, error)
+		RecodeList(ctx context.Context, userId int64) ([]*Recode, error)
 	}
 
 	customRecodeModel struct {
@@ -35,12 +35,27 @@ func NewRecodeModel(conn sqlx.SqlConn, c cache.CacheConf, opts ...cache.Option) 
 	}
 }
 
-func (c *customRecodeModel) FindLastOneByUserIdSignDate(ctx context.Context, userId int64, SignDate time.Time) (*Recode, error) {
+func (c *customRecodeModel) RecodeList(ctx context.Context, userId int64) ([]*Recode, error) {
 	var query string
-	query = fmt.Sprintf("select %s from %s where user_id = ? and sign_date = ? order by id desc limit 1", recodeRows, c.table)
+	query = fmt.Sprintf("select %s from %s where user_id = ? order by sign_date desc", recodeRows, c.table)
+	var resp []*Recode
+	err := c.QueryRowsNoCacheCtx(ctx, &resp, query, userId)
+	switch err {
+	case nil:
+		return resp, nil
+	case sqlc.ErrNotFound:
+		return nil, ErrNotFound
+	default:
+		return nil, errors.Wrapf(xerr.NewErrCode(xerr.DB_ERROR), "RecodeList, &resp:%v, query:%v, userId:%v, error: %v", &resp, query, userId, err)
+	}
+}
+
+func (c *customRecodeModel) FindLastOneByUserIdSignDate(ctx context.Context, userId int64) (*Recode, error) {
+	var query string
+	query = fmt.Sprintf("select %s from %s where user_id = ? and sign_date = CURDATE() order by id desc limit 1", recodeRows, c.table)
 	var resp Recode
 
-	err := c.QueryRowNoCacheCtx(ctx, &resp, query, userId, SignDate)
+	err := c.QueryRowNoCacheCtx(ctx, &resp, query, userId)
 
 	switch err {
 	case nil:
@@ -60,16 +75,15 @@ FROM (
     SELECT 
         user_id,
         sign_date,
-        IF(@prev_user = user_id AND DATEDIFF(sign_date, @prev_date) = 1, 
-           @consecutive_days := @consecutive_days + 1,
-           IF(@prev_user = user_id AND DATEDIFF(sign_date, @prev_date) > 1, 
-              @consecutive_days := 1,
-              @consecutive_days := 1)) AS consecutive_days,
-        @prev_date := sign_date,
-        @prev_user := user_id
+        IF(
+            DATEDIFF(@prev_date, sign_date) = 1, 
+            @consecutive_days := @consecutive_days + 1,
+            @consecutive_days := 1
+        ) AS consecutive_days,
+        @prev_date := sign_date
     FROM 
         recode,
-        (SELECT @prev_date := NULL, @prev_user := NULL, @consecutive_days := 0) AS vars
+        (SELECT @prev_date := NULL, @consecutive_days := 0) AS vars
     WHERE 
         user_id = ? AND
         sign_date <= CURDATE()

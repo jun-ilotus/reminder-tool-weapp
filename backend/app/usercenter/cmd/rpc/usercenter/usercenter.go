@@ -32,7 +32,9 @@ type (
 	LoginResp                = pb.LoginResp
 	ModifyUserInfoReq        = pb.ModifyUserInfoReq
 	ModifyUserInfoResp       = pb.ModifyUserInfoResp
+	PointRecodeListResp      = pb.PointRecodeListResp
 	PointsRecode             = pb.PointsRecode
+	PointsRecodeListReq      = pb.PointsRecodeListReq
 	RegisterReq              = pb.RegisterReq
 	RegisterResp             = pb.RegisterResp
 	User                     = pb.User
@@ -50,6 +52,7 @@ type (
 		ModifyUserInfo(ctx context.Context, in *ModifyUserInfoReq, opts ...grpc.CallOption) (*ModifyUserInfoResp, error)
 		AddPointsRecode(ctx context.Context, in *AddPointsRecodeReq, opts ...grpc.CallOption) (*AddPointsRecodeResp, error)
 		AddPointsRecodeRollback(ctx context.Context, in *AddPointsRecodeReq, opts ...grpc.CallOption) (*AddPointsRecodeResp, error)
+		PointsRecodeList(ctx context.Context, in *PointsRecodeListReq, opts ...grpc.CallOption) (*PointRecodeListResp, error)
 	}
 
 	defaultUsercenter struct {
@@ -116,4 +119,9 @@ func (m *defaultUsercenter) AddPointsRecode(ctx context.Context, in *AddPointsRe
 func (m *defaultUsercenter) AddPointsRecodeRollback(ctx context.Context, in *AddPointsRecodeReq, opts ...grpc.CallOption) (*AddPointsRecodeResp, error) {
 	client := pb.NewUsercenterClient(m.cli.Conn())
 	return client.AddPointsRecodeRollback(ctx, in, opts...)
+}
+
+func (m *defaultUsercenter) PointsRecodeList(ctx context.Context, in *PointsRecodeListReq, opts ...grpc.CallOption) (*PointRecodeListResp, error) {
+	client := pb.NewUsercenterClient(m.cli.Conn())
+	return client.PointsRecodeList(ctx, in, opts...)
 }

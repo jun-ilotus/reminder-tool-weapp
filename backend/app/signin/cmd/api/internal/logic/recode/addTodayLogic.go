@@ -6,6 +6,7 @@ import (
 	"github.com/zeromicro/go-zero/core/logx"
 	"looklook/app/signin/cmd/rpc/signin"
 	"looklook/app/usercenter/cmd/rpc/usercenter"
+	"looklook/common/ctxdata"
 	"time"
 
 	"looklook/app/signin/cmd/api/internal/svc"
@@ -32,8 +33,8 @@ func NewAddTodayLogic(ctx context.Context, svcCtx *svc.ServiceContext) *AddToday
 }
 
 func (l *AddTodayLogic) AddToday(req *types.AddRecodeTodayReq) (resp *types.AddRecodeTodayResp, err error) {
-	//userId := ctxdata.GetUidFromCtx(l.ctx)
-	userId := int64(2)
+	userId := ctxdata.GetUidFromCtx(l.ctx)
+	//userId := int64(2)
 
 	signinRpcBusiServer, err := l.svcCtx.Config.SigninRpcConf.BuildTarget()
 	if err != nil {
@@ -56,15 +57,21 @@ func (l *AddTodayLogic) AddToday(req *types.AddRecodeTodayReq) (resp *types.AddR
 		if err != nil {
 			return err
 		}
-		addTaskFinishReq := &signin.AddTaskFinishReq{Task: addRecodeResp.Task, UserId: userId}
+
+		addTaskFinishReq := &signin.AddTaskFinishReq{
+			Task:       addRecodeResp.Task,
+			UserId:     userId,
+			FinishDate: time.Now().Unix(),
+		}
 		err = tcc.CallBranch(addTaskFinishReq, signinRpcBusiServer+"/pb.signin/AddTaskFinish",
 			"", signinRpcBusiServer+"/pb.signin/AddTaskFinishRollback", addFinishResp)
 		if err != nil {
 			return err
 		}
+
 		content := ""
 		if len(addRecodeResp.Task) > 0 {
-			content = addRecodeResp.Task[0].Content
+			content = addRecodeResp.Task[0].Title
 		}
 		addPointsRecodeReq := &usercenter.AddPointsRecodeReq{
 			UserId:  userId,

@@ -5,6 +5,8 @@ import (
 	"github.com/pkg/errors"
 	"github.com/zeromicro/go-zero/core/logx"
 	"github.com/zeromicro/go-zero/core/stores/sqlx"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 	"looklook/app/usercenter/cmd/rpc/internal/svc"
 	"looklook/app/usercenter/cmd/rpc/pb"
 	"looklook/app/usercenter/model"
@@ -44,14 +46,14 @@ func (l *AddPointsRecodeLogic) AddPointsRecode(in *pb.AddPointsRecodeReq) (*pb.A
 		id, _ = insert.LastInsertId()
 
 		// 修改用户表中积分值
-		err = l.svcCtx.UserModel.TransUpdatePoints(l.ctx, session, pointsRecode.Points, pointsRecode.UserId)
+		err = l.svcCtx.UserModel.TransUpdatePoints(l.ctx, session, pointsRecode.UserId, pointsRecode.Points)
 		if err != nil {
 			return errors.Wrapf(xerr.NewErrCode(xerr.DB_ERROR), "user Database Exception pointsRecode : %+v , err: %v", pointsRecode.UserId, err)
 		}
 
 		return nil
 	}); err != nil {
-		return nil, errors.Wrapf(xerr.NewErrCode(xerr.DB_ERROR), "pointsRecode Database Exception pointsRecode : err: %v", err)
+		return nil, status.Error(codes.Internal, err.Error())
 	}
 
 	return &pb.AddPointsRecodeResp{Id: id}, nil

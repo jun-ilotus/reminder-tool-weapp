@@ -1,0 +1,21 @@
+syntax = "v1"
+
+info(
+    title: "积分记录实例"
+    desc: "积分记录实例"
+    author: "ilotus"
+)
+
+type PointsRecode {
+    id int64 `json:"id"`
+    userId int64 `json:"userId"`
+    content string `json:"content"`
+    points int64 `json:"points"`
+}
+
+type pointsRecodeListReq {
+}
+
+type pointsRecodeListResp {
+    list []PointsRecode `json:"pointsRecode"`
+}

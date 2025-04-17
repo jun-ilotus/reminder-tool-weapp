@@ -9,6 +9,7 @@ info (
 
 import (
 	"recode/recode.api"
+	"task/task.api"
 )
 
 //=====================================> lottery-lottery v1 <=================================
@@ -16,7 +17,7 @@ import (
 @server (
 	prefix: signin/v1
 	group:  recode
-// jwt:    JwtAuth
+	jwt:    JwtAuth
 )
 service signin {
 	@doc "测试Validator"
@@ -26,4 +27,21 @@ service signin {
 	@doc "recode addToday"
 	@handler addToday
 	post /recode/addToday (AddRecodeTodayReq) returns (AddRecodeTodayResp)
+
+	@doc "recode addToday"
+	@handler listRecode
+	get /recode/list (ListRecodeReq) returns (ListRecodeResp)
 }
+
+//need login
+@server (
+	prefix: signin/v1
+	group:  task
+	jwt:    JwtAuth
+)
+service signin {
+	@doc "recode addToday"
+	@handler listTask
+	get /task/list (ListTaskReq) returns (ListTaskResp)
+}
+

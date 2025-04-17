@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	recode "looklook/app/signin/cmd/api/internal/handler/recode"
+	task "looklook/app/signin/cmd/api/internal/handler/task"
 	"looklook/app/signin/cmd/api/internal/svc"
 
 	"github.com/zeromicro/go-zero/rest"
@@ -25,7 +26,27 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Path:    "/recode/addToday",
 				Handler: recode.AddTodayHandler(serverCtx),
 			},
+			{
+				// recode addToday
+				Method:  http.MethodGet,
+				Path:    "/recode/list",
+				Handler: recode.ListRecodeHandler(serverCtx),
+			},
 		},
+		rest.WithJwt(serverCtx.Config.JwtAuth.AccessSecret),
+		rest.WithPrefix("/signin/v1"),
+	)
+
+	server.AddRoutes(
+		[]rest.Route{
+			{
+				// recode addToday
+				Method:  http.MethodGet,
+				Path:    "/task/list",
+				Handler: task.ListTaskHandler(serverCtx),
+			},
+		},
+		rest.WithJwt(serverCtx.Config.JwtAuth.AccessSecret),
 		rest.WithPrefix("/signin/v1"),
 	)
 }
