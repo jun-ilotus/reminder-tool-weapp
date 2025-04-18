@@ -1,5 +1,5 @@
 
-
+请阅读项目根目录下的 /doc/chinese/ 下的完整教程，从 01-开发环境搭建环境。
 ## go-zero-looklook
 
 [English](README.md) | 简体中文
@@ -101,18 +101,6 @@
 - modd.conf :  modd热加载配置文件，不要怕～它用起来很简单，关于modd更多用法可以去这里了解 ： https://github.com/cortesi/modd ， 本项目镜像只是将golang-1.17.7-alpine作为基础镜像安装了modd在内部，如果你想把goctl、protoc、golint等加进去，不用我的镜像直接制作一个镜像也一样的哈
 
 
-
-
-
-## 系统架构图
-
-![jiagou](./doc/chinese/images/1/gozerolooklook.png)
-
-## 业务架构图
-
-![jiagou](./doc/chinese/images/1/go-zero-looklook-service.png)
-
-
 ## 网关
 
 nginx做对外网关，网关前面是slb，另外，很多同学觉得nginx做网关不太好，这块原理基本一样，可以自行替换成apisix、kong等
@@ -189,11 +177,4 @@ go-zero 微服务: https://github.com/zeromicro/go-zero
 
 dtm分布式事务：https://github.com/dtm-labs/dtm
 
-
-
-
-
-## 赞赏
-
-![image-20220124142937169](./doc/chinese/images/1/info.jpg)
 
