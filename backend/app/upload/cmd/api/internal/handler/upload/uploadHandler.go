@@ -1,8 +1,10 @@
 package upload
 
 import (
+	"github.com/pkg/errors"
 	uuid "github.com/satori/go.uuid"
 	"github.com/zeromicro/go-zero/rest/httpx"
+	"io"
 	"io/ioutil"
 	"looklook/app/upload/cmd/api/internal/logic/upload"
 	"looklook/app/upload/cmd/api/internal/svc"
@@ -24,6 +26,24 @@ func UploadHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 			result.ParamErrorResult(r, w, err)
 			return
 		}
+
+		// 读取文件内容到字节切片
+		buffer := make([]byte, 512)
+		n, err := file.Read(buffer)
+		if err != nil && err != io.EOF {
+			result.ParamErrorResult(r, w, errors.New("Error reading file"))
+			return
+		}
+		fileType := http.DetectContentType(buffer[:n])
+		if !isImage(fileType) {
+			result.ParamErrorResult(r, w, errors.New("File is not an image"))
+			return
+		}
+		_, err = file.Seek(0, io.SeekStart)
+		if err != nil {
+			result.ParamErrorResult(r, w, errors.New("Error reading file"))
+			return
+		} // 将文件指针重置到文件开头
 		//todo 添加文件大小限制
 		//当文件大于10M
 		//if header.Size >= (10 << 20) {
@@ -56,4 +76,22 @@ func UploadHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 			result.HttpResult(r, w, resp, err)
 		}
 	}
+}
+
+// isImage 检查 MIME 类型是否是图片类型
+func isImage(fileType string) bool {
+	imageTypes := []string{
+		"image/jpeg",
+		"image/png",
+		"image/gif",
+		"image/webp",
+		"image/bmp",
+		"image/tiff",
+	}
+	for _, t := range imageTypes {
+		if fileType == t {
+			return true
+		}
+	}
+	return false
 }

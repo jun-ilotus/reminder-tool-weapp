@@ -18,7 +18,7 @@ type (
 	RecodeModel interface {
 		recodeModel
 
-		FindCountUserNowConRecodeDays(ctx context.Context, userId int64) (*int, error)
+		FindCountUserNowConRecodeDays(ctx context.Context, session sqlx.Session, userId int64) (*int, error)
 		FindLastOneByUserIdSignDate(ctx context.Context, userId int64) (*Recode, error)
 		RecodeList(ctx context.Context, userId int64) ([]*Recode, error)
 	}
@@ -67,7 +67,7 @@ func (c *customRecodeModel) FindLastOneByUserIdSignDate(ctx context.Context, use
 	}
 }
 
-func (c *customRecodeModel) FindCountUserNowConRecodeDays(ctx context.Context, userId int64) (*int, error) {
+func (c *customRecodeModel) FindCountUserNowConRecodeDays(ctx context.Context, session sqlx.Session, userId int64) (*int, error) {
 	var query string
 	query = `SELECT 
     COALESCE(MAX(consecutive_days), 0) AS max_consecutive_days
@@ -91,8 +91,8 @@ FROM (
         sign_date DESC
 ) AS subquery;`
 	var resp int
-
-	err := c.QueryRowNoCacheCtx(ctx, &resp, query, userId)
+	// 这里必须在同一个事务中才能查询到新插入的数据
+	err := session.QueryRowCtx(ctx, &resp, query, userId)
 
 	switch err {
 	case nil:

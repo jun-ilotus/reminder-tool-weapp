@@ -2,7 +2,8 @@ import type { UserConfigExport } from "@tarojs/cli";
 export default {
   env: { // 设置环境变量
     NODE_ENV: '"production"', // JSON.stringify('production')
-    TARO_APP_PROXY: '"https://remind.jilotus.cn"'
+    // TARO_APP_PROXY: '"https://remind.jilotus.cn"'
+    TARO_APP_PROXY: '"http://localhost:8888"'
   },
   mini: {},
   h5: {

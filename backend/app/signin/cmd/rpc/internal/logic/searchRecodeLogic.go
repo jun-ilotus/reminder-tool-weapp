@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/jinzhu/copier"
 	"github.com/pkg/errors"
+	"github.com/zeromicro/go-zero/core/stores/sqlx"
 	"looklook/app/signin/cmd/rpc/internal/svc"
 	"looklook/app/signin/cmd/rpc/pb"
 	"looklook/app/signin/model"
@@ -31,9 +32,16 @@ func (l *SearchRecodeLogic) SearchRecode(in *pb.SearchRecodeReq) (*pb.SearchReco
 	if err != nil && !errors.Is(err, model.ErrNotFound) {
 		return nil, errors.Wrapf(xerr.NewErrCode(xerr.DB_ERROR), "SearchRecode查询记录失败 err: %v", err)
 	}
+	var days *int
 
 	// 获取用户当前的连续签到天数
-	days, err := l.svcCtx.RecodeModel.FindCountUserNowConRecodeDays(l.ctx, in.UserId)
+	err = l.svcCtx.RecodeModel.Trans(l.ctx, func(ctx context.Context, session sqlx.Session) error {
+		days, err = l.svcCtx.RecodeModel.FindCountUserNowConRecodeDays(l.ctx, session, in.UserId)
+		if err != nil {
+			return errors.Wrapf(xerr.NewErrCode(xerr.DB_ERROR), "SearchRecode recode Database Exception : err: %v", err)
+		}
+		return nil
+	})
 	if err != nil {
 		return nil, errors.Wrapf(xerr.NewErrCode(xerr.DB_ERROR), "SearchRecode recode Database Exception : err: %v", err)
 	}

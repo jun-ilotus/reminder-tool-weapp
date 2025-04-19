@@ -46,7 +46,7 @@ func (l *AddRecodeLogic) AddRecode(in *pb.AddRecodeReq) (*pb.AddRecodeResp, erro
 	if date != nil {
 		return nil, errors.Wrapf(xerr.NewErrCode(xerr.DB_ERROR), "今天签过到了")
 	}
-
+	// todo 用户两次签到过快 前一次插入事务还未完成 后一次查询不到签过到了  导致两次签到
 	err = l.svcCtx.RecodeModel.Trans(l.ctx, func(ctx context.Context, session sqlx.Session) error {
 		insert, err := l.svcCtx.RecodeModel.TransInsert(l.ctx, session, recode)
 		if err != nil {
@@ -54,9 +54,8 @@ func (l *AddRecodeLogic) AddRecode(in *pb.AddRecodeReq) (*pb.AddRecodeResp, erro
 		}
 		id, _ = insert.LastInsertId()
 
-		// todo 添加任务查询 看是否完成
-		// 获取用户当前的连续签到天数
-		days, err := l.svcCtx.RecodeModel.FindCountUserNowConRecodeDays(l.ctx, in.UserId)
+		// 获取用户当前的连续签到天数   必须在同一个事务中才能查询到新插入的数据
+		days, err := l.svcCtx.RecodeModel.FindCountUserNowConRecodeDays(l.ctx, session, in.UserId)
 		if err != nil {
 			return errors.Wrapf(xerr.NewErrCode(xerr.DB_ERROR), "AddRecode recode Database Exception AddRecode : %+v , err: %v", recode, err)
 		}
