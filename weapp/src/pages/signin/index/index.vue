@@ -13,6 +13,11 @@
         <nut-button v-if="isToday===0" block type="success" @click="addRecode()">签到</nut-button>
         <nut-button v-else block plain disabled type="success">已签到</nut-button>
     </nut-form>
+    <nut-form>
+      <nut-form-item body-align="right" label="签到提醒">
+        <nut-switch v-model="signRemindSwitch" @change="change"></nut-switch>
+      </nut-form-item>
+    </nut-form>
     <nut-divider style="margin-top: 5vh;"> 积分任务 </nut-divider>
     <nut-form disabled v-for="task in taskList">
         <nut-cell :title="task.title" :sub-title="task.points" :desc="task.isFinished === 1 ? '已完成':''"></nut-cell>
@@ -35,6 +40,7 @@ const markDate = ref<any[]>([])
 const conDays = ref(0)
 const taskList = ref<any[]>([])
 const isToday = ref(0)
+const signRemindSwitch = ref(false)
 
 // 页面显示时 获取reminder数据
 useDidShow(() => {
@@ -44,6 +50,10 @@ useDidShow(() => {
 
 const addRecode = () => {
     createReq()
+}
+
+const change = () => {
+    console.log(signRemindSwitch.value)
 }
 
 

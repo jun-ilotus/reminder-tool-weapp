@@ -1,0 +1,29 @@
+syntax = "v1"
+
+info(
+    title: "签到提醒下实例"
+    desc: "签到提醒实例"
+    author: "ilotus"
+)
+
+type Remind {
+    Id       int64  `json:"id"`
+    UserId   int64 `json:"userId"`
+    Status int64 `json:"status"`
+}
+
+type (
+    ChangeSignRemindReq {
+        Status int64 `json:"status"`
+    }
+    ChangeSignRemindResp {
+        Id int64 `json:"id"`
+        Status int64 `json:"status"`
+    }
+    GetRemindStatusReq {
+
+    }
+    GetRemindStatusResp {
+        Status int64 `json:"status"`
+    }
+)

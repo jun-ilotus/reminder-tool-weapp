@@ -36,6 +36,8 @@ const (
 	Signin_DelTaskFinish_FullMethodName         = "/pb.signin/DelTaskFinish"
 	Signin_GetTaskFinishById_FullMethodName     = "/pb.signin/GetTaskFinishById"
 	Signin_SearchTaskFinish_FullMethodName      = "/pb.signin/SearchTaskFinish"
+	Signin_ChangeSignRemind_FullMethodName      = "/pb.signin/ChangeSignRemind"
+	Signin_GetRemindStatus_FullMethodName       = "/pb.signin/GetRemindStatus"
 )
 
 // SigninClient is the client API for Signin service.
@@ -62,6 +64,9 @@ type SigninClient interface {
 	DelTaskFinish(ctx context.Context, in *DelTaskFinishReq, opts ...grpc.CallOption) (*DelTaskFinishResp, error)
 	GetTaskFinishById(ctx context.Context, in *GetTaskFinishByIdReq, opts ...grpc.CallOption) (*GetTaskFinishByIdResp, error)
 	SearchTaskFinish(ctx context.Context, in *SearchTaskFinishReq, opts ...grpc.CallOption) (*SearchTaskFinishResp, error)
+	// -----------------------remind-----------------------
+	ChangeSignRemind(ctx context.Context, in *ChangeRemindReq, opts ...grpc.CallOption) (*ChangeRemindResp, error)
+	GetRemindStatus(ctx context.Context, in *GetRemindStatusReq, opts ...grpc.CallOption) (*GetRemindStatusResp, error)
 }
 
 type signinClient struct {
@@ -242,6 +247,26 @@ func (c *signinClient) SearchTaskFinish(ctx context.Context, in *SearchTaskFinis
 	return out, nil
 }
 
+func (c *signinClient) ChangeSignRemind(ctx context.Context, in *ChangeRemindReq, opts ...grpc.CallOption) (*ChangeRemindResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ChangeRemindResp)
+	err := c.cc.Invoke(ctx, Signin_ChangeSignRemind_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *signinClient) GetRemindStatus(ctx context.Context, in *GetRemindStatusReq, opts ...grpc.CallOption) (*GetRemindStatusResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetRemindStatusResp)
+	err := c.cc.Invoke(ctx, Signin_GetRemindStatus_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // SigninServer is the server API for Signin service.
 // All implementations must embed UnimplementedSigninServer
 // for forward compatibility.
@@ -266,6 +291,9 @@ type SigninServer interface {
 	DelTaskFinish(context.Context, *DelTaskFinishReq) (*DelTaskFinishResp, error)
 	GetTaskFinishById(context.Context, *GetTaskFinishByIdReq) (*GetTaskFinishByIdResp, error)
 	SearchTaskFinish(context.Context, *SearchTaskFinishReq) (*SearchTaskFinishResp, error)
+	// -----------------------remind-----------------------
+	ChangeSignRemind(context.Context, *ChangeRemindReq) (*ChangeRemindResp, error)
+	GetRemindStatus(context.Context, *GetRemindStatusReq) (*GetRemindStatusResp, error)
 	mustEmbedUnimplementedSigninServer()
 }
 
@@ -326,6 +354,12 @@ func (UnimplementedSigninServer) GetTaskFinishById(context.Context, *GetTaskFini
 }
 func (UnimplementedSigninServer) SearchTaskFinish(context.Context, *SearchTaskFinishReq) (*SearchTaskFinishResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SearchTaskFinish not implemented")
+}
+func (UnimplementedSigninServer) ChangeSignRemind(context.Context, *ChangeRemindReq) (*ChangeRemindResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ChangeSignRemind not implemented")
+}
+func (UnimplementedSigninServer) GetRemindStatus(context.Context, *GetRemindStatusReq) (*GetRemindStatusResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetRemindStatus not implemented")
 }
 func (UnimplementedSigninServer) mustEmbedUnimplementedSigninServer() {}
 func (UnimplementedSigninServer) testEmbeddedByValue()                {}
@@ -654,6 +688,42 @@ func _Signin_SearchTaskFinish_Handler(srv interface{}, ctx context.Context, dec 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Signin_ChangeSignRemind_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ChangeRemindReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SigninServer).ChangeSignRemind(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Signin_ChangeSignRemind_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SigninServer).ChangeSignRemind(ctx, req.(*ChangeRemindReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Signin_GetRemindStatus_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetRemindStatusReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SigninServer).GetRemindStatus(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Signin_GetRemindStatus_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SigninServer).GetRemindStatus(ctx, req.(*GetRemindStatusReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Signin_ServiceDesc is the grpc.ServiceDesc for Signin service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -728,6 +798,14 @@ var Signin_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "SearchTaskFinish",
 			Handler:    _Signin_SearchTaskFinish_Handler,
+		},
+		{
+			MethodName: "ChangeSignRemind",
+			Handler:    _Signin_ChangeSignRemind_Handler,
+		},
+		{
+			MethodName: "GetRemindStatus",
+			Handler:    _Signin_GetRemindStatus_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

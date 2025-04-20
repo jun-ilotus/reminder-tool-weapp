@@ -10,6 +10,7 @@ info (
 import (
 	"recode/recode.api"
 	"task/task.api"
+	"remind/remind.api"
 )
 
 //=====================================> lottery-lottery v1 <=================================
@@ -43,5 +44,21 @@ service signin {
 	@doc "recode addToday"
 	@handler listTask
 	get /task/list (ListTaskReq) returns (ListTaskResp)
+}
+
+// need login
+@server (
+	prefix: signin/v1
+	group:  remind
+	jwt:    JwtAuth
+)
+service signin {
+	@doc "remind changeSignRemind"
+	@handler changeSignRemind
+	post /remind/change (ChangeSignRemindReq) returns (ChangeSignRemindResp)
+
+	@doc "remind getRemindStatus"
+	@handler getRemindStatus
+	post /remind/getStatus (GetRemindStatusReq) returns (GetRemindStatusResp)
 }
 

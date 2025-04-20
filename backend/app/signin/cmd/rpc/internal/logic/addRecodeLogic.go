@@ -39,15 +39,16 @@ func (l *AddRecodeLogic) AddRecode(in *pb.AddRecodeReq) (*pb.AddRecodeResp, erro
 		UserId:   in.UserId,
 		SignDate: time.Unix(in.SignDate, 0),
 	}
-	date, err := l.svcCtx.RecodeModel.FindLastOneByUserIdSignDate(l.ctx, recode.UserId)
-	if err != nil && err != model.ErrNotFound {
-		return nil, errors.Wrapf(xerr.NewErrCode(xerr.DB_ERROR), "AddRecode recode Database Exception AddRecode : %+v , err: %v", recode, err)
-	}
-	if date != nil {
-		return nil, errors.Wrapf(xerr.NewErrCode(xerr.DB_ERROR), "今天签过到了")
-	}
 	// todo 用户两次签到过快 前一次插入事务还未完成 后一次查询不到签过到了  导致两次签到
-	err = l.svcCtx.RecodeModel.Trans(l.ctx, func(ctx context.Context, session sqlx.Session) error {
+	err := l.svcCtx.RecodeModel.Trans(l.ctx, func(ctx context.Context, session sqlx.Session) error {
+		date, err := l.svcCtx.RecodeModel.FindLastOneByUserIdSignDate(l.ctx, recode.UserId)
+		if err != nil && err != model.ErrNotFound {
+			return errors.Wrapf(xerr.NewErrCode(xerr.DB_ERROR), "AddRecode recode Database Exception AddRecode : %+v , err: %v", recode, err)
+		}
+		if date != nil {
+			return errors.Wrapf(xerr.NewErrCode(xerr.DB_ERROR), "今天签过到了")
+		}
+
 		insert, err := l.svcCtx.RecodeModel.TransInsert(l.ctx, session, recode)
 		if err != nil {
 			return errors.Wrapf(xerr.NewErrCode(xerr.DB_ERROR), "AddRecode recode Database Exception AddRecode : %+v , err: %v", recode, err)

@@ -110,3 +110,14 @@ func (s *SigninServer) SearchTaskFinish(ctx context.Context, in *pb.SearchTaskFi
 	l := logic.NewSearchTaskFinishLogic(ctx, s.svcCtx)
 	return l.SearchTaskFinish(in)
 }
+
+// -----------------------remind-----------------------
+func (s *SigninServer) ChangeSignRemind(ctx context.Context, in *pb.ChangeRemindReq) (*pb.ChangeRemindResp, error) {
+	l := logic.NewChangeSignRemindLogic(ctx, s.svcCtx)
+	return l.ChangeSignRemind(in)
+}
+
+func (s *SigninServer) GetRemindStatus(ctx context.Context, in *pb.GetRemindStatusReq) (*pb.GetRemindStatusResp, error) {
+	l := logic.NewGetRemindStatusLogic(ctx, s.svcCtx)
+	return l.GetRemindStatus(in)
+}

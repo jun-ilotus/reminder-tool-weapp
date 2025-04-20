@@ -196,7 +196,32 @@ message SearchTaskFinishResp {
   repeated TaskFinish taskFinish = 1; //taskFinish
 }
 
+//--------------------------------remind--------------------------------
+message Remind {
+  int64 id = 1; //id
+  int64 userId = 2; //userId
+  int64 createTime = 3; //createTime
+  int64 updateTime = 4; //updateTime
+  int64 status = 5; //0不开启，1开启
+}
 
+message ChangeRemindReq {
+  int64 userId = 1;
+  int64 status = 2;
+}
+
+message ChangeRemindResp {
+  int64 id = 1;
+  int64 status = 2;
+}
+
+message GetRemindStatusReq {
+  int64 userId = 1;
+}
+
+message GetRemindStatusResp {
+  int64 status = 1;
+}
 
 // ------------------------------------ 
 // Rpc Func
@@ -223,6 +248,8 @@ service signin {
 	 rpc UpdateTaskFinish(UpdateTaskFinishReq) returns (UpdateTaskFinishResp); 
 	 rpc DelTaskFinish(DelTaskFinishReq) returns (DelTaskFinishResp); 
 	 rpc GetTaskFinishById(GetTaskFinishByIdReq) returns (GetTaskFinishByIdResp); 
-	 rpc SearchTaskFinish(SearchTaskFinishReq) returns (SearchTaskFinishResp); 
-
+	 rpc SearchTaskFinish(SearchTaskFinishReq) returns (SearchTaskFinishResp);
+     //-----------------------remind-----------------------
+     rpc ChangeSignRemind(ChangeRemindReq) returns (ChangeRemindResp);
+     rpc GetRemindStatus(GetRemindStatusReq) returns (GetRemindStatusResp);
 }

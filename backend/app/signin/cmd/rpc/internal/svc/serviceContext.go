@@ -14,6 +14,7 @@ type ServiceContext struct {
 	RecodeModel     model.RecodeModel
 	TaskModel       model.TaskModel
 	TaskFinishModel model.TaskFinishModel
+	RemindModel     model.RemindModel
 }
 
 func NewServiceContext(c config.Config) *ServiceContext {
@@ -22,6 +23,7 @@ func NewServiceContext(c config.Config) *ServiceContext {
 		RecodeModel:     model.NewRecodeModel(sqlx.NewMysql(c.DB.DataSource), c.Cache),
 		TaskModel:       model.NewTaskModel(sqlx.NewMysql(c.DB.DataSource), c.Cache),
 		TaskFinishModel: model.NewTaskFinishModel(sqlx.NewMysql(c.DB.DataSource), c.Cache),
+		RemindModel:     model.NewRemindModel(sqlx.NewMysql(c.DB.DataSource), c.Cache),
 		UsercenterRpc:   usercenter.NewUsercenter(zrpc.MustNewClient(c.UsercenterRpcConf)),
 	}
 }

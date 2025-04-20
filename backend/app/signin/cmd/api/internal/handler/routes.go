@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	recode "looklook/app/signin/cmd/api/internal/handler/recode"
+	remind "looklook/app/signin/cmd/api/internal/handler/remind"
 	task "looklook/app/signin/cmd/api/internal/handler/task"
 	"looklook/app/signin/cmd/api/internal/svc"
 
@@ -31,6 +32,25 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Method:  http.MethodGet,
 				Path:    "/recode/list",
 				Handler: recode.ListRecodeHandler(serverCtx),
+			},
+		},
+		rest.WithJwt(serverCtx.Config.JwtAuth.AccessSecret),
+		rest.WithPrefix("/signin/v1"),
+	)
+
+	server.AddRoutes(
+		[]rest.Route{
+			{
+				// remind changeSignRemind
+				Method:  http.MethodPost,
+				Path:    "/remind/change",
+				Handler: remind.ChangeSignRemindHandler(serverCtx),
+			},
+			{
+				// remind getRemindStatus
+				Method:  http.MethodPost,
+				Path:    "/remind/getStatus",
+				Handler: remind.GetRemindStatusHandler(serverCtx),
 			},
 		},
 		rest.WithJwt(serverCtx.Config.JwtAuth.AccessSecret),

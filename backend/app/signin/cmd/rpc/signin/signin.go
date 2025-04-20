@@ -20,6 +20,8 @@ type (
 	AddTaskFinishResp     = pb.AddTaskFinishResp
 	AddTaskReq            = pb.AddTaskReq
 	AddTaskResp           = pb.AddTaskResp
+	ChangeRemindReq       = pb.ChangeRemindReq
+	ChangeRemindResp      = pb.ChangeRemindResp
 	DelRecodeReq          = pb.DelRecodeReq
 	DelRecodeResp         = pb.DelRecodeResp
 	DelTaskFinishReq      = pb.DelTaskFinishReq
@@ -28,11 +30,14 @@ type (
 	DelTaskResp           = pb.DelTaskResp
 	GetRecodeByIdReq      = pb.GetRecodeByIdReq
 	GetRecodeByIdResp     = pb.GetRecodeByIdResp
+	GetRemindStatusReq    = pb.GetRemindStatusReq
+	GetRemindStatusResp   = pb.GetRemindStatusResp
 	GetTaskByIdReq        = pb.GetTaskByIdReq
 	GetTaskByIdResp       = pb.GetTaskByIdResp
 	GetTaskFinishByIdReq  = pb.GetTaskFinishByIdReq
 	GetTaskFinishByIdResp = pb.GetTaskFinishByIdResp
 	Recode                = pb.Recode
+	Remind                = pb.Remind
 	SearchRecodeReq       = pb.SearchRecodeReq
 	SearchRecodeResp      = pb.SearchRecodeResp
 	SearchTaskFinishReq   = pb.SearchTaskFinishReq
@@ -69,6 +74,9 @@ type (
 		DelTaskFinish(ctx context.Context, in *DelTaskFinishReq, opts ...grpc.CallOption) (*DelTaskFinishResp, error)
 		GetTaskFinishById(ctx context.Context, in *GetTaskFinishByIdReq, opts ...grpc.CallOption) (*GetTaskFinishByIdResp, error)
 		SearchTaskFinish(ctx context.Context, in *SearchTaskFinishReq, opts ...grpc.CallOption) (*SearchTaskFinishResp, error)
+		// -----------------------remind-----------------------
+		ChangeSignRemind(ctx context.Context, in *ChangeRemindReq, opts ...grpc.CallOption) (*ChangeRemindResp, error)
+		GetRemindStatus(ctx context.Context, in *GetRemindStatusReq, opts ...grpc.CallOption) (*GetRemindStatusResp, error)
 	}
 
 	defaultSignin struct {
@@ -168,4 +176,15 @@ func (m *defaultSignin) GetTaskFinishById(ctx context.Context, in *GetTaskFinish
 func (m *defaultSignin) SearchTaskFinish(ctx context.Context, in *SearchTaskFinishReq, opts ...grpc.CallOption) (*SearchTaskFinishResp, error) {
 	client := pb.NewSigninClient(m.cli.Conn())
 	return client.SearchTaskFinish(ctx, in, opts...)
+}
+
+// -----------------------remind-----------------------
+func (m *defaultSignin) ChangeSignRemind(ctx context.Context, in *ChangeRemindReq, opts ...grpc.CallOption) (*ChangeRemindResp, error) {
+	client := pb.NewSigninClient(m.cli.Conn())
+	return client.ChangeSignRemind(ctx, in, opts...)
+}
+
+func (m *defaultSignin) GetRemindStatus(ctx context.Context, in *GetRemindStatusReq, opts ...grpc.CallOption) (*GetRemindStatusResp, error) {
+	client := pb.NewSigninClient(m.cli.Conn())
+	return client.GetRemindStatus(ctx, in, opts...)
 }

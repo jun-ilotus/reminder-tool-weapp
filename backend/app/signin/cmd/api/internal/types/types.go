@@ -8,6 +8,22 @@ type AddRecodeTodayResp struct {
 	Id int64 `json:"id"`
 }
 
+type ChangeSignRemindReq struct {
+	Status int64 `json:"status"`
+}
+
+type ChangeSignRemindResp struct {
+	Id     int64 `json:"id"`
+	Status int64 `json:"status"`
+}
+
+type GetRemindStatusReq struct {
+}
+
+type GetRemindStatusResp struct {
+	Status int64 `json:"status"`
+}
+
 type ListRecodeReq struct {
 	LastId   int64 `form:"lastId"`
 	Page     int64 `form:"page"`
@@ -34,6 +50,12 @@ type Recode struct {
 	Id       int64 `json:"id"`
 	UserId   int64 `json:"userId"`
 	SignDate int64 `json:"signDate"`
+}
+
+type Remind struct {
+	Id     int64 `json:"id"`
+	UserId int64 `json:"userId"`
+	Status int64 `json:"status"`
 }
 
 type Task struct {
