@@ -121,3 +121,8 @@ func (s *SigninServer) GetRemindStatus(ctx context.Context, in *pb.GetRemindStat
 	l := logic.NewGetRemindStatusLogic(ctx, s.svcCtx)
 	return l.GetRemindStatus(in)
 }
+
+func (s *SigninServer) SearchRemind(ctx context.Context, in *pb.SearchRemindReq) (*pb.SearchRemindResp, error) {
+	l := logic.NewSearchRemindLogic(ctx, s.svcCtx)
+	return l.SearchRemind(in)
+}

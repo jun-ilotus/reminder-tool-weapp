@@ -7,6 +7,7 @@ import (
 	"github.com/zeromicro/go-zero/zrpc"
 	"looklook/app/mqueue/cmd/job/internal/config"
 	"looklook/app/reminder/cmd/rpc/reminder"
+	"looklook/app/signin/cmd/rpc/signin"
 	"looklook/app/usercenter/cmd/rpc/usercenter"
 )
 
@@ -18,6 +19,7 @@ type ServiceContext struct {
 
 	ReminderRpc   reminder.ReminderZrpcClient
 	UsercenterRpc usercenter.Usercenter
+	SigninRpc     signin.Signin
 }
 
 func NewServiceContext(c config.Config) *ServiceContext {
@@ -28,5 +30,6 @@ func NewServiceContext(c config.Config) *ServiceContext {
 		WxMiniProgram: MustNewMiniProgram(c), // 使用
 		ReminderRpc:   reminder.NewReminderZrpcClient(zrpc.MustNewClient(c.ReminderRpcConf)),
 		UsercenterRpc: usercenter.NewUsercenter(zrpc.MustNewClient(c.UsercenterRpcConf)),
+		SigninRpc:     signin.NewSignin(zrpc.MustNewClient(c.SigninRpcConf)),
 	}
 }

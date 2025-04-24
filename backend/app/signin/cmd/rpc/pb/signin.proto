@@ -203,6 +203,8 @@ message Remind {
   int64 createTime = 3; //createTime
   int64 updateTime = 4; //updateTime
   int64 status = 5; //0不开启，1开启
+  string authKey = 6;
+
 }
 
 message ChangeRemindReq {
@@ -221,6 +223,16 @@ message GetRemindStatusReq {
 
 message GetRemindStatusResp {
   int64 status = 1;
+}
+
+message SearchRemindReq {
+  int64 id = 1; //id
+  int64 userId = 2; //userId
+  int64 status = 5; //0不开启，1开启
+}
+
+message SearchRemindResp {
+  repeated Remind reminds = 1;
 }
 
 // ------------------------------------ 
@@ -252,4 +264,5 @@ service signin {
      //-----------------------remind-----------------------
      rpc ChangeSignRemind(ChangeRemindReq) returns (ChangeRemindResp);
      rpc GetRemindStatus(GetRemindStatusReq) returns (GetRemindStatusResp);
+     rpc SearchRemind(SearchRemindReq) returns (SearchRemindResp);
 }

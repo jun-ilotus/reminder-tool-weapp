@@ -20,14 +20,13 @@ import (
 	group:  user
 )
 service usercenter {
-	@doc "注册"
-	@handler register
-	post /user/register (RegisterReq) returns (RegisterResp)
-
-	@doc "登录"
-	@handler login
-	post /user/login (LoginReq) returns (LoginResp)
-
+	// @doc "注册"
+	// @handler register
+	// post /user/register (RegisterReq) returns (RegisterResp)
+	//
+	// @doc "登录"
+	// @handler login
+	// post /user/login (LoginReq) returns (LoginResp)
 	@doc "小程序注册登录"
 	@handler wxMiniAuth
 	post /user/wxMiniAuth (WXMiniAuthReq) returns (WXMiniAuthResp)

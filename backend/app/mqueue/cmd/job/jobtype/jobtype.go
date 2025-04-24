@@ -11,3 +11,6 @@ const MsgPaySuccessNotifyUser = "msg:pay_success:notify_user"
 
 // MsgWxMiniProgramNotifyUser 给用户发送小程序订阅消息
 const MsgWxMiniProgramNotifyUser = "msg:wx_mini_program:notify_user"
+
+// ScheduleRemindSignin 提醒签到的定时任务
+const ScheduleRemindSignin = "schedule:remind_signin"

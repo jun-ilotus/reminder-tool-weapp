@@ -17,10 +17,8 @@ func NewCronScheduler(ctx context.Context, svcCtx *svc.ServiceContext) *MqueueSc
 	}
 }
 
-func (l *MqueueScheduler) Register()  {
+func (l *MqueueScheduler) Register() {
 
-	l.settleRecordScheduler()
+	//l.settleRecordScheduler()
+	l.remindSignin()
 }
-
-
-

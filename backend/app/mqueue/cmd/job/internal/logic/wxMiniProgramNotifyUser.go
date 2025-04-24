@@ -110,7 +110,7 @@ func (l *WxMiniProgramNotifyUserHandler) ProcessTask(ctx context.Context, t *asy
 		ToUser:           p.OpenId,
 		TemplateID:       templateId,
 		Page:             p.PageAddr,
-		MiniProgramState: "developer",
+		MiniProgramState: "formal",
 		Lang:             "zh_CN",
 		Data:             data,
 	}

@@ -26,7 +26,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { useDidShow } from '@tarojs/taro'
+import { useReady } from '@tarojs/taro'
 import { getAction, postAction } from 'src/http'
 import Taro from '@tarojs/taro'
 import { AtCalendar } from "taro-ui-vue3"
@@ -41,19 +41,37 @@ const conDays = ref(0)
 const taskList = ref<any[]>([])
 const isToday = ref(0)
 const signRemindSwitch = ref(false)
+var serverChange = false
 
 // 页面显示时 获取reminder数据
-useDidShow(() => {
+useReady(() => {
     getRecodeList()
     getTaskList()
+    getRemindStatus()
 })
 
 const addRecode = () => {
     createReq()
 }
 
-const change = () => {
-    console.log(signRemindSwitch.value)
+const change = (value) => {
+  if (!serverChange) {
+    if (value) {
+      Taro.requestSubscribeMessage({
+        tmplIds:["T6iprDxSmNa_hmMQDSrfJAGxTulxZh3dkBTycKWpXlI"],
+        entityIds:["T6iprDxSmNa_hmMQDSrfJAGxTulxZh3dkBTycKWpXlI"],
+        success: function (res) { 
+          console.log(res)
+          if (res.T6iprDxSmNa_hmMQDSrfJAGxTulxZh3dkBTycKWpXlI === "accept") {
+            changeSignRemind()
+          }
+        }
+      })
+    } else {
+      changeSignRemind()
+    }
+  }
+  serverChange = false
 }
 
 
@@ -158,6 +176,75 @@ async function getTaskList() {
             isFinished: list[index].isFinished,
           }
           taskList.value.push(task)
+        }
+    } else {
+        Taro.showToast({
+            title: '获取失败！' + result.message,
+            icon: 'error', // 'error' 'success' 'loading' 'none'
+            duration: 1500
+        })
+    }
+  } catch (error) {
+  }
+}
+
+async function getRemindStatus() {
+  try {
+    const result = await postAction('/signin/v1/remind/getStatus', {}, {
+      loadingTitle: '正在加载...', // 请求时显示的加载提示
+      toastDuration: 1500 // 错误提示的显示时长
+    }, true) as ApiResponse;
+
+    if (result.success) {
+        const status = result.data.status
+        if (status === 1) {
+          serverChange = true
+          signRemindSwitch.value = true
+        } else {
+          signRemindSwitch.value = false
+        }
+    } else {
+        Taro.showToast({
+            title: '获取失败！' + result.message,
+            icon: 'error', // 'error' 'success' 'loading' 'none'
+            duration: 1500
+        })
+    }
+  } catch (error) {
+  }
+}
+
+async function changeSignRemind() {
+  try {
+    const result = await postAction('/signin/v1/remind/change', {
+      status: signRemindSwitch.value ? 1 : 0
+    }, {
+      loadingTitle: '正在加载...', // 请求时显示的加载提示
+      toastDuration: 1500 // 错误提示的显示时长
+    }, true) as ApiResponse;
+
+    if (result.success) {
+        const status = result.data.status
+        if (status === 1 && signRemindSwitch.value) {
+          Taro.showToast({
+              title: '开启成功',
+              icon: 'success', // 'error' 'success' 'loading' 'none'
+              duration: 1500
+          })
+        } else if (status === 0 && !signRemindSwitch.value) {
+          Taro.showToast({
+              title: '关闭成功',
+              icon: 'success', // 'error' 'success' 'loading' 'none'
+              duration: 1500
+          })
+        } else {
+          Taro.showToast({
+            title: '设置失败',
+            icon: 'error', // 'error' 'success' 'loading' 'none'
+            duration: 1500
+          })
+          serverChange = true
+          signRemindSwitch.value = status === 1 ? true : false
         }
     } else {
         Taro.showToast({

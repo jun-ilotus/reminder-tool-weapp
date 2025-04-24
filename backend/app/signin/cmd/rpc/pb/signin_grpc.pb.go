@@ -38,6 +38,7 @@ const (
 	Signin_SearchTaskFinish_FullMethodName      = "/pb.signin/SearchTaskFinish"
 	Signin_ChangeSignRemind_FullMethodName      = "/pb.signin/ChangeSignRemind"
 	Signin_GetRemindStatus_FullMethodName       = "/pb.signin/GetRemindStatus"
+	Signin_SearchRemind_FullMethodName          = "/pb.signin/SearchRemind"
 )
 
 // SigninClient is the client API for Signin service.
@@ -67,6 +68,7 @@ type SigninClient interface {
 	// -----------------------remind-----------------------
 	ChangeSignRemind(ctx context.Context, in *ChangeRemindReq, opts ...grpc.CallOption) (*ChangeRemindResp, error)
 	GetRemindStatus(ctx context.Context, in *GetRemindStatusReq, opts ...grpc.CallOption) (*GetRemindStatusResp, error)
+	SearchRemind(ctx context.Context, in *SearchRemindReq, opts ...grpc.CallOption) (*SearchRemindResp, error)
 }
 
 type signinClient struct {
@@ -267,6 +269,16 @@ func (c *signinClient) GetRemindStatus(ctx context.Context, in *GetRemindStatusR
 	return out, nil
 }
 
+func (c *signinClient) SearchRemind(ctx context.Context, in *SearchRemindReq, opts ...grpc.CallOption) (*SearchRemindResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(SearchRemindResp)
+	err := c.cc.Invoke(ctx, Signin_SearchRemind_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // SigninServer is the server API for Signin service.
 // All implementations must embed UnimplementedSigninServer
 // for forward compatibility.
@@ -294,6 +306,7 @@ type SigninServer interface {
 	// -----------------------remind-----------------------
 	ChangeSignRemind(context.Context, *ChangeRemindReq) (*ChangeRemindResp, error)
 	GetRemindStatus(context.Context, *GetRemindStatusReq) (*GetRemindStatusResp, error)
+	SearchRemind(context.Context, *SearchRemindReq) (*SearchRemindResp, error)
 	mustEmbedUnimplementedSigninServer()
 }
 
@@ -360,6 +373,9 @@ func (UnimplementedSigninServer) ChangeSignRemind(context.Context, *ChangeRemind
 }
 func (UnimplementedSigninServer) GetRemindStatus(context.Context, *GetRemindStatusReq) (*GetRemindStatusResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetRemindStatus not implemented")
+}
+func (UnimplementedSigninServer) SearchRemind(context.Context, *SearchRemindReq) (*SearchRemindResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SearchRemind not implemented")
 }
 func (UnimplementedSigninServer) mustEmbedUnimplementedSigninServer() {}
 func (UnimplementedSigninServer) testEmbeddedByValue()                {}
@@ -724,6 +740,24 @@ func _Signin_GetRemindStatus_Handler(srv interface{}, ctx context.Context, dec f
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Signin_SearchRemind_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SearchRemindReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SigninServer).SearchRemind(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Signin_SearchRemind_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SigninServer).SearchRemind(ctx, req.(*SearchRemindReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Signin_ServiceDesc is the grpc.ServiceDesc for Signin service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -806,6 +840,10 @@ var Signin_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetRemindStatus",
 			Handler:    _Signin_GetRemindStatus_Handler,
+		},
+		{
+			MethodName: "SearchRemind",
+			Handler:    _Signin_SearchRemind_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

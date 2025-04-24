@@ -48,3 +48,10 @@ UsercenterRpcConf:
       - etcd:2379
     key: usercenter.rpc
   NonBlock: true
+
+SigninRpcConf:
+  Etcd:
+    Hosts:
+      - etcd:2379
+    key: signin.rpc
+  NonBlock: true
