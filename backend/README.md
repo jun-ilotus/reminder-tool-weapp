@@ -1,24 +1,6 @@
 
-请阅读项目根目录下的 /doc/chinese/ 下的完整教程，从 01-开发环境搭建环境。
+搭建请阅读项目根目录下的 /doc/chinese/ 下的完整教程，从 01-开发环境搭建环境。
 ## go-zero-looklook
-
-[English](README.md) | 简体中文
-
-
-
-## 前言
-
-
-
-#### 老规矩，看之前先给个star哈～～,不star被抓住要打屁股，哈哈哈哈哈哈
-
-本人接触go-zero可能比较早，go-zero在大约1000star左右我就在用了，后来跟go-zero作者加了微信也熟悉了，go-zero作者非常热心以及耐心的帮我解答了很多问题，我也想积极帮助go-zero推广社区，基本是在社区群内回答大家相关的问题，因为在这个过程中发现很多人觉得go-zero没有一个完整的项目例子，作为想推动社区的一员，我就搞了个可用版本开源出来，主要技术栈包含如下：
-
-
-
-##### Tips : 如果你不熟悉这里面很多技术栈也不要怕，只要你会mysql、redis可以先启动这两个中间件在启动项目先跑起来项目，其他可以慢慢学。
-
-
 
 
 - k8s
@@ -46,39 +28,9 @@
 - harbor
 
 
-
-## 视频教程
-
-这个是我正在录制的go-zero教程：https://space.bilibili.com/389552232/video
-
-此教程最后也会给大家分享一下go-zero-looklook，敬请期待哦～
-
-
-
-## 项目文档
-
-（地址一）[doc/chinese](doc/chinese/) 即该项目的doc目录下
-
-（地址二）go-zero官方微信公众号（微服务从代码到k8s部署应有尽有系列）
-
-【注】go-zero的相关资料、知识点在这都能找到
-
-![go-zero-public-qcode](./doc/chinese/images/1/go-zero-public-qcode.jpeg)
-
-
-
-本项目开发环境推荐docker-compose，使用直链方式，放弃服务注册发现中间件（etcd、nacos、consul等）带来的麻烦
-
-测试、线上部署使用k8s（也不需要etcd、nacos、consul等）有详细教程（搭建+部署），可以进go-zero社区群沟通，非常easy
-
-
-
 ## 项目简介
 
 整个项目使用了go-zero开发的微服务，基本包含了go-zero以及相关go-zero作者开发的一些中间件，所用到的技术栈基本是go-zero项目组的自研组件，基本是go-zero全家桶了
-
-另外，前端是小程序，本项目已经对接好了小程序授权登录 以及 微信支付了 ，前端看看后面是否能开源吧
-
 
 
 项目目录结构如下：
@@ -98,7 +50,7 @@
         - mysql：生成model的sh工具
     - goctl: 该项目goctl的template，goctl生成自定义代码模版，template用法可参考go-zero文档，复制到家目录下.goctl即可
 - doc : 该项目系列文档
-- modd.conf :  modd热加载配置文件，不要怕～它用起来很简单，关于modd更多用法可以去这里了解 ： https://github.com/cortesi/modd ， 本项目镜像只是将golang-1.17.7-alpine作为基础镜像安装了modd在内部，如果你想把goctl、protoc、golint等加进去，不用我的镜像直接制作一个镜像也一样的哈
+- modd.conf :  modd热加载配置文件，不要怕～它用起来很简单，关于modd更多用法可以去这里了解 ： https://github.com/cortesi/modd ， 本项目镜像只是将golang-1.24.1-alpine作为基础镜像安装了modd在内部，如果你想把goctl、protoc、golint等加进去，不用我的镜像直接制作一个镜像也一样的哈
 
 
 ## 网关
@@ -172,6 +124,8 @@ gitlab + jenkins + harbor + k8s
 
 
 ## 感谢
+
+go-zero-looklook: https://github.com/Mikaelemmmm/go-zero-looklook
 
 go-zero 微服务: https://github.com/zeromicro/go-zero
 
