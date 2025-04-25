@@ -1,0 +1,38 @@
+syntax = "v1"
+
+info (
+	title:   "抽奖服务"
+	desc:    "抽奖服务"
+	author:  "ilotus"
+	version: "v1"
+)
+
+import (
+	"lottery/lottery.api"
+)
+
+//=====================================> lottery-lottery v1 <=================================
+//need login
+@server (
+	prefix: lottery/v1
+	group:  lottery
+	jwt:    JwtAuth
+)
+service lottery {
+	@doc "发起抽奖"
+	@handler createLottery
+	post /lottery/createLottery (CreateLotteryReq) returns (CreateLotteryResp)
+
+	@doc "发布抽奖"
+	@handler updateLottery
+	post /lottery/updateLottery (UpdateLotteryReq) returns (UpdateLotteryResp)
+
+	@doc "lottery detail"
+	@handler lotteryDetail
+	post /lottery/lotteryDetail (LotteryDetailReq) returns (LotteryDetailResp)
+
+	@doc "lottery list"
+	@handler lotteryList
+	post /lottery/lotteryList (LotteryListReq) returns (LotteryListResp)
+}
+

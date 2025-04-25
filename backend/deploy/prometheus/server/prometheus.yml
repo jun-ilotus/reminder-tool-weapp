@@ -93,3 +93,17 @@ scrape_configs:
           job: signin-rpc
           app: signin-rpc
           env: dev
+  - job_name: 'lottery-api'
+    static_configs:
+      - targets: [ 'looklook:4020' ]
+        labels:
+          job: lottery-api
+          app: lottery-api
+          env: dev
+  - job_name: 'lottery-rpc'
+    static_configs:
+      - targets: [ 'looklook:4021' ]
+        labels:
+          job: lottery-rpc
+          app: lottery-rpc
+          env: dev
