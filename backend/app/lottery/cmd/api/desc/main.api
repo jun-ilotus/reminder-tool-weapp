@@ -33,6 +33,6 @@ service lottery {
 
 	@doc "lottery list"
 	@handler lotteryList
-	post /lottery/lotteryList (LotteryListReq) returns (LotteryListResp)
+	get /lottery/lotteryList (LotteryListReq) returns (LotteryListResp)
 }
 

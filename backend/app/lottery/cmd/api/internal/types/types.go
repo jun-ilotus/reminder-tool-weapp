@@ -47,9 +47,9 @@ type LotteryDetailResp struct {
 }
 
 type LotteryListReq struct {
-	LastId     int64 `json:"lastId"`
-	PageSize   int64 `json:"pageSize"`
-	IsSelected int64 `json:"isSelected"`
+	LastId     int64 `form:"lastId"`
+	PageSize   int64 `form:"pageSize"`
+	IsSelected int64 `form:"isSelected"`
 }
 
 type LotteryListResp struct {

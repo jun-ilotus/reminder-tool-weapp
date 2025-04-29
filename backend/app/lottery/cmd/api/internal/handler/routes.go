@@ -27,7 +27,7 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 			},
 			{
 				// lottery list
-				Method:  http.MethodPost,
+				Method:  http.MethodGet,
 				Path:    "/lottery/lotteryList",
 				Handler: lottery.LotteryListHandler(serverCtx),
 			},

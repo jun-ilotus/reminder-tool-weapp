@@ -37,8 +37,61 @@ export function dateFormat (value: number|string|Date = Date.now(), format = 'YY
     return showTime
   }
 
+// 定义一个函数来计算天数
+export function getDays(value: number|string|Date = Date.now()): number {
+  if (typeof value === 'number' || typeof value === 'string') {
+    var targetDate = new Date(value)
+  } else {
+    var targetDate = value
+  }
+  const now = new Date();
+  const distance = targetDate.getTime() - now.getTime();
+  if (distance < 0) return 0; // 如果目标时间已经过去，返回00
+  const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+  return days;
+}
 
+// 定义一个函数来计算小时数
+export function getHours(value: number|string|Date = Date.now()): number {
+  if (typeof value === 'number' || typeof value === 'string') {
+    var targetDate = new Date(value)
+  } else {
+    var targetDate = value
+  }
+  const now = new Date();
+  const distance = targetDate.getTime() - now.getTime();
+  if (distance < 0) return 0; // 如果目标时间已经过去，返回00
+  const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  return hours;
+}
 
+// 定义一个函数来计算分钟数
+export function getMinutes(value: number|string|Date = Date.now()): number {
+  if (typeof value === 'number' || typeof value === 'string') {
+    var targetDate = new Date(value)
+  } else {
+    var targetDate = value
+  }
+  const now = new Date();
+  const distance = targetDate.getTime() - now.getTime();
+  if (distance < 0) return 0; // 如果目标时间已经过去，返回00
+  const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+  return minutes;
+}
+
+// 定义一个函数来计算秒数
+export function getSeconds(value: number|string|Date = Date.now()): number {
+  if (typeof value === 'number' || typeof value === 'string') {
+    var targetDate = new Date(value)
+  } else {
+    var targetDate = value
+  }
+  const now = new Date();
+  const distance = targetDate.getTime() - now.getTime();
+  if (distance < 0) return 0; // 如果目标时间已经过去，返回00
+  const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+  return seconds;
+}
 
 // 定义数字与汉字的映射关系
 const numMap = [

@@ -90,6 +90,7 @@ message GetLotteryByIdResp {
 message SearchLotteryReq {
   int64 page = 1; //page
   int64 limit = 2; //limit
+  int64 lastId = 20;
   int64 id = 3; //id
   int64 userId = 4; //鍙戣捣鎶藉鐢ㄦ埛ID
   string name = 5; //榛樿鍙栦竴绛夊鍚嶇О
