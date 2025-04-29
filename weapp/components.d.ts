@@ -7,10 +7,14 @@ export {}
 
 declare module 'vue' {
   export interface GlobalComponents {
+    LotteryTabbar: typeof import('./src/components/lotteryTabbar.vue')['default']
     NutActionSheet: typeof import('@nutui/nutui-taro')['ActionSheet']
     NutAvatar: typeof import('@nutui/nutui-taro')['Avatar']
     NutButton: typeof import('@nutui/nutui-taro')['Button']
+    NutCard: typeof import('@nutui/nutui-taro')['Card']
     NutCell: typeof import('@nutui/nutui-taro')['Cell']
+    NutCollapse: typeof import('@nutui/nutui-taro')['Collapse']
+    NutCollapseItem: typeof import('@nutui/nutui-taro')['CollapseItem']
     NutDatePicker: typeof import('@nutui/nutui-taro')['DatePicker']
     NutDialog: typeof import('@nutui/nutui-taro')['Dialog']
     NutDivider: typeof import('@nutui/nutui-taro')['Divider']
@@ -21,7 +25,10 @@ declare module 'vue' {
     NutInput: typeof import('@nutui/nutui-taro')['Input']
     NutNavbar: typeof import('@nutui/nutui-taro')['Navbar']
     NutNotify: typeof import('@nutui/nutui-taro')['Notify']
+    NutPicker: typeof import('@nutui/nutui-taro')['Picker']
     NutPopup: typeof import('@nutui/nutui-taro')['Popup']
+    NutRadio: typeof import('@nutui/nutui-taro')['Radio']
+    NutRadioGroup: typeof import('@nutui/nutui-taro')['RadioGroup']
     NutSpace: typeof import('@nutui/nutui-taro')['Space']
     NutSwipe: typeof import('@nutui/nutui-taro')['Swipe']
     NutSwipeGroup: typeof import('@nutui/nutui-taro')['SwipeGroup']
@@ -31,6 +38,7 @@ declare module 'vue' {
     NutTabPane: typeof import('@nutui/nutui-taro')['TabPane']
     NutTabs: typeof import('@nutui/nutui-taro')['Tabs']
     NutTextarea: typeof import('@nutui/nutui-taro')['Textarea']
+    NutUploader: typeof import('@nutui/nutui-taro')['Uploader']
     Tabbar: typeof import('./src/components/Tabbar.vue')['default']
   }
 }

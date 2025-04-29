@@ -2,6 +2,7 @@ package logic
 
 import (
 	"context"
+	"looklook/app/lottery/model"
 
 	"looklook/app/lottery/cmd/rpc/internal/svc"
 	"looklook/app/lottery/cmd/rpc/pb"
@@ -25,7 +26,19 @@ func NewAddPrizeLogic(ctx context.Context, svcCtx *svc.ServiceContext) *AddPrize
 
 // -----------------------濂栧搧琛?----------------------
 func (l *AddPrizeLogic) AddPrize(in *pb.AddPrizeReq) (*pb.AddPrizeResp, error) {
-	// todo: add your logic here and delete this line
+	prize := &model.Prize{
+		LotteryId: in.LotteryId,
+		Type:      in.Type,
+		Name:      in.Name,
+		Level:     in.Level,
+		Thumb:     in.Thumb,
+		Count:     in.Count,
+		GrantType: in.GrantType,
+	}
+	_, err := l.svcCtx.PrizeModel.Insert(l.ctx, prize)
+	if err != nil {
+		return nil, err
+	}
 
 	return &pb.AddPrizeResp{}, nil
 }

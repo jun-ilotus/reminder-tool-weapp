@@ -2,17 +2,17 @@
 package types
 
 type CreateLotteryReq struct {
-	Name          string   `json:"name"`                              //默认一等奖名称
-	Thumb         string   `json:"thumb"`                             //默认一等奖配图
-	AnnounceType  int64    `json:"announceType" validate:"oneof=1 2"` //开奖设置：1按时间开奖 2按人数开奖 3即抽即中
-	AnnounceTime  int64    `json:"announceTime"`                      //开奖时间
-	JoinNumber    int64    `json:"joinNumber"`                        //自动开奖人数标准
-	Introduce     string   `json:"introduce"`                         //抽奖说明
-	AwardDeadline int64    `json:"awardDeadline"`                     //领奖截止时间
-	SponsorId     int64    `json:"sponsorId"`                         // 赞助商Id
-	Prizes        []*Prize `json:"prizes"`                            //奖品 支持多个
-	IsClocked     int64    `json:"isClocked"`                         //是否开启打卡任务 0未开启；1已开启
-	PublishType   int64    `json:"publishType" validate:"oneof=1 2"`  //发布类型 1发布抽奖 2发布测试
+	Name          string   `json:"name"`  //默认一等奖名称
+	Thumb         string   `json:"thumb"` //默认一等奖配图
+	PublishTime   int64    `json:"publishTime"`
+	AnnounceType  int64    `json:"announceType" validate:"oneof=1 2 3"` //开奖设置：1按时间开奖 2按人数开奖 3即抽即中
+	AnnounceTime  int64    `json:"announceTime"`                        //开奖时间
+	JoinNumber    int64    `json:"joinNumber"`                          //自动开奖人数标准
+	Introduce     string   `json:"introduce"`                           //抽奖说明
+	AwardDeadline int64    `json:"awardDeadline"`                       //领奖截止时间
+	Prizes        []*Prize `json:"prizes"`                              //奖品 支持多个
+	IsClocked     int64    `json:"isClocked"  validate:"oneof=0 1`      //是否开启打卡任务 0未开启；1已开启
+	ClockTaskId   int64    `json:"clockTaskId"`
 }
 
 type CreateLotteryResp struct {
@@ -57,8 +57,8 @@ type LotteryListResp struct {
 }
 
 type Prize struct {
-	Id        int64  `json:"id"`
-	LotteryId int64  `json:"lotteryId"`
+	Id        int64  `json:"id,optional"`
+	LotteryId int64  `json:"lotteryId,optional"`
 	Type      int64  `json:"type"`      //奖品类型：1奖品 2优惠券 3兑换码 4商城 5微信红包封面 6红包
 	Name      string `json:"name"`      //奖品名称
 	Count     int64  `json:"count"`     //奖品份数

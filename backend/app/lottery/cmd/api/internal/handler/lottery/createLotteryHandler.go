@@ -1,10 +1,9 @@
 package lottery
 
 import (
+	"looklook/common/result"
 	"looklook/common/translator"
 	"net/http"
-
-	"looklook/common/result"
 
 	"github.com/zeromicro/go-zero/rest/httpx"
 	"looklook/app/lottery/cmd/api/internal/logic/lottery"

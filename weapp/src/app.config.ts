@@ -11,6 +11,8 @@ export default {
     'pages/userinfo/index',
     'pages/signin/index/index',
     'pages/points/recode/index',
+    'pages/lottery/list/index',
+    'pages/lottery/create/index',
   ],
   window: {
     backgroundTextStyle: 'light',

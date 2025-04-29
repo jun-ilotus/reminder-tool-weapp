@@ -11,6 +11,11 @@ func init() {
 	message[TOKEN_GENERATE_ERROR] = "生成token失败"
 	message[DB_ERROR] = "数据库繁忙,请稍后再试"
 	message[DB_UPDATE_AFFECTED_ZERO_ERROR] = "更新数据影响行数为0"
+
+	// 抽奖模块
+	message[PARAM_ERROR_PublishTime] = "发布时间在当前时间之前"
+	message[PARAM_ERROR_AnnounceTime] = "开奖时间在发布时间之前"
+	message[PARAM_ERROR_UserId] = "无权限修改"
 }
 
 func MapErrMsg(errcode uint32) string {

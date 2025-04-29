@@ -23,15 +23,15 @@
 <script lang="ts" setup>
 import Taro from '@tarojs/taro'
 import { Home, My, Date } from '@nutui/icons-vue-taro'
-import { useTabbarStore } from "../stores/tabbar";
   
-const store = useTabbarStore()
+const pages = Taro.getCurrentPages()
+const page = pages[pages.length-1]
 
-const active = store.getTabbarSelectedName
-  
-const tabSwitch = (item: Record<string, unknown>) => {
-    store.setTabbarSelectedName(item.name)
-}
+const path = page.route
+const parts = path.split("/"); // 使用 "/" 分割字符串
+const target = parts[1]; // 获取第三个部分（索引为2）
+
+const active = target
 
 const goIndex = () => {
   Taro.redirectTo({ url: '/pages/index/index' })

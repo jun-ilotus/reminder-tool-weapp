@@ -3,12 +3,15 @@
     <nut-grid-item text="提醒待办" @click="toReminder"><Order /></nut-grid-item>
     <nut-grid-item text="签到" @click="toSignin"><Check /></nut-grid-item>
   </nut-grid>
+  <nut-grid :column-num="2">
+    <nut-grid-item text="抽奖" @click="toLottery"><Star /></nut-grid-item>
+  </nut-grid>
 
   <Tabbar></Tabbar>
 </template>
 
 <script lang="ts" setup>
-import { Order, Check } from '@nutui/icons-vue-taro'
+import { Order, Check , Star} from '@nutui/icons-vue-taro'
 import Taro from '@tarojs/taro';
 import Tabbar from "../../components/Tabbar.vue";
 import { useDidShow } from '@tarojs/taro'
@@ -26,6 +29,12 @@ const toReminder = () => {
 const toSignin = () => {
   Taro.navigateTo({ 
       url: '/pages/signin/index/index'
+  })
+}
+
+const toLottery = () => {
+  Taro.navigateTo({
+    url: '/pages/lottery/list/index'
   })
 }
 

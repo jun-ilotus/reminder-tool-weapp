@@ -15,13 +15,18 @@ message Lottery {
   string name = 3; //榛樿鍙栦竴绛夊鍚嶇О
   string thumb = 4; //榛樿鍙栦竴绛夌粡閰嶅浘
   int64 publishTime = 5; //鍙戝竷鎶藉鏃堕棿
-  int64 joinNumber = 6; //鑷姩寮€濂栦汉鏁?  string introduce = 7; //鎶藉璇存槑
+  int64 joinNumber = 6; //鑷姩寮€濂栦汉鏁?
+  string introduce = 7; //鎶藉璇存槑
   int64 awardDeadline = 8; //棰嗗鎴鏃堕棿
-  int64 isSelected = 9; //鏄惁绮鹃€?1鏄?0鍚?  int64 announceType = 10; //寮€濂栬缃細1鎸夋椂闂村紑濂?2鎸変汉鏁板紑濂?3鍗虫娊鍗充腑
-  int64 announceTime = 11; //寮€濂栨椂闂?  int64 createTime = 12; //createTime
+  int64 isSelected = 9; //鏄惁绮鹃€?1鏄?0鍚?
+  int64 announceType = 10; //寮€濂栬缃細1鎸夋椂闂村紑濂?2鎸変汉鏁板紑濂?3鍗虫娊鍗充腑
+  int64 announceTime = 11; //寮€濂栨椂闂?
+  int64 createTime = 12; //createTime
   int64 updateTime = 13; //updateTime
-  int64 isAnnounced = 14; //鏄惁寮€濂栵細0鏈紑濂栵紱1宸茬粡寮€濂?  int64 sponsorId = 15; //鍙戣捣鎶藉璧炲姪鍟咺D
-  int64 isClocked = 16; //鏄惁寮€鍚墦鍗′换鍔★細0鏈紑鍚紱1宸插紑鍚?  int64 clockTaskId = 17; //鎵撳崱浠诲姟浠诲姟ID
+  int64 isAnnounced = 14; //鏄惁寮€濂栵細0鏈紑濂栵紱1宸茬粡寮€濂?
+  int64 sponsorId = 15; //鍙戣捣鎶藉璧炲姪鍟咺D
+  int64 isClocked = 16; //鏄惁寮€鍚墦鍗′换鍔★細0鏈紑鍚紱1宸插紑鍚?
+  int64 clockTaskId = 17; //鎵撳崱浠诲姟浠诲姟ID
 }
 
 message AddLotteryReq {
@@ -29,14 +34,21 @@ message AddLotteryReq {
   string name = 2; //榛樿鍙栦竴绛夊鍚嶇О
   string thumb = 3; //榛樿鍙栦竴绛夌粡閰嶅浘
   int64 publishTime = 4; //鍙戝竷鎶藉鏃堕棿
-  int64 joinNumber = 5; //鑷姩寮€濂栦汉鏁?  string introduce = 6; //鎶藉璇存槑
+  int64 joinNumber = 5; //鑷姩寮€濂栦汉鏁?
+  string introduce = 6; //鎶藉璇存槑
   int64 awardDeadline = 7; //棰嗗鎴鏃堕棿
-  int64 isSelected = 8; //鏄惁绮鹃€?1鏄?0鍚?  int64 announceType = 9; //寮€濂栬缃細1鎸夋椂闂村紑濂?2鎸変汉鏁板紑濂?3鍗虫娊鍗充腑
-  int64 announceTime = 10; //寮€濂栨椂闂?  int64 isAnnounced = 11; //鏄惁寮€濂栵細0鏈紑濂栵紱1宸茬粡寮€濂?  int64 sponsorId = 12; //鍙戣捣鎶藉璧炲姪鍟咺D
-  int64 isClocked = 13; //鏄惁寮€鍚墦鍗′换鍔★細0鏈紑鍚紱1宸插紑鍚?  int64 clockTaskId = 14; //鎵撳崱浠诲姟浠诲姟ID
+  int64 isSelected = 8; //鏄惁绮鹃€?1鏄?0鍚?
+  int64 announceType = 9; //寮€濂栬缃細1鎸夋椂闂村紑濂?2鎸変汉鏁板紑濂?3鍗虫娊鍗充腑
+  int64 announceTime = 10; //寮€濂栨椂闂?
+  int64 isAnnounced = 11; //鏄惁寮€濂栵細0鏈紑濂栵紱1宸茬粡寮€濂?
+  int64 sponsorId = 12; //鍙戣捣鎶藉璧炲姪鍟咺D
+  int64 isClocked = 13; //鏄惁寮€鍚墦鍗′换鍔★細0鏈紑鍚紱1宸插紑鍚?
+  int64 clockTaskId = 14; //鎵撳崱浠诲姟浠诲姟ID
+  int64 id = 15;
 }
 
 message AddLotteryResp {
+  int64 id = 1;
 }
 
 message UpdateLotteryReq {
@@ -45,11 +57,16 @@ message UpdateLotteryReq {
   string name = 3; //榛樿鍙栦竴绛夊鍚嶇О
   string thumb = 4; //榛樿鍙栦竴绛夌粡閰嶅浘
   int64 publishTime = 5; //鍙戝竷鎶藉鏃堕棿
-  int64 joinNumber = 6; //鑷姩寮€濂栦汉鏁?  string introduce = 7; //鎶藉璇存槑
+  int64 joinNumber = 6; //鑷姩寮€濂栦汉鏁?
+  string introduce = 7; //鎶藉璇存槑
   int64 awardDeadline = 8; //棰嗗鎴鏃堕棿
-  int64 isSelected = 9; //鏄惁绮鹃€?1鏄?0鍚?  int64 announceType = 10; //寮€濂栬缃細1鎸夋椂闂村紑濂?2鎸変汉鏁板紑濂?3鍗虫娊鍗充腑
-  int64 announceTime = 11; //寮€濂栨椂闂?  int64 isAnnounced = 12; //鏄惁寮€濂栵細0鏈紑濂栵紱1宸茬粡寮€濂?  int64 sponsorId = 13; //鍙戣捣鎶藉璧炲姪鍟咺D
-  int64 isClocked = 14; //鏄惁寮€鍚墦鍗′换鍔★細0鏈紑鍚紱1宸插紑鍚?  int64 clockTaskId = 15; //鎵撳崱浠诲姟浠诲姟ID
+  int64 isSelected = 9; //鏄惁绮鹃€?1鏄?0鍚?
+  int64 announceType = 10; //寮€濂栬缃細1鎸夋椂闂村紑濂?2鎸変汉鏁板紑濂?3鍗虫娊鍗充腑
+  int64 announceTime = 11; //寮€濂栨椂闂?
+  int64 isAnnounced = 12; //鏄惁寮€濂栵細0鏈紑濂栵紱1宸茬粡寮€濂?
+  int64 sponsorId = 13; //鍙戣捣鎶藉璧炲姪鍟咺D
+  int64 isClocked = 14; //鏄惁寮€鍚墦鍗′换鍔★細0鏈紑鍚紱1宸插紑鍚?
+  int64 clockTaskId = 15; //鎵撳崱浠诲姟浠诲姟ID
 }
 
 message UpdateLotteryResp {
@@ -78,13 +95,18 @@ message SearchLotteryReq {
   string name = 5; //榛樿鍙栦竴绛夊鍚嶇О
   string thumb = 6; //榛樿鍙栦竴绛夌粡閰嶅浘
   int64 publishTime = 7; //鍙戝竷鎶藉鏃堕棿
-  int64 joinNumber = 8; //鑷姩寮€濂栦汉鏁?  string introduce = 9; //鎶藉璇存槑
+  int64 joinNumber = 8; //鑷姩寮€濂栦汉鏁?
+  string introduce = 9; //鎶藉璇存槑
   int64 awardDeadline = 10; //棰嗗鎴鏃堕棿
-  int64 isSelected = 11; //鏄惁绮鹃€?1鏄?0鍚?  int64 announceType = 12; //寮€濂栬缃細1鎸夋椂闂村紑濂?2鎸変汉鏁板紑濂?3鍗虫娊鍗充腑
-  int64 announceTime = 13; //寮€濂栨椂闂?  int64 createTime = 14; //createTime
+  int64 isSelected = 11; //鏄惁绮鹃€?1鏄?0鍚?
+  int64 announceType = 12; //寮€濂栬缃細1鎸夋椂闂村紑濂?2鎸変汉鏁板紑濂?3鍗虫娊鍗充腑
+  int64 announceTime = 13; //寮€濂栨椂闂?
+  int64 createTime = 14; //createTime
   int64 updateTime = 15; //updateTime
-  int64 isAnnounced = 16; //鏄惁寮€濂栵細0鏈紑濂栵紱1宸茬粡寮€濂?  int64 sponsorId = 17; //鍙戣捣鎶藉璧炲姪鍟咺D
-  int64 isClocked = 18; //鏄惁寮€鍚墦鍗′换鍔★細0鏈紑鍚紱1宸插紑鍚?  int64 clockTaskId = 19; //鎵撳崱浠诲姟浠诲姟ID
+  int64 isAnnounced = 16; //鏄惁寮€濂栵細0鏈紑濂栵紱1宸茬粡寮€濂?
+  int64 sponsorId = 17; //鍙戣捣鎶藉璧炲姪鍟咺D
+  int64 isClocked = 18; //鏄惁寮€鍚墦鍗′换鍔★細0鏈紑鍚紱1宸插紑鍚?
+  int64 clockTaskId = 19; //鎵撳崱浠诲姟浠诲姟ID
 }
 
 message SearchLotteryResp {
@@ -96,7 +118,8 @@ message LotteryParticipation {
   int64 id = 1; //涓婚敭
   int64 lotteryId = 2; //鍙備笌鐨勬娊濂栫殑id
   int64 userId = 3; //鐢ㄦ埛id
-  int64 isWon = 4; //涓浜嗗悧锛?  int64 prizeId = 5; //濂栧搧id
+  int64 isWon = 4; //涓浜嗗悧锛?
+  int64 prizeId = 5; //濂栧搧id
   int64 createTime = 6; //createTime
   int64 updateTime = 7; //updateTime
 }
@@ -104,7 +127,8 @@ message LotteryParticipation {
 message AddLotteryParticipationReq {
   int64 lotteryId = 1; //鍙備笌鐨勬娊濂栫殑id
   int64 userId = 2; //鐢ㄦ埛id
-  int64 isWon = 3; //涓浜嗗悧锛?  int64 prizeId = 4; //濂栧搧id
+  int64 isWon = 3; //涓浜嗗悧锛?
+  int64 prizeId = 4; //濂栧搧id
 }
 
 message AddLotteryParticipationResp {
@@ -114,7 +138,8 @@ message UpdateLotteryParticipationReq {
   int64 id = 1; //涓婚敭
   int64 lotteryId = 2; //鍙備笌鐨勬娊濂栫殑id
   int64 userId = 3; //鐢ㄦ埛id
-  int64 isWon = 4; //涓浜嗗悧锛?  int64 prizeId = 5; //濂栧搧id
+  int64 isWon = 4; //涓浜嗗悧锛?
+  int64 prizeId = 5; //濂栧搧id
 }
 
 message UpdateLotteryParticipationResp {
@@ -141,7 +166,8 @@ message SearchLotteryParticipationReq {
   int64 id = 3; //涓婚敭
   int64 lotteryId = 4; //鍙備笌鐨勬娊濂栫殑id
   int64 userId = 5; //鐢ㄦ埛id
-  int64 isWon = 6; //涓浜嗗悧锛?  int64 prizeId = 7; //濂栧搧id
+  int64 isWon = 6; //涓浜嗗悧锛?
+  int64 prizeId = 7; //濂栧搧id
   int64 createTime = 8; //createTime
   int64 updateTime = 9; //updateTime
 }
@@ -157,7 +183,8 @@ message Prize {
   int64 type = 3; //濂栧搧绫诲瀷锛?濂栧搧 2浼樻儬鍒?3鍏戞崲鐮?4鍟嗗煄 5寰俊绾㈠寘灏侀潰 6绾㈠寘
   string name = 4; //濂栧搧鍚嶇О
   int64 level = 5; //鍑犵瓑濂?榛樿1
-  string thumb = 6; //濂栧搧鍥?  int64 count = 7; //濂栧搧浠芥暟
+  string thumb = 6; //濂栧搧鍥?
+  int64 count = 7; //濂栧搧浠芥暟
   int64 grantType = 8; //濂栧搧鍙戞斁鏂瑰紡锛?蹇€掗偖瀵?2璁╀腑濂栬€呰仈绯绘垜 3涓鑰呭～鍐欎俊鎭?4璺宠浆鍒板叾浠栧皬绋嬪簭
   int64 createTime = 9; //createTime
   int64 updateTime = 10; //updateTime
@@ -168,7 +195,8 @@ message AddPrizeReq {
   int64 type = 2; //濂栧搧绫诲瀷锛?濂栧搧 2浼樻儬鍒?3鍏戞崲鐮?4鍟嗗煄 5寰俊绾㈠寘灏侀潰 6绾㈠寘
   string name = 3; //濂栧搧鍚嶇О
   int64 level = 4; //鍑犵瓑濂?榛樿1
-  string thumb = 5; //濂栧搧鍥?  int64 count = 6; //濂栧搧浠芥暟
+  string thumb = 5; //濂栧搧鍥?
+  int64 count = 6; //濂栧搧浠芥暟
   int64 grantType = 7; //濂栧搧鍙戞斁鏂瑰紡锛?蹇€掗偖瀵?2璁╀腑濂栬€呰仈绯绘垜 3涓鑰呭～鍐欎俊鎭?4璺宠浆鍒板叾浠栧皬绋嬪簭
 }
 
@@ -181,7 +209,8 @@ message UpdatePrizeReq {
   int64 type = 3; //濂栧搧绫诲瀷锛?濂栧搧 2浼樻儬鍒?3鍏戞崲鐮?4鍟嗗煄 5寰俊绾㈠寘灏侀潰 6绾㈠寘
   string name = 4; //濂栧搧鍚嶇О
   int64 level = 5; //鍑犵瓑濂?榛樿1
-  string thumb = 6; //濂栧搧鍥?  int64 count = 7; //濂栧搧浠芥暟
+  string thumb = 6; //濂栧搧鍥?
+  int64 count = 7; //濂栧搧浠芥暟
   int64 grantType = 8; //濂栧搧鍙戞斁鏂瑰紡锛?蹇€掗偖瀵?2璁╀腑濂栬€呰仈绯绘垜 3涓鑰呭～鍐欎俊鎭?4璺宠浆鍒板叾浠栧皬绋嬪簭
 }
 
@@ -211,7 +240,8 @@ message SearchPrizeReq {
   int64 type = 5; //濂栧搧绫诲瀷锛?濂栧搧 2浼樻儬鍒?3鍏戞崲鐮?4鍟嗗煄 5寰俊绾㈠寘灏侀潰 6绾㈠寘
   string name = 6; //濂栧搧鍚嶇О
   int64 level = 7; //鍑犵瓑濂?榛樿1
-  string thumb = 8; //濂栧搧鍥?  int64 count = 9; //濂栧搧浠芥暟
+  string thumb = 8; //濂栧搧鍥?
+  int64 count = 9; //濂栧搧浠芥暟
   int64 grantType = 10; //濂栧搧鍙戞斁鏂瑰紡锛?蹇€掗偖瀵?2璁╀腑濂栬€呰仈绯绘垜 3涓鑰呭～鍐欎俊鎭?4璺宠浆鍒板叾浠栧皬绋嬪簭
   int64 createTime = 11; //createTime
   int64 updateTime = 12; //updateTime
