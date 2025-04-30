@@ -13,6 +13,7 @@ export default {
     'pages/points/recode/index',
     'pages/lottery/list/index',
     'pages/lottery/create/index',
+    'pages/lottery/detail/index',
   ],
   window: {
     backgroundTextStyle: 'light',

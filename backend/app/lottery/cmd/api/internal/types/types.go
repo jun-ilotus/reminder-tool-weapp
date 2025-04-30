@@ -37,7 +37,7 @@ type Lottery struct {
 }
 
 type LotteryDetailReq struct {
-	Id int64 `json:"id"`
+	Id int64 `form:"id"`
 }
 
 type LotteryDetailResp struct {

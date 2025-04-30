@@ -155,6 +155,8 @@ message DelLotteryParticipationResp {
 
 message GetLotteryParticipationByIdReq {
   int64 id = 1; //id
+  int64 lotteryId = 2;
+  int64 userId = 3;
 }
 
 message GetLotteryParticipationByIdResp {

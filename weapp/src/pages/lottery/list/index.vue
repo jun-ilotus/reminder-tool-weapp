@@ -13,14 +13,14 @@
         <template #shop-tag >
             <div style="font-size: x-small;">{{announceTimeString[item.announceType]}}</div>
                 <AtCountdown 
-                    isCard="true"
+                    isCard="false"
                     :format="{day:'天', hours: '时', minutes: '分', seconds: '秒' }"
                     isShowDay
                     :seconds="item.announceTime"
                 />
         </template>
         <template #footer >
-            <nut-button size="mini"  type="primary">参与抽奖</nut-button>
+            <nut-button size="mini"  type="primary" @click="lotteryDetail(item.id)" >参与抽奖</nut-button>
         </template>
     </nut-card>  
     </div>
@@ -32,7 +32,8 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue'
-import { useReady, Taro, useReachBottom } from '@tarojs/taro'
+import { useReady, useReachBottom } from '@tarojs/taro'
+import Taro from '@tarojs/taro'
 import lotteryTabbar from "src/components/lotteryTabbar.vue";
 import { dateFormat, getDays, getHours, getMinutes, getSeconds } from 'src/pages/utils'
 import { getAction } from "src/http";
@@ -54,6 +55,12 @@ useReady (() => {
 useReachBottom(() => {
     getLotteryList(data.value[data.value.length-1].id, 10, 0)
 })
+
+const lotteryDetail = (id) => {
+    Taro.navigateTo({ 
+      url: '/pages/lottery/detail/index?id=' + String(id)
+    })
+}
 
 interface ApiResponse {
     success: boolean;

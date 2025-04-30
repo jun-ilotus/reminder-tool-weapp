@@ -2,6 +2,9 @@ package lottery
 
 import (
 	"context"
+	"github.com/jinzhu/copier"
+	"looklook/app/lottery/cmd/rpc/lottery"
+	"looklook/common/ctxdata"
 
 	"looklook/app/lottery/cmd/api/internal/svc"
 	"looklook/app/lottery/cmd/api/internal/types"
@@ -24,7 +27,36 @@ func NewLotteryDetailLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Lot
 }
 
 func (l *LotteryDetailLogic) LotteryDetail(req *types.LotteryDetailReq) (resp *types.LotteryDetailResp, err error) {
-	// todo: add your logic here and delete this line
+	userId := ctxdata.GetUidFromCtx(l.ctx)
+	RespLottery, err := l.svcCtx.LotteryRpc.GetLotteryById(l.ctx, &lottery.GetLotteryByIdReq{Id: req.Id})
+	if err != nil {
+		return nil, err
+	}
+	var ResLottery types.Lottery
+	_ = copier.Copy(&ResLottery, RespLottery.Lottery)
+	prizes, err := l.svcCtx.LotteryRpc.SearchPrize(l.ctx, &lottery.SearchPrizeReq{LotteryId: req.Id})
+	if err != nil {
+		return nil, err
+	}
+	var res []*types.Prize
+	for _, v := range prizes.Prize {
+		resPrize := &types.Prize{}
+		_ = copier.Copy(resPrize, v)
+		res = append(res, resPrize)
+	}
+	one, err := l.svcCtx.LotteryRpc.GetLotteryParticipationById(l.ctx,
+		&lottery.GetLotteryParticipationByIdReq{UserId: userId, LotteryId: req.Id})
+	if err != nil {
+		return nil, err
+	}
+	isParticipated := 0
+	if one.LotteryParticipation != nil {
+		isParticipated = 1
+	}
 
-	return
+	return &types.LotteryDetailResp{
+		Lottery:        ResLottery,
+		Prizes:         res,
+		IsParticipated: int64(isParticipated),
+	}, nil
 }

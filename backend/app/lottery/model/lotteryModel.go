@@ -18,6 +18,7 @@ type (
 		lotteryModel
 		LotteryList(ctx context.Context, limit, selected, lastId int64) ([]*Lottery, error)
 		GetLastId(ctx context.Context) (int64, error)
+		GetLotteryById(ctx context.Context, lotteryId int64) (*Lottery, error)
 	}
 
 	customLotteryModel struct {
@@ -56,4 +57,16 @@ func (c *customLotteryModel) GetLastId(ctx context.Context) (int64, error) {
 		return 0, errors.Wrapf(xerr.NewErrCode(xerr.DB_ERROR), "GetLastId, error: %v", err)
 	}
 	return resp, nil
+}
+
+func (c *customLotteryModel) GetLotteryById(ctx context.Context, lotteryId int64) (*Lottery, error) {
+	var query string
+	query = fmt.Sprintf("select %s from %s where id = ?", lotteryRows, c.table)
+
+	var resp Lottery
+	err := c.QueryRowNoCacheCtx(ctx, &resp, query, lotteryId)
+	if err != nil {
+		return nil, errors.Wrapf(xerr.NewErrCode(xerr.DB_ERROR), "GetLotteryById, &resp:%v, query:%v, lastId:%v, limit:%v, error: %v", &resp, query, err)
+	}
+	return &resp, nil
 }

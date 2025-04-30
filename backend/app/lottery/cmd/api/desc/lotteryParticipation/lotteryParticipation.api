@@ -1,0 +1,99 @@
+syntax = "v1"
+
+info(
+    title: "抽奖服务"
+    desc: "抽奖服务"
+    author: "ilotus"
+    version: "v1"
+)
+
+type LotteryParticipation {
+    Id        int64 `json:"id"`         // 主键
+    LotteryId int64 `json:"lottery_id"` // 参与的抽奖的id
+    UserId    int64 `json:"user_id"`    // 用户id
+    IsWon     int64 `json:"is_won"`     // 中奖了吗？
+    PrizeId   int64 `json:"prize_id"`   // 中奖id
+}
+
+type Prizes {
+    Id         int64     `json:"id"`
+    LotteryId  int64     `json:"lottery_id"` // 抽奖ID
+    Type       int64     `json:"type"`       // 奖品类型：1奖品 2优惠券 3兑换码 4商城 5微信红包封面 6红包
+    Name       string    `json:"name"`       // 奖品名称
+    Level      int64     `json:"level"`      // 几等奖 默认1
+    Thumb      string    `json:"thumb"`      // 奖品图
+    Count      int64     `json:"count"`      // 奖品份数
+    GrantType  int64     `json:"grant_type"` // 奖品发放方式：1快递邮寄 2让中奖者联系我 3中奖者填写信息 4跳转到其他小程序
+}
+
+type SearchLotteryParticipationReq {
+    LotteryId int64 `json:"lotteryId"`
+    PageIndex int64 `json:"pageIndex"`
+    PageSize int64 `json:"pageSize"`
+}
+
+type UserInfo {
+    Mobile    		 string `json:"mobile"`
+    Nickname         string `json:"nickname"`
+    Sex              int64 `json:"sex"`
+    Avatar           string `json:"avatar"`
+    Info             string `json:"info"`
+    Signature        string `json:"signature"`
+    LocationName     string `json:"locationName"`
+}
+
+type AddLotteryParticipationReq {
+    LotteryId int64 `json:"lotteryId"`
+}
+
+type AddLotteryParticipationResp {
+}
+
+type SearchLotteryParticipationResp {
+    Count int64 `json:"count"`
+    List []*UserInfo `json:"list"`
+}
+
+
+type WonList {
+    Id        int64 `json:"id"`         // 主键
+    LotteryId int64 `json:"lottery_id"` // 参与的抽奖的id
+    UserId    int64 `json:"user_id"`    // 用户id
+    IsWon     int64 `json:"is_won"`     // 中奖了吗？
+    Prize     *Prizes `json:"prize"`     // 中奖奖品
+}
+
+// 获取当前用户中奖列表
+type GetLotteryWinListReq {
+    LastId int64 `json:"lastId"`
+    Size int64 `json:"size"`
+}
+
+type GetLotteryWinListResp {
+    list []*WonList `json:"list"`
+}
+
+// 获取当前用户当前抽奖是否中奖
+type CheckIsWinReq {
+    LotteryId int64 `json:"lotteryId"`
+}
+
+type CheckIsWinResp {
+    IsWon int64 `json:"isWon"`
+}
+
+// 得到当前抽奖中奖者名单列表
+type GetLotteryWinList2Req {
+    LotteryId int64 `json:"lotteryId"`
+}
+
+// 重新构建一个中奖者名单的返回
+type WonList2 {
+    Prize *Prizes `json:"prize"`
+    WinnerCount int64 `json:"winnerCount"`
+    Users []*UserInfo `json:"users"`
+}
+
+type GetLotteryWinList2Resp {
+    list []*WonList2 `json:"list"`
+}

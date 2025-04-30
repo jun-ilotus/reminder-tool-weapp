@@ -67,7 +67,7 @@ type (
 
 type (
     LotteryDetailReq {
-        Id int64 `json:"id"`
+        Id int64 `form:"id"`
     }
     LotteryDetailResp {
         lottery Lottery `json:"lottery"`
