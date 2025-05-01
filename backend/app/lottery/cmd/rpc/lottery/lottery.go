@@ -14,39 +14,41 @@ import (
 )
 
 type (
-	AddLotteryParticipationReq      = pb.AddLotteryParticipationReq
-	AddLotteryParticipationResp     = pb.AddLotteryParticipationResp
-	AddLotteryReq                   = pb.AddLotteryReq
-	AddLotteryResp                  = pb.AddLotteryResp
-	AddPrizeReq                     = pb.AddPrizeReq
-	AddPrizeResp                    = pb.AddPrizeResp
-	DelLotteryParticipationReq      = pb.DelLotteryParticipationReq
-	DelLotteryParticipationResp     = pb.DelLotteryParticipationResp
-	DelLotteryReq                   = pb.DelLotteryReq
-	DelLotteryResp                  = pb.DelLotteryResp
-	DelPrizeReq                     = pb.DelPrizeReq
-	DelPrizeResp                    = pb.DelPrizeResp
-	GetLotteryByIdReq               = pb.GetLotteryByIdReq
-	GetLotteryByIdResp              = pb.GetLotteryByIdResp
-	GetLotteryParticipationByIdReq  = pb.GetLotteryParticipationByIdReq
-	GetLotteryParticipationByIdResp = pb.GetLotteryParticipationByIdResp
-	GetPrizeByIdReq                 = pb.GetPrizeByIdReq
-	GetPrizeByIdResp                = pb.GetPrizeByIdResp
-	Lottery                         = pb.Lottery
-	LotteryParticipation            = pb.LotteryParticipation
-	Prize                           = pb.Prize
-	SearchLotteryParticipationReq   = pb.SearchLotteryParticipationReq
-	SearchLotteryParticipationResp  = pb.SearchLotteryParticipationResp
-	SearchLotteryReq                = pb.SearchLotteryReq
-	SearchLotteryResp               = pb.SearchLotteryResp
-	SearchPrizeReq                  = pb.SearchPrizeReq
-	SearchPrizeResp                 = pb.SearchPrizeResp
-	UpdateLotteryParticipationReq   = pb.UpdateLotteryParticipationReq
-	UpdateLotteryParticipationResp  = pb.UpdateLotteryParticipationResp
-	UpdateLotteryReq                = pb.UpdateLotteryReq
-	UpdateLotteryResp               = pb.UpdateLotteryResp
-	UpdatePrizeReq                  = pb.UpdatePrizeReq
-	UpdatePrizeResp                 = pb.UpdatePrizeResp
+	AddLotteryParticipationReq        = pb.AddLotteryParticipationReq
+	AddLotteryParticipationResp       = pb.AddLotteryParticipationResp
+	AddLotteryReq                     = pb.AddLotteryReq
+	AddLotteryResp                    = pb.AddLotteryResp
+	AddPrizeReq                       = pb.AddPrizeReq
+	AddPrizeResp                      = pb.AddPrizeResp
+	DelLotteryParticipationReq        = pb.DelLotteryParticipationReq
+	DelLotteryParticipationResp       = pb.DelLotteryParticipationResp
+	DelLotteryReq                     = pb.DelLotteryReq
+	DelLotteryResp                    = pb.DelLotteryResp
+	DelPrizeReq                       = pb.DelPrizeReq
+	DelPrizeResp                      = pb.DelPrizeResp
+	GetLotteryByIdReq                 = pb.GetLotteryByIdReq
+	GetLotteryByIdResp                = pb.GetLotteryByIdResp
+	GetLotteryParticipationByIdReq    = pb.GetLotteryParticipationByIdReq
+	GetLotteryParticipationByIdResp   = pb.GetLotteryParticipationByIdResp
+	GetPrizeByIdReq                   = pb.GetPrizeByIdReq
+	GetPrizeByIdResp                  = pb.GetPrizeByIdResp
+	Lottery                           = pb.Lottery
+	LotteryParticipation              = pb.LotteryParticipation
+	Prize                             = pb.Prize
+	SearchLotteryParticipationReq     = pb.SearchLotteryParticipationReq
+	SearchLotteryParticipationResp    = pb.SearchLotteryParticipationResp
+	SearchLotteryParticipationWinReq  = pb.SearchLotteryParticipationWinReq
+	SearchLotteryParticipationWinResp = pb.SearchLotteryParticipationWinResp
+	SearchLotteryReq                  = pb.SearchLotteryReq
+	SearchLotteryResp                 = pb.SearchLotteryResp
+	SearchPrizeReq                    = pb.SearchPrizeReq
+	SearchPrizeResp                   = pb.SearchPrizeResp
+	UpdateLotteryParticipationReq     = pb.UpdateLotteryParticipationReq
+	UpdateLotteryParticipationResp    = pb.UpdateLotteryParticipationResp
+	UpdateLotteryReq                  = pb.UpdateLotteryReq
+	UpdateLotteryResp                 = pb.UpdateLotteryResp
+	UpdatePrizeReq                    = pb.UpdatePrizeReq
+	UpdatePrizeResp                   = pb.UpdatePrizeResp
 
 	LotteryZrpcClient interface {
 		// -----------------------鎶藉琛?----------------------
@@ -61,6 +63,7 @@ type (
 		DelLotteryParticipation(ctx context.Context, in *DelLotteryParticipationReq, opts ...grpc.CallOption) (*DelLotteryParticipationResp, error)
 		GetLotteryParticipationById(ctx context.Context, in *GetLotteryParticipationByIdReq, opts ...grpc.CallOption) (*GetLotteryParticipationByIdResp, error)
 		SearchLotteryParticipation(ctx context.Context, in *SearchLotteryParticipationReq, opts ...grpc.CallOption) (*SearchLotteryParticipationResp, error)
+		SearchLotteryParticipationWin(ctx context.Context, in *SearchLotteryParticipationWinReq, opts ...grpc.CallOption) (*SearchLotteryParticipationWinResp, error)
 		// -----------------------濂栧搧琛?----------------------
 		AddPrize(ctx context.Context, in *AddPrizeReq, opts ...grpc.CallOption) (*AddPrizeResp, error)
 		UpdatePrize(ctx context.Context, in *UpdatePrizeReq, opts ...grpc.CallOption) (*UpdatePrizeResp, error)
@@ -130,6 +133,11 @@ func (m *defaultLotteryZrpcClient) GetLotteryParticipationById(ctx context.Conte
 func (m *defaultLotteryZrpcClient) SearchLotteryParticipation(ctx context.Context, in *SearchLotteryParticipationReq, opts ...grpc.CallOption) (*SearchLotteryParticipationResp, error) {
 	client := pb.NewLotteryClient(m.cli.Conn())
 	return client.SearchLotteryParticipation(ctx, in, opts...)
+}
+
+func (m *defaultLotteryZrpcClient) SearchLotteryParticipationWin(ctx context.Context, in *SearchLotteryParticipationWinReq, opts ...grpc.CallOption) (*SearchLotteryParticipationWinResp, error) {
+	client := pb.NewLotteryClient(m.cli.Conn())
+	return client.SearchLotteryParticipationWin(ctx, in, opts...)
 }
 
 // -----------------------濂栧搧琛?----------------------

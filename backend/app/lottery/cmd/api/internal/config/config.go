@@ -14,6 +14,7 @@ type Config struct {
 	JwtAuth struct {
 		AccessSecret string
 	}
-	Cache          cache.CacheConf
-	LotteryRpcConf zrpc.RpcClientConf
+	Cache             cache.CacheConf
+	LotteryRpcConf    zrpc.RpcClientConf
+	UsercenterRpcConf zrpc.RpcClientConf
 }

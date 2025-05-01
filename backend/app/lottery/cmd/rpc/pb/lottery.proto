@@ -164,8 +164,8 @@ message GetLotteryParticipationByIdResp {
 }
 
 message SearchLotteryParticipationReq {
-  int64 page = 1; //page
-  int64 limit = 2; //limit
+  int64 pageSize = 1; //page
+  int64 lastId = 2; //limit
   int64 id = 3; //涓婚敭
   int64 lotteryId = 4; //鍙備笌鐨勬娊濂栫殑id
   int64 userId = 5; //鐢ㄦ埛id
@@ -177,6 +177,16 @@ message SearchLotteryParticipationReq {
 
 message SearchLotteryParticipationResp {
   repeated LotteryParticipation lotteryParticipation = 1; //lotteryParticipation
+  int64 count = 2;
+}
+
+message SearchLotteryParticipationWinReq {
+  int64 lotteryId = 1;
+}
+
+message SearchLotteryParticipationWinResp {
+  repeated LotteryParticipation lotteryParticipation = 1; //lotteryParticipation
+  int64 count = 2;
 }
 
 //--------------------------------濂栧搧琛?-------------------------------
@@ -273,8 +283,9 @@ service lottery{
 	 rpc UpdateLotteryParticipation(UpdateLotteryParticipationReq) returns (UpdateLotteryParticipationResp); 
 	 rpc DelLotteryParticipation(DelLotteryParticipationReq) returns (DelLotteryParticipationResp); 
 	 rpc GetLotteryParticipationById(GetLotteryParticipationByIdReq) returns (GetLotteryParticipationByIdResp); 
-	 rpc SearchLotteryParticipation(SearchLotteryParticipationReq) returns (SearchLotteryParticipationResp); 
-	 //-----------------------濂栧搧琛?---------------------- 
+	 rpc SearchLotteryParticipation(SearchLotteryParticipationReq) returns (SearchLotteryParticipationResp);
+     rpc SearchLotteryParticipationWin(SearchLotteryParticipationWinReq) returns (SearchLotteryParticipationWinResp);
+  //-----------------------濂栧搧琛?----------------------
 	 rpc AddPrize(AddPrizeReq) returns (AddPrizeResp); 
 	 rpc UpdatePrize(UpdatePrizeReq) returns (UpdatePrizeResp); 
 	 rpc DelPrize(DelPrizeReq) returns (DelPrizeResp); 

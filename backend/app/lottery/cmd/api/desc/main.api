@@ -35,5 +35,17 @@ service lottery {
 	@doc "lottery list"
 	@handler lotteryList
 	get /lottery/lotteryList (LotteryListReq) returns (LotteryListResp)
+
+	@doc "参与抽奖"
+	@handler addLotteryParticipation
+	post /lottery/participation (AddLotteryParticipationReq) returns (AddLotteryParticipationResp)
+
+	@doc "抽奖人"
+	@handler searchParticipation
+	get /lottery/participations (SearchLotteryParticipationReq) returns (SearchLotteryParticipationResp)
+
+	@doc "获取当前抽奖中奖者名单"
+	@handler getLotteryWinList2
+	get /lottery/getLotteryWinnersList (GetLotteryWinList2Req) returns (GetLotteryWinList2Resp)
 }
 

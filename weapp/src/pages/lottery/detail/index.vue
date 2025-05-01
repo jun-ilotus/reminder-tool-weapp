@@ -28,29 +28,61 @@
     </nut-form>
     <!-- 待开奖 -->
     <nut-form v-if="lotteryData.isAnnounced === 0">
-        <div style="display: flex; margin-left: 36%; margin-top: 15%; height: 30vh;">
+        <div style="display: flex; justify-content: center; margin-top: 15%; height: 20vh;">
 
             <nut-animate v-if="lotteryData.isParticipated === 0" type="ripple" loop duration="1000" 
-            style="border-radius: 50%; width: 90vw; height: 90vw;">
-                <nut-button type="primary" style="width: 30vw; height: 30vw; border-radius: 50%;">参与抽奖</nut-button>
+            style="border-radius: 50%; width: 30vw; height: 30vw;">
+                <nut-button @click="participation()" type="primary" style="width: 30vw; height: 30vw; border-radius: 50%;">参与抽奖</nut-button>
             </nut-animate>
             <nut-button v-else plain type="primary" style="width: 30vw; height: 30vw; border-radius: 50%;">待开奖</nut-button>
+        </div>
 
+        <!-- 参与者 -->
+        <div style="display: flex; justify-content: center;">
+            <div style="color:#ccc; font-size: small;">
+                已有 {{ participationsData.count }} 人参与
+            </div>
+        </div>
+        <div style="display: flex; justify-content: center; margin-top: 3vh; margin-bottom: 5vh;">
+            <nut-avatar-group max-count="7" max-content="..." span="2" size="small">
+                <nut-avatar v-for="info in participationsData.list" size="small">
+                    <img :src="info.avatar" />
+                </nut-avatar>
+            </nut-avatar-group>
         </div>
     </nut-form>
     
     <!-- 已开奖 -->
     <nut-form v-else>
-        
+        <div style="margin-left: 5vw; margin-top: 3vw; color:#ccc; font-size: small; margin-bottom: 3vw;">
+            中奖名单
+        </div>
+        <div v-for="win in winData" style=" margin: 2vh 5vw 3vh 3vw; border: 1px solid #ccc;  border-radius: 8px;">
+            <div style="text-align: center;  line-height: 30px; font-size: small; background-color: #F8F8FF; width: 100%; height: 30px; border-radius: 8px;">
+                {{ win.prize.name }}，{{ win.winnerCount }} 人中奖
+            </div>
+            <div style="display: flex; justify-content: center; margin-top: 3vh; margin-bottom: 3vh;">
+                <nut-grid :column-num="4" :border="false" gutter="10">
+                    <nut-grid-item v-for="user in win.users" :text="user.nickname">
+                        <nut-avatar>
+                            <img :src="user.avatar" />
+                        </nut-avatar>
+                    </nut-grid-item>
+                </nut-grid>
+            </div>
+        </div>
     </nut-form>
 
 </template>
 
 <script lang="ts" setup>
 import { ref } from 'vue'
-import { useReady, Taro, useReachBottom, useRouter  } from '@tarojs/taro'
+import { useReady, useReachBottom, useRouter  } from '@tarojs/taro'
+import Taro from '@tarojs/taro'
 import { numberToChinese, dateFormat } from 'src/pages/utils'
-import { getAction } from "src/http";
+import { getAction, postAction } from "src/http";
+
+import { My } from '@nutui/icons-vue-taro'
 
 
 const announceTimeString: string[] = ['', '开奖时间 ', '结束时间 ', '开始时间 ']
@@ -83,6 +115,16 @@ const lotteryData = ref({
         }
     ],
 })
+const participationsData = ref({
+    count: 0,
+    list: []
+})
+
+const winData = ref([{
+    prize: {},
+    winnerCount: 0,
+    users: [],
+}])
 
 let lotteryId = 0
 useReady(() => {
@@ -90,6 +132,10 @@ useReady(() => {
     lotteryId = Number(router.params.id) as number
     getlottery(lotteryId)
 })
+
+const participation = () => {
+    lotteryParticipation()
+}
 
 interface ApiResponse {
     success: boolean;
@@ -136,7 +182,117 @@ async function getlottery (id) {
                 }
                 lotteryData.value.prizes.push(prize)
             }
-            console.log(lotteryData.value)
+            if (lotteryData.value.isAnnounced === 0) {  // 未开奖
+                GetParticipations(0, 10)
+            } else if (lotteryData.value.isAnnounced === 1) {  // 已开奖
+                GetParticipationsWin()
+            }
+        } else {
+            Taro.showToast({
+                title: '获取失败！' + result.message,
+                icon: 'error', // 'error' 'success' 'loading' 'none'
+                duration: 1500
+            })
+        }
+    } catch (error) {
+        
+    }
+}
+
+async function lotteryParticipation () {
+    try {
+        const result = await postAction('/lottery/v1/lottery/participation', {
+            lotteryId: lotteryData.value.id
+        }, {
+        loadingTitle: '正在参与...', // 请求时显示的加载提示
+        toastDuration: 1500 // 错误提示的显示时长
+        }, true) as ApiResponse;
+        if (result.success) {
+            lotteryData.value.isParticipated = 1
+        } else {
+            Taro.showToast({
+                title: '参与失败！' + result.message,
+                icon: 'error', // 'error' 'success' 'loading' 'none'
+                duration: 1500
+            })
+        }
+    } catch (error) {
+        
+    }
+}
+
+async function GetParticipations (lastId, pageSize) {
+    try {
+        const result = await getAction('/lottery/v1/lottery/participations', {
+            lotteryId: lotteryData.value.id,
+            lastId,
+            pageSize,
+        }, {
+        loadingTitle: '正在加载...', // 请求时显示的加载提示
+        toastDuration: 1500 // 错误提示的显示时长
+        }, true) as ApiResponse;
+        let data = result.data
+        let participations = data.list
+        if (result.success) {
+            participationsData.value.count = data.count
+            for (let index = 0; index < participations.length; index++) {
+                let participation = {
+                    key: index,
+                    nickname: participations[index].nickname,
+                    avatar: participations[index].avatar,
+                }
+                participationsData.value.list.push(participation)
+            }
+            console.log(participationsData.value)
+        } else {
+            Taro.showToast({
+                title: '获取失败！' + result.message,
+                icon: 'error', // 'error' 'success' 'loading' 'none'
+                duration: 1500
+            })
+        }
+    } catch (error) {
+        
+    }
+}
+
+async function GetParticipationsWin () {
+    try {
+        const result = await getAction('/lottery/v1/lottery/getLotteryWinnersList', {
+            lotteryId: lotteryData.value.id,
+        }, {
+        loadingTitle: '正在加载...', // 请求时显示的加载提示
+        toastDuration: 1500 // 错误提示的显示时长
+        }, true) as ApiResponse;
+        let list = result.data.list
+        if (result.success) {
+            winData.value = []
+
+            for (let i = 0; i < list.length; i ++ ) {
+                let won = {
+                    prize: {
+                        id: list[i].prize.id,
+                        lotteryId: list[i].prize.lottery_id,
+                        type: list[i].prize.type,
+                        name: list[i].prize.name,
+                        level: list[i].prize.level,
+                        count: list[i].prize.count,
+                        grantType: list[i].prize.grant_type,
+                    },
+                    winnerCount: list[i].winnerCount,
+                    users: [],
+                }
+                for (let j = 0; j < list[i].users.length; j ++ ) {
+                    let user = {
+                        key: j,
+                        nickname: list[i].users[j].nickname,
+                        avatar: list[i].users[j].avatar,
+                    }
+                    won.users.push(user)
+                }
+                winData.value.push(won)
+            }
+            console.log(winData.value)
         } else {
             Taro.showToast({
                 title: '获取失败！' + result.message,

@@ -66,7 +66,7 @@ func (c *customLotteryModel) GetLotteryById(ctx context.Context, lotteryId int64
 	var resp Lottery
 	err := c.QueryRowNoCacheCtx(ctx, &resp, query, lotteryId)
 	if err != nil {
-		return nil, errors.Wrapf(xerr.NewErrCode(xerr.DB_ERROR), "GetLotteryById, &resp:%v, query:%v, lastId:%v, limit:%v, error: %v", &resp, query, err)
+		return nil, errors.Wrapf(xerr.NewErrCode(xerr.DB_ERROR), "GetLotteryById, &resp:%v, query:%v, error: %v, lotteryId: %v", &resp, query, err, lotteryId)
 	}
 	return &resp, nil
 }

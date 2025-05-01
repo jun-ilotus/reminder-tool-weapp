@@ -19,21 +19,22 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	Lottery_AddLottery_FullMethodName                  = "/pb.lottery/AddLottery"
-	Lottery_UpdateLottery_FullMethodName               = "/pb.lottery/UpdateLottery"
-	Lottery_DelLottery_FullMethodName                  = "/pb.lottery/DelLottery"
-	Lottery_GetLotteryById_FullMethodName              = "/pb.lottery/GetLotteryById"
-	Lottery_SearchLottery_FullMethodName               = "/pb.lottery/SearchLottery"
-	Lottery_AddLotteryParticipation_FullMethodName     = "/pb.lottery/AddLotteryParticipation"
-	Lottery_UpdateLotteryParticipation_FullMethodName  = "/pb.lottery/UpdateLotteryParticipation"
-	Lottery_DelLotteryParticipation_FullMethodName     = "/pb.lottery/DelLotteryParticipation"
-	Lottery_GetLotteryParticipationById_FullMethodName = "/pb.lottery/GetLotteryParticipationById"
-	Lottery_SearchLotteryParticipation_FullMethodName  = "/pb.lottery/SearchLotteryParticipation"
-	Lottery_AddPrize_FullMethodName                    = "/pb.lottery/AddPrize"
-	Lottery_UpdatePrize_FullMethodName                 = "/pb.lottery/UpdatePrize"
-	Lottery_DelPrize_FullMethodName                    = "/pb.lottery/DelPrize"
-	Lottery_GetPrizeById_FullMethodName                = "/pb.lottery/GetPrizeById"
-	Lottery_SearchPrize_FullMethodName                 = "/pb.lottery/SearchPrize"
+	Lottery_AddLottery_FullMethodName                    = "/pb.lottery/AddLottery"
+	Lottery_UpdateLottery_FullMethodName                 = "/pb.lottery/UpdateLottery"
+	Lottery_DelLottery_FullMethodName                    = "/pb.lottery/DelLottery"
+	Lottery_GetLotteryById_FullMethodName                = "/pb.lottery/GetLotteryById"
+	Lottery_SearchLottery_FullMethodName                 = "/pb.lottery/SearchLottery"
+	Lottery_AddLotteryParticipation_FullMethodName       = "/pb.lottery/AddLotteryParticipation"
+	Lottery_UpdateLotteryParticipation_FullMethodName    = "/pb.lottery/UpdateLotteryParticipation"
+	Lottery_DelLotteryParticipation_FullMethodName       = "/pb.lottery/DelLotteryParticipation"
+	Lottery_GetLotteryParticipationById_FullMethodName   = "/pb.lottery/GetLotteryParticipationById"
+	Lottery_SearchLotteryParticipation_FullMethodName    = "/pb.lottery/SearchLotteryParticipation"
+	Lottery_SearchLotteryParticipationWin_FullMethodName = "/pb.lottery/SearchLotteryParticipationWin"
+	Lottery_AddPrize_FullMethodName                      = "/pb.lottery/AddPrize"
+	Lottery_UpdatePrize_FullMethodName                   = "/pb.lottery/UpdatePrize"
+	Lottery_DelPrize_FullMethodName                      = "/pb.lottery/DelPrize"
+	Lottery_GetPrizeById_FullMethodName                  = "/pb.lottery/GetPrizeById"
+	Lottery_SearchPrize_FullMethodName                   = "/pb.lottery/SearchPrize"
 )
 
 // LotteryClient is the client API for Lottery service.
@@ -52,6 +53,7 @@ type LotteryClient interface {
 	DelLotteryParticipation(ctx context.Context, in *DelLotteryParticipationReq, opts ...grpc.CallOption) (*DelLotteryParticipationResp, error)
 	GetLotteryParticipationById(ctx context.Context, in *GetLotteryParticipationByIdReq, opts ...grpc.CallOption) (*GetLotteryParticipationByIdResp, error)
 	SearchLotteryParticipation(ctx context.Context, in *SearchLotteryParticipationReq, opts ...grpc.CallOption) (*SearchLotteryParticipationResp, error)
+	SearchLotteryParticipationWin(ctx context.Context, in *SearchLotteryParticipationWinReq, opts ...grpc.CallOption) (*SearchLotteryParticipationWinResp, error)
 	// -----------------------濂栧搧琛?----------------------
 	AddPrize(ctx context.Context, in *AddPrizeReq, opts ...grpc.CallOption) (*AddPrizeResp, error)
 	UpdatePrize(ctx context.Context, in *UpdatePrizeReq, opts ...grpc.CallOption) (*UpdatePrizeResp, error)
@@ -168,6 +170,16 @@ func (c *lotteryClient) SearchLotteryParticipation(ctx context.Context, in *Sear
 	return out, nil
 }
 
+func (c *lotteryClient) SearchLotteryParticipationWin(ctx context.Context, in *SearchLotteryParticipationWinReq, opts ...grpc.CallOption) (*SearchLotteryParticipationWinResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(SearchLotteryParticipationWinResp)
+	err := c.cc.Invoke(ctx, Lottery_SearchLotteryParticipationWin_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *lotteryClient) AddPrize(ctx context.Context, in *AddPrizeReq, opts ...grpc.CallOption) (*AddPrizeResp, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(AddPrizeResp)
@@ -234,6 +246,7 @@ type LotteryServer interface {
 	DelLotteryParticipation(context.Context, *DelLotteryParticipationReq) (*DelLotteryParticipationResp, error)
 	GetLotteryParticipationById(context.Context, *GetLotteryParticipationByIdReq) (*GetLotteryParticipationByIdResp, error)
 	SearchLotteryParticipation(context.Context, *SearchLotteryParticipationReq) (*SearchLotteryParticipationResp, error)
+	SearchLotteryParticipationWin(context.Context, *SearchLotteryParticipationWinReq) (*SearchLotteryParticipationWinResp, error)
 	// -----------------------濂栧搧琛?----------------------
 	AddPrize(context.Context, *AddPrizeReq) (*AddPrizeResp, error)
 	UpdatePrize(context.Context, *UpdatePrizeReq) (*UpdatePrizeResp, error)
@@ -279,6 +292,9 @@ func (UnimplementedLotteryServer) GetLotteryParticipationById(context.Context, *
 }
 func (UnimplementedLotteryServer) SearchLotteryParticipation(context.Context, *SearchLotteryParticipationReq) (*SearchLotteryParticipationResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SearchLotteryParticipation not implemented")
+}
+func (UnimplementedLotteryServer) SearchLotteryParticipationWin(context.Context, *SearchLotteryParticipationWinReq) (*SearchLotteryParticipationWinResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SearchLotteryParticipationWin not implemented")
 }
 func (UnimplementedLotteryServer) AddPrize(context.Context, *AddPrizeReq) (*AddPrizeResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AddPrize not implemented")
@@ -496,6 +512,24 @@ func _Lottery_SearchLotteryParticipation_Handler(srv interface{}, ctx context.Co
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Lottery_SearchLotteryParticipationWin_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SearchLotteryParticipationWinReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(LotteryServer).SearchLotteryParticipationWin(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Lottery_SearchLotteryParticipationWin_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(LotteryServer).SearchLotteryParticipationWin(ctx, req.(*SearchLotteryParticipationWinReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Lottery_AddPrize_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(AddPrizeReq)
 	if err := dec(in); err != nil {
@@ -632,6 +666,10 @@ var Lottery_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "SearchLotteryParticipation",
 			Handler:    _Lottery_SearchLotteryParticipation_Handler,
+		},
+		{
+			MethodName: "SearchLotteryParticipationWin",
+			Handler:    _Lottery_SearchLotteryParticipationWin_Handler,
 		},
 		{
 			MethodName: "AddPrize",

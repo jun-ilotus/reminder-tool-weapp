@@ -1,6 +1,7 @@
 package {{.PkgName}}
 
 import (
+    "looklook/common/translator"
 	"net/http"
 
 	"looklook/common/result"
