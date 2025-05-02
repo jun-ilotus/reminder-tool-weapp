@@ -29,6 +29,7 @@
         <nut-cell title="个人信息" is-link @click="userinfo"></nut-cell>
         <nut-cell title="亲密好友" is-link @click="intimatePage"></nut-cell>
         <nut-cell title="积分记录" is-link @click="pointsPage"></nut-cell>
+        <nut-cell title="我的抽奖" is-link @click="mylotteryPage"></nut-cell>
 
     </div>
     <Tabbar></Tabbar>
@@ -53,6 +54,10 @@ const userinfo = () => {
 
 const pointsPage = () => {
     Taro.navigateTo({ url: '/pages/points/recode/index' })
+}
+
+const mylotteryPage = () => {
+    Taro.navigateTo({ url: '/pages/lottery/my/index' })
 }
 
 const getInfo = () => {

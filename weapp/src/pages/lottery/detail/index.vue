@@ -243,7 +243,7 @@ async function GetParticipations (lastId, pageSize) {
                 }
                 participationsData.value.list.push(participation)
             }
-            console.log(participationsData.value)
+            // console.log(participationsData.value)
         } else {
             Taro.showToast({
                 title: '获取失败！' + result.message,

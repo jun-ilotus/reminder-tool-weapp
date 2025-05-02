@@ -31,7 +31,7 @@ const goList = () => {
   Taro.redirectTo({ url: '/pages/lottery/list/index' })
 }
 const goCreate = () => {
-  Taro.redirectTo({ url: '/pages/lottery/create/index' })
+  Taro.redirectTo({ url: '/pages/lottery/create/index?id=0' })
 }
 
 </script>

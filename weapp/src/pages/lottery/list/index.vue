@@ -13,10 +13,11 @@
         <template #shop-tag >
             <div style="font-size: x-small;">{{announceTimeString[item.announceType]}}</div>
                 <AtCountdown 
-                    isCard="false"
+                    :isCard="false"
                     :format="{day:'天', hours: '时', minutes: '分', seconds: '秒' }"
                     isShowDay
                     :seconds="item.announceTime"
+                    style="font-size: x-small;"
                 />
         </template>
         <template #footer >

@@ -35,9 +35,18 @@ func (l *AddPrizeLogic) AddPrize(in *pb.AddPrizeReq) (*pb.AddPrizeResp, error) {
 		Count:     in.Count,
 		GrantType: in.GrantType,
 	}
-	_, err := l.svcCtx.PrizeModel.Insert(l.ctx, prize)
-	if err != nil {
-		return nil, err
+
+	if in.Id != 0 {
+		prize.Id = in.Id
+		err := l.svcCtx.PrizeModel.Update(l.ctx, prize)
+		if err != nil {
+			return nil, err
+		}
+	} else {
+		_, err := l.svcCtx.PrizeModel.Insert(l.ctx, prize)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	return &pb.AddPrizeResp{}, nil

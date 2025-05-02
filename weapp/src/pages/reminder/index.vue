@@ -86,7 +86,7 @@ useDidShow(() => {
 
 
 const confirm = ({ selectedValue }) => {
-  console.log(selectedValue)
+  // console.log(selectedValue)
   show.value = false
   reminderTimeString.value = dateFormat(reminderTime.value, 'YYYY-MM-DD HH:mm')
 }
@@ -104,7 +104,7 @@ const submit = () => {
         tmplIds:["T6iprDxSmNa_hmMQDSrfJAGxTulxZh3dkBTycKWpXlI"],
         entityIds:["T6iprDxSmNa_hmMQDSrfJAGxTulxZh3dkBTycKWpXlI"],
         success: function (res) { 
-          console.log(res)
+          // console.log(res)
           if (res.T6iprDxSmNa_hmMQDSrfJAGxTulxZh3dkBTycKWpXlI === "accept") {
             createReq(content.value, reminderTime.value, member.value)
           }

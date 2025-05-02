@@ -180,6 +180,33 @@ message SearchLotteryParticipationResp {
   int64 count = 2;
 }
 
+message UserLottery {
+  int64 lotteryId = 1;
+  string name = 2;
+  string thumb = 3;
+  int64 publishTime = 4;
+  int64 joinNumber = 5;
+  int64 awardDeadline = 6;
+  int64 announceType  = 7;
+  int64 announceTime = 8;
+  int64 isAnnounced = 9;
+  int64 lotteryParticipationId = 10;
+  int64 userId = 11;
+  int64 isWon = 12;
+  int64 prizeId = 13;
+  int64 updateTime = 14;
+}
+
+message SearchUserLotteryParticipationReq {
+  int64 userId = 1; //鐢ㄦ埛id
+  int64 isWon = 2; //涓浜嗗悧锛?
+  int64 isAnnounced = 3;
+}
+
+message SearchUserLotteryParticipationResp {
+  repeated UserLottery userLottery = 1;
+}
+
 message SearchLotteryParticipationWinReq {
   int64 lotteryId = 1;
 }
@@ -211,6 +238,7 @@ message AddPrizeReq {
   string thumb = 5; //濂栧搧鍥?
   int64 count = 6; //濂栧搧浠芥暟
   int64 grantType = 7; //濂栧搧鍙戞斁鏂瑰紡锛?蹇€掗偖瀵?2璁╀腑濂栬€呰仈绯绘垜 3涓鑰呭～鍐欎俊鎭?4璺宠浆鍒板叾浠栧皬绋嬪簭
+  int64 id = 8;
 }
 
 message AddPrizeResp {
@@ -284,6 +312,7 @@ service lottery{
 	 rpc DelLotteryParticipation(DelLotteryParticipationReq) returns (DelLotteryParticipationResp); 
 	 rpc GetLotteryParticipationById(GetLotteryParticipationByIdReq) returns (GetLotteryParticipationByIdResp); 
 	 rpc SearchLotteryParticipation(SearchLotteryParticipationReq) returns (SearchLotteryParticipationResp);
+     rpc SearchUserLotteryParticipation(SearchUserLotteryParticipationReq) returns (SearchUserLotteryParticipationResp);
      rpc SearchLotteryParticipationWin(SearchLotteryParticipationWinReq) returns (SearchLotteryParticipationWinResp);
   //-----------------------濂栧搧琛?----------------------
 	 rpc AddPrize(AddPrizeReq) returns (AddPrizeResp); 

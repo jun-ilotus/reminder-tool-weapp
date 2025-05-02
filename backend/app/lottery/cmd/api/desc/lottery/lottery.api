@@ -38,6 +38,7 @@ type Prize {
 
 type (
     CreateLotteryReq {
+        Id int64 `json:"id,optional"`
         Name string `json:"name"`                                                                     //默认一等奖名称
         Thumb string `json:"thumb"`                                                                   //默认一等奖配图
         PublishTime int64 `json:"publishTime"`

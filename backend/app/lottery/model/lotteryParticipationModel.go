@@ -8,6 +8,7 @@ import (
 	"github.com/zeromicro/go-zero/core/stores/sqlc"
 	"github.com/zeromicro/go-zero/core/stores/sqlx"
 	"looklook/common/xerr"
+	"time"
 )
 
 var _ LotteryParticipationModel = (*customLotteryParticipationModel)(nil)
@@ -23,6 +24,7 @@ type (
 		GetLotteryParticipationLastId(ctx context.Context, lotteryId int64) (int64, error)
 		LotteryParticipationList(ctx context.Context, lotteryId, limit, lastId int64) ([]*LotteryParticipation, error)
 		LotteryParticipationWinList(ctx context.Context, lotteryId int64) ([]*LotteryParticipation, error)
+		LotteryParticipationUserList(ctx context.Context, userId, isWon, isAnnounced int64) ([]*UserLottery, error)
 	}
 
 	customLotteryParticipationModel struct {
@@ -114,5 +116,59 @@ func (c *customLotteryParticipationModel) LotteryParticipationWinList(ctx contex
 		return nil, ErrNotFound
 	default:
 		return nil, errors.Wrapf(xerr.NewErrCode(xerr.DB_ERROR), "LotteryParticipationList, &resp:%v, query:%v, error: %v", &resp, query, err)
+	}
+}
+
+type UserLottery struct {
+	LotteryId     int64     `db:"lottery_id"`     // 参与的抽奖的id
+	Name          string    `db:"name"`           // 默认取一等奖名称
+	Thumb         string    `db:"thumb"`          // 默认取一等经配图
+	PublishTime   time.Time `db:"publish_time"`   // 发布抽奖时间
+	JoinNumber    int64     `db:"join_number"`    // 自动开奖人数
+	AwardDeadline time.Time `db:"award_deadline"` // 领奖截止时间
+	AnnounceType  int64     `db:"announce_type"`  // 开奖设置：1按时间开奖 2按人数开奖 3即抽即中
+	AnnounceTime  time.Time `db:"announce_time"`  // 开奖时间
+	IsAnnounced   int64     `db:"is_announced"`   // 是否开奖：0未开奖；1已经开奖
+
+	LotteryParticipationId int64     `db:"id"`       // 主键
+	UserId                 int64     `db:"user_id"`  // 用户id
+	IsWon                  int64     `db:"is_won"`   // 中奖了吗？
+	PrizeId                int64     `db:"prize_id"` // 奖品id
+	UpdateTime             time.Time `db:"update_time"`
+}
+
+func (c *customLotteryParticipationModel) LotteryParticipationUserList(ctx context.Context, userId, isWon, isAnnounced int64) ([]*UserLottery, error) {
+	var query string
+	if isWon == 0 { // 全部的参与
+		query = fmt.Sprintf(`
+select p.lottery_id, l.name, l.thumb, l.publish_time, l.join_number, l.award_deadline, l.announce_type, l.announce_time, l.is_announced, p.id, p.user_id, p.is_won, p.prize_id, p.update_time  
+from lottery_participation as p
+	LEFT JOIN lottery as l
+		ON p.lottery_id = l.id
+where p.user_id = ? AND l.is_announced = ?
+order by p.id desc 
+`)
+	} else if isWon == 1 { // 中奖的
+		query = fmt.Sprintf(`
+select p.lottery_id, l.name, l.thumb, l.publish_time, l.join_number, l.award_deadline, l.announce_type, l.announce_time, l.is_announced, p.id, p.user_id, p.is_won, p.prize_id, p.update_time  
+from lottery_participation as p
+	LEFT JOIN lottery as l
+		ON p.lottery_id = l.id
+where p.user_id = ? AND p.is_won = 1 AND l.is_announced = ?
+order by p.id desc 
+`)
+	}
+
+	var resp []*UserLottery
+	//err := c.conn.QueryRowsCtx(ctx, &resp, query, (page-1)*limit, limit)
+	err := c.QueryRowsNoCacheCtx(ctx, &resp, query, userId, isAnnounced)
+
+	switch err {
+	case nil:
+		return resp, nil
+	case sqlc.ErrNotFound:
+		return nil, ErrNotFound
+	default:
+		return nil, errors.Wrapf(xerr.NewErrCode(xerr.DB_ERROR), "LotteryParticipationUserList, &resp:%v, query:%v, error: %v", &resp, query, err)
 	}
 }

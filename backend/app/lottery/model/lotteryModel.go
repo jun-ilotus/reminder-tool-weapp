@@ -19,6 +19,7 @@ type (
 		LotteryList(ctx context.Context, limit, selected, lastId int64) ([]*Lottery, error)
 		GetLastId(ctx context.Context) (int64, error)
 		GetLotteryById(ctx context.Context, lotteryId int64) (*Lottery, error)
+		LotteryUserList(ctx context.Context, userId, isAnnounced int64) ([]*Lottery, error)
 	}
 
 	customLotteryModel struct {
@@ -45,6 +46,19 @@ func (c *customLotteryModel) LotteryList(ctx context.Context, limit, selected, l
 	err := c.QueryRowsNoCacheCtx(ctx, &resp, query, lastId, limit)
 	if err != nil {
 		return nil, errors.Wrapf(xerr.NewErrCode(xerr.DB_ERROR), "LotteryList, &resp:%v, query:%v, lastId:%v, limit:%v, error: %v", &resp, query, lastId, limit, err)
+	}
+	return resp, nil
+}
+
+func (c *customLotteryModel) LotteryUserList(ctx context.Context, userId, isAnnounced int64) ([]*Lottery, error) {
+	var query string
+	query = fmt.Sprintf("select %s from %s where user_id = ? AND is_announced = ? order by id desc", lotteryRows, c.table)
+
+	var resp []*Lottery
+	//err := c.conn.QueryRowsCtx(ctx, &resp, query, (page-1)*limit, limit)
+	err := c.QueryRowsNoCacheCtx(ctx, &resp, query, userId, isAnnounced)
+	if err != nil {
+		return nil, errors.Wrapf(xerr.NewErrCode(xerr.DB_ERROR), "LotteryList, &resp:%v, query:%v, error: %v", &resp, query, err)
 	}
 	return resp, nil
 }

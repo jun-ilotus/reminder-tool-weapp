@@ -75,6 +75,11 @@ func (s *LotteryServer) SearchLotteryParticipation(ctx context.Context, in *pb.S
 	return l.SearchLotteryParticipation(in)
 }
 
+func (s *LotteryServer) SearchUserLotteryParticipation(ctx context.Context, in *pb.SearchUserLotteryParticipationReq) (*pb.SearchUserLotteryParticipationResp, error) {
+	l := logic.NewSearchUserLotteryParticipationLogic(ctx, s.svcCtx)
+	return l.SearchUserLotteryParticipation(in)
+}
+
 func (s *LotteryServer) SearchLotteryParticipationWin(ctx context.Context, in *pb.SearchLotteryParticipationWinReq) (*pb.SearchLotteryParticipationWinResp, error) {
 	l := logic.NewSearchLotteryParticipationWinLogic(ctx, s.svcCtx)
 	return l.SearchLotteryParticipationWin(in)

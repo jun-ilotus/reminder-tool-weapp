@@ -3,10 +3,11 @@ package logic
 import (
 	"context"
 	"github.com/jinzhu/copier"
-	"looklook/app/lottery/model"
-
+	"github.com/pkg/errors"
 	"looklook/app/lottery/cmd/rpc/internal/svc"
 	"looklook/app/lottery/cmd/rpc/pb"
+	"looklook/app/lottery/model"
+	"looklook/common/xerr"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -27,16 +28,22 @@ func NewSearchLotteryLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Sea
 
 func (l *SearchLotteryLogic) SearchLottery(in *pb.SearchLotteryReq) (*pb.SearchLotteryResp, error) {
 	//list, err := l.svcCtx.LotteryModel.FindPageListByIdDESC(l.ctx, whereBuilder, in.LastId, in.PageSize)
-	if in.LastId == 0 {
-		id, err := l.svcCtx.LotteryModel.GetLastId(l.ctx)
-		if err != nil {
-			return nil, err
+	list := make([]*model.Lottery, 0)
+	var err error
+	if in.UserId != 0 {
+		list, err = l.svcCtx.LotteryModel.LotteryUserList(l.ctx, in.UserId, in.IsAnnounced)
+	} else {
+		if in.LastId == 0 {
+			id, err := l.svcCtx.LotteryModel.GetLastId(l.ctx)
+			if err != nil {
+				return nil, errors.Wrapf(xerr.NewErrCode(xerr.DB_ERROR), "GetLastId Database Exception lottery err: %v", err)
+			}
+			in.LastId = id + 1
 		}
-		in.LastId = id + 1
+		list, err = l.svcCtx.LotteryModel.LotteryList(l.ctx, in.Limit, in.IsSelected, in.LastId)
 	}
-	list, err := l.svcCtx.LotteryModel.LotteryList(l.ctx, in.Limit, in.IsSelected, in.LastId)
 	if err != nil && err != model.ErrNotFound {
-		return nil, err
+		return nil, errors.Wrapf(xerr.NewErrCode(xerr.DB_ERROR), "SearchLottery Database Exception lottery err: %v", err)
 	}
 
 	var resp []*pb.Lottery

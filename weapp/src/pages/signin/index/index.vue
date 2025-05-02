@@ -61,7 +61,7 @@ const change = (value) => {
         tmplIds:["T6iprDxSmNa_hmMQDSrfJAGxTulxZh3dkBTycKWpXlI"],
         entityIds:["T6iprDxSmNa_hmMQDSrfJAGxTulxZh3dkBTycKWpXlI"],
         success: function (res) { 
-          console.log(res)
+          // console.log(res)
           if (res.T6iprDxSmNa_hmMQDSrfJAGxTulxZh3dkBTycKWpXlI === "accept") {
             changeSignRemind()
           }

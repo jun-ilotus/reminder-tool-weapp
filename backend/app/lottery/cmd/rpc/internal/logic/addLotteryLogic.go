@@ -68,6 +68,7 @@ func (l *AddLotteryLogic) AddLottery(in *pb.AddLotteryReq) (*pb.AddLotteryResp, 
 			if err != nil {
 				return nil, errors.Wrapf(xerr.NewErrCode(xerr.DB_ERROR), "Update Database Exception lottery : %+v , err: %v", lottery, err)
 			}
+			Id = lottery.Id
 		}
 	} else {
 		insert, err := l.svcCtx.LotteryModel.Insert(l.ctx, lottery)

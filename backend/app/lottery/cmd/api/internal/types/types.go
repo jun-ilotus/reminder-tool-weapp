@@ -17,6 +17,7 @@ type CheckIsWinResp struct {
 }
 
 type CreateLotteryReq struct {
+	Id            int64    `json:"id,optional"`
 	Name          string   `json:"name"`  //默认一等奖名称
 	Thumb         string   `json:"thumb"` //默认一等奖配图
 	PublishTime   int64    `json:"publishTime"`
@@ -32,6 +33,17 @@ type CreateLotteryReq struct {
 
 type CreateLotteryResp struct {
 	Id int64 `json:"id"`
+}
+
+type GetLotteryListByUserIdReq struct {
+	Type        int64 `form:"type" validate:"oneof=1 2 3"`      // 1:参与 2:发起 3：中奖
+	Size        int64 `form:"size,optional"`                    // 每页数量
+	LastId      int64 `form:"lastId,optional"`                  // 最后一条数据的id
+	IsAnnounced int64 `form:"isAnnounced" validate:"oneof=0 1"` // 是否已开奖 0:未开奖 1:已开奖
+}
+
+type GetLotteryListByUserIdResp struct {
+	List []*LotteryPrizes `json:"list"`
 }
 
 type GetLotteryWinList2Req struct {
@@ -94,6 +106,25 @@ type LotteryParticipation struct {
 	UserId    int64 `json:"user_id"`    // 用户id
 	IsWon     int64 `json:"is_won"`     // 中奖了吗？
 	PrizeId   int64 `json:"prize_id"`   // 中奖id
+}
+
+type LotteryPrizes struct {
+	Name                   string `json:"name"`                   //默认一等奖名称
+	Thumb                  string `json:"thumb"`                  //默认一等奖配图
+	PublishTime            int64  `json:"publishTime"`            //发布抽奖时间
+	JoinNumber             int64  `json:"joinNumber"`             //自动开奖人数标准
+	AwardDeadline          int64  `json:"awardDeadline"`          //领奖截止时间
+	AnnounceTime           int64  `json:"announceTime"`           //开奖时间
+	AnnounceType           int64  `json:"announceType"`           //开奖设置：1按时间开奖 2按人数开奖 3即抽即中
+	IsAnnounced            int64  `json:"isAnnounced"`            // 是否已经开奖：0未开奖 1已开奖
+	LotteryParticipationId int64  `json:"LotteryParticipationId"` // 主键
+	LotteryId              int64  `json:"lotteryId"`              // 参与的抽奖的id
+	UserId                 int64  `json:"userId"`                 // 用户id
+	IsWon                  int64  `json:"isWon"`                  // 中奖了吗？
+	PrizeId                int64  `json:"prizeId"`                // 中奖id
+	PrizeName              string `json:"prizeName"`              // 奖品名称
+	Level                  int64  `json:"level"`                  // 几等奖 默认1
+	Time                   int64  `json:"time"`                   //参与/发起/中奖时间
 }
 
 type Prize struct {

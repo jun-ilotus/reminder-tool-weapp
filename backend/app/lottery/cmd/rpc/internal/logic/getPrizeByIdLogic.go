@@ -2,6 +2,9 @@ package logic
 
 import (
 	"context"
+	"github.com/jinzhu/copier"
+	"github.com/pkg/errors"
+	"looklook/common/xerr"
 
 	"looklook/app/lottery/cmd/rpc/internal/svc"
 	"looklook/app/lottery/cmd/rpc/pb"
@@ -24,7 +27,12 @@ func NewGetPrizeByIdLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetP
 }
 
 func (l *GetPrizeByIdLogic) GetPrizeById(in *pb.GetPrizeByIdReq) (*pb.GetPrizeByIdResp, error) {
-	// todo: add your logic here and delete this line
+	one, err := l.svcCtx.PrizeModel.FindOne(l.ctx, in.Id)
+	if err != nil {
+		return nil, errors.Wrapf(xerr.NewErrCode(xerr.DB_ERROR), "GetPrizeById Database Exception lottery err: %v", err)
+	}
+	prize := pb.Prize{}
+	_ = copier.Copy(&prize, one)
 
-	return &pb.GetPrizeByIdResp{}, nil
+	return &pb.GetPrizeByIdResp{Prize: &prize}, nil
 }

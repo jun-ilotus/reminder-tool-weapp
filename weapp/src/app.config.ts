@@ -14,6 +14,7 @@ export default {
     'pages/lottery/list/index',
     'pages/lottery/create/index',
     'pages/lottery/detail/index',
+    'pages/lottery/my/index',
   ],
   window: {
     backgroundTextStyle: 'light',

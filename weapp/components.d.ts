@@ -7,6 +7,7 @@ export {}
 
 declare module 'vue' {
   export interface GlobalComponents {
+    Create: typeof import('./src/components/myLottery/create.vue')['default']
     LotteryTabbar: typeof import('./src/components/lotteryTabbar.vue')['default']
     NutActionSheet: typeof import('@nutui/nutui-taro')['ActionSheet']
     NutAnimate: typeof import('@nutui/nutui-taro')['Animate']
@@ -15,6 +16,7 @@ declare module 'vue' {
     NutButton: typeof import('@nutui/nutui-taro')['Button']
     NutCard: typeof import('@nutui/nutui-taro')['Card']
     NutCell: typeof import('@nutui/nutui-taro')['Cell']
+    NutCellGroup: typeof import('@nutui/nutui-taro')['CellGroup']
     NutCollapse: typeof import('@nutui/nutui-taro')['Collapse']
     NutCollapseItem: typeof import('@nutui/nutui-taro')['CollapseItem']
     NutDatePicker: typeof import('@nutui/nutui-taro')['DatePicker']
@@ -44,6 +46,8 @@ declare module 'vue' {
     NutTag: typeof import('@nutui/nutui-taro')['Tag']
     NutTextarea: typeof import('@nutui/nutui-taro')['Textarea']
     NutUploader: typeof import('@nutui/nutui-taro')['Uploader']
+    Participation: typeof import('./src/components/myLottery/participation.vue')['default']
     Tabbar: typeof import('./src/components/Tabbar.vue')['default']
+    Won: typeof import('./src/components/myLottery/won.vue')['default']
   }
 }

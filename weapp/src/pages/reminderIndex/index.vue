@@ -109,7 +109,7 @@
         url: '/pages/reminder/index?id='+ actionSheetId.value
       })
     } else if (item.key === 1) {  //完成
-      console.log(clickReminder.value)
+      // console.log(clickReminder.value)
       modifyReq(clickReminder.value.id, 2)
     } else if (item.key === 2) {  //删除
       deleteReq(clickReminder.value.id)

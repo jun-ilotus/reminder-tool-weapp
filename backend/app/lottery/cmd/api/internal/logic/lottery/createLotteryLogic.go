@@ -29,6 +29,7 @@ func (l *CreateLotteryLogic) CreateLottery(req *types.CreateLotteryReq) (resp *t
 	userId := ctxdata.GetUidFromCtx(l.ctx)
 
 	lottery, err := l.svcCtx.LotteryRpc.AddLottery(l.ctx, &pb.AddLotteryReq{
+		Id:            req.Id,
 		UserId:        userId,
 		Name:          req.Name,
 		Thumb:         req.Thumb,
@@ -47,6 +48,7 @@ func (l *CreateLotteryLogic) CreateLottery(req *types.CreateLotteryReq) (resp *t
 	lotteryId := lottery.Id
 	for _, prize := range req.Prizes {
 		pbPrize := &pb.AddPrizeReq{
+			Id:        prize.Id,
 			LotteryId: lotteryId,
 			Type:      prize.Type,
 			Name:      prize.Name,

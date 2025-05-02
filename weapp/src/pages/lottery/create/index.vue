@@ -56,7 +56,7 @@
             <nut-radio-group v-model="lotteryData.announceType" direction="horizontal">
                 <nut-radio label="1" shape="button">按时间开奖</nut-radio>
                 <nut-radio label="2" shape="button">按人数开奖</nut-radio>
-                <nut-radio label="3" shape="button">即抽即中</nut-radio>
+                <!-- <nut-radio label="3" shape="button">即抽即中</nut-radio> -->
             </nut-radio-group>
         </nut-form-item>
         <div v-if="lotteryData.announceType === '1'">
@@ -65,10 +65,17 @@
                 label="开奖时间"
                 :rules="[{ required: true, message: '请填写时间'}]"
             >
-                <nut-input v-model="announceTimeString" readonly   @click="show = true" />
+                <nut-input v-model="lotteryData.announceTimeString" readonly   @click="show = true" />
             </nut-form-item>
         </div>
         <div v-if="lotteryData.announceType === '2'">
+            <nut-form-item
+                required
+                label="开始时间"
+                :rules="[{ required: true, message: '请填写时间'}]"
+            >
+                <nut-input v-model="lotteryData.announceTimeString" readonly   @click="show = true" />
+            </nut-form-item>
             <nut-form-item
                 required
                 label="达到指定人数自动开奖"
@@ -81,10 +88,10 @@
                 label="未达到人数自动开奖时间"
                 :rules="[{ required: true, message: '请填写时间'}]"
             >
-                <nut-input v-model="announceTimeString" readonly   @click="show = true" />
+                <nut-input v-model="lotteryData.awardDeadlineString" readonly   @click="awardDeadlineshow = true" />
             </nut-form-item>
         </div>
-        <div v-if="lotteryData.announceType === '3'">
+        <!-- <div v-if="lotteryData.announceType === '3'">
             <nut-form-item
                 required
                 label="参与人数上限"
@@ -106,7 +113,7 @@
             >
                 <nut-input v-model="awardDeadlineString" readonly   @click="awardDeadlineshow = true" />
             </nut-form-item>
-        </div>
+        </div> -->
         <nut-form-item label="抽奖说明">
             <nut-textarea autosize="{ maxHeight: 200, minHeight: 100 }" max-length="80" limit-show placeholder="请输入抽奖说明" type="text" v-model="lotteryData.introduce" />
         </nut-form-item>
@@ -129,11 +136,11 @@
         </nut-collapse>
     </nut-form>
 
-    <nut-button block type="primary" @click="createLottery">发起抽奖</nut-button>
+    <nut-button block type="primary" @click="createLottery">{{lotteryId === 0 ? "发起抽奖" : "更新抽奖"}}</nut-button>
 
     <nut-popup v-model:visible="show" position="bottom">
         <nut-date-picker
-        v-model="reminderTime"
+        v-model="lotteryData.announceTime"
         type="datetime"
         :min-date="min"
         :three-dimensional="false"
@@ -144,7 +151,7 @@
     </nut-popup>
     <nut-popup v-model:visible="awardDeadlineshow" position="bottom">
         <nut-date-picker
-        v-model="awardDeadlineTime"
+        v-model="lotteryData.awardDeadlineTime"
         type="datetime"
         :min-date="min"
         :three-dimensional="false"
@@ -163,7 +170,8 @@ import { ref, reactive } from 'vue'
 import lotteryTabbar from "src/components/lotteryTabbar.vue"
 import { useUserStore } from "src/stores/user";
 import { numberToChinese, dateFormat } from 'src/pages/utils'
-import { postAction } from "src/http";
+import { postAction, getAction } from "src/http";
+import { useReady, useRouter  } from '@tarojs/taro'
 
 
 const store = useUserStore();
@@ -203,20 +211,23 @@ const show = ref(false)
 const awardDeadlineshow = ref(false)
 var now: Date = new Date()
 const min = now
-const reminderTime = ref(now)
-const awardDeadlineTime = ref(now)
-const announceTimeString = ref(dateFormat(now, 'YYYY-MM-DD HH:mm'))
-const awardDeadlineString = ref(dateFormat(now, 'YYYY-MM-DD HH:mm'))
+
+const lotteryId = ref(0)
+useReady(() => {
+    const router = useRouter()
+    lotteryId.value = Number(router.params.id) as number
+    if (lotteryId.value !== 0) {
+        getlottery(lotteryId.value)
+    }
+})
 
 const timeConfirm = ({ selectedValue }) => {
     show.value = false
-    announceTimeString.value = dateFormat(reminderTime.value, 'YYYY-MM-DD HH:mm')
-    lotteryData.value.announceTime = Math.floor(reminderTime.value/1000)
+    lotteryData.value.announceTimeString = dateFormat(lotteryData.value.announceTime, 'YYYY年MM月DD日 HH:mm')
 }
 const awardDeadlineConfirm = ({ selectedValue }) => {
     awardDeadlineshow.value = false
-    awardDeadlineString.value = dateFormat(awardDeadlineTime.value, 'YYYY-MM-DD HH:mm')
-    lotteryData.value.awardDeadline = Math.floor(awardDeadlineTime.value/1000)
+    lotteryData.value.awardDeadlineString = dateFormat(lotteryData.value.awardDeadlineTime, 'YYYY年MM月DD日 HH:mm')
 }
 
 const file = reactive([
@@ -232,14 +243,17 @@ const lotteryData = ref({
     url: "http://image.jilotus.cn/lottery.png",
     name: "",
     announceType: "1",
-    announceTime: Math.floor(now/1000),
+    announceTime: now,
     joinNumber: 0,
     introduce: "",
     isClocked: false,
     clockTaskId: 0,
-    awardDeadline: Math.floor(now/1000),
+    awardDeadline: now,
+    announceTimeString: dateFormat(now, 'YYYY年MM月DD日 HH:mm'),
+    awardDeadlineString: dateFormat(now, 'YYYY年MM月DD日 HH:mm'),
     prizes: [
         {
+            id: 0,
             key: Date.now(),
             show: false,
             levelString: '一等奖',
@@ -255,6 +269,7 @@ const lotteryData = ref({
 const add = () => {
     const k = lotteryData.value.prizes.length
     lotteryData.value.prizes.push({
+        id: 0,
         key: Date.now(),
         show: false,
         levelString: numberToChinese(k+1) + '等奖',
@@ -335,20 +350,23 @@ interface ApiResponse {
 }
 async function createLottery() {
     const data = {
+        id: lotteryId.value,
         name: lotteryData.value.name,
         thumb: lotteryData.value.url,
         publishTime: 0,
         announceType: Number(lotteryData.value.announceType),
-        announceTime: lotteryData.value.announceTime,
+        announceTime: Math.floor(lotteryData.value.announceTime/1000),
         joinNumber: Number(lotteryData.value.joinNumber),
         introduce: lotteryData.value.introduce,
-        awardDeadline: lotteryData.value.awardDeadline,
+        awardDeadline: Math.floor(lotteryData.value.awardDeadlineTime/1000),
         isClocked: lotteryData.value.isClocked ? 1:0,
         clockTaskId: lotteryData.value.clockTaskId,
         prizes: [],
     }
     for (let i = 0; i < lotteryData.value.prizes.length; i ++) {
         data.prizes.push({
+            id: lotteryData.value.prizes[i].id,
+            lotteryId: lotteryData.value.prizes[i].lotteryId,
             type: Number(lotteryData.value.prizes[i].type),
             name: lotteryData.value.prizes[i].name,
             count: Number(lotteryData.value.prizes[i].count),
@@ -385,5 +403,60 @@ async function createLottery() {
         duration: 1500
     })
   }
+}
+
+async function getlottery (id) {
+    try {
+        const result = await getAction('/lottery/v1/lottery/lotteryDetail', {
+            id,
+        }, {
+        loadingTitle: '正在加载...', // 请求时显示的加载提示
+        toastDuration: 1500 // 错误提示的显示时长
+        }, true) as ApiResponse;
+        let data = result.data.lottery
+        if (result.success) {
+            lotteryData.value.id = data.id,
+            lotteryData.value.userId = data.userId,
+            lotteryData.value.name = data.name,
+            lotteryData.value.thumb = data.thumb,
+            lotteryData.value.joinNumber = data.joinNumber,
+            lotteryData.value.introduce = data.introduce,
+            lotteryData.value.awardDeadline = data.awardDeadline*1000,
+            lotteryData.value.awardDeadlineString = dateFormat(data.awardDeadline*1000, 'YYYY年MM月DD日 HH:mm'),
+            lotteryData.value.isSelected = data.isSelected,
+            lotteryData.value.announceType = String(data.announceType),
+            lotteryData.value.announceTime = data.announceTime*1000,
+            lotteryData.value.announceTimeString = dateFormat(data.announceTime*1000, 'YYYY年MM月DD日 HH:mm'),
+            lotteryData.value.isAnnounced = data.isAnnounced,
+            lotteryData.value.isClocked = data.isClocked === 1 ? true : false,
+            lotteryData.value.clockTaskId = data.clockTaskId,
+            lotteryData.value.isParticipated = result.data.isParticipated
+            const prizes = result.data.prizes
+            lotteryData.value.prizes = []
+            for (let index = 0; index < prizes.length; index++) {
+                let prize = {
+                    key: index,
+                    id: prizes[index].id,
+                    lotteryId: prizes[index].lotteryId,
+                    levelString: numberToChinese(prizes[index].level) + '等奖',
+                    level: prizes[index].level,
+                    type: String(prizes[index].type),
+                    name: prizes[index].name,
+                    count: prizes[index].count,
+                    grantType: prizes[index].grantType,
+                }
+                lotteryData.value.prizes.push(prize)
+            }
+            // console.log(lotteryData.value)
+        } else {
+            Taro.showToast({
+                title: '获取失败！' + result.message,
+                icon: 'error', // 'error' 'success' 'loading' 'none'
+                duration: 1500
+            })
+        }
+    } catch (error) {
+        
+    }
 }
 </script>

@@ -26,6 +26,12 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Handler: lottery.GetLotteryWinList2Handler(serverCtx),
 			},
 			{
+				// 获取当前用户全部/发起/中奖的抽奖列表
+				Method:  http.MethodGet,
+				Path:    "/lottery/getUserLotteryList",
+				Handler: lottery.GetLotteryListByUserIdHandler(serverCtx),
+			},
+			{
 				// lottery detail
 				Method:  http.MethodGet,
 				Path:    "/lottery/lotteryDetail",

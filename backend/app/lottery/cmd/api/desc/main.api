@@ -47,5 +47,9 @@ service lottery {
 	@doc "获取当前抽奖中奖者名单"
 	@handler getLotteryWinList2
 	get /lottery/getLotteryWinnersList (GetLotteryWinList2Req) returns (GetLotteryWinList2Resp)
+
+	@doc "获取当前用户全部/发起/中奖的抽奖列表"
+	@handler getLotteryListByUserId
+	get /lottery/getUserLotteryList (GetLotteryListByUserIdReq) returns (GetLotteryListByUserIdResp)
 }
 
