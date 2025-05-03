@@ -55,3 +55,10 @@ SigninRpcConf:
       - etcd:2379
     key: signin.rpc
   NonBlock: true
+
+LotteryRpcConf:
+  Etcd:
+    Hosts:
+      - etcd:2379
+    key: lottery.rpc
+  NonBlock: true

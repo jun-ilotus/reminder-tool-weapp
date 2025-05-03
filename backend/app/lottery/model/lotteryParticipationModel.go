@@ -2,6 +2,7 @@ package model
 
 import (
 	"context"
+	"database/sql"
 	"fmt"
 	"github.com/pkg/errors"
 	"github.com/zeromicro/go-zero/core/stores/cache"
@@ -25,6 +26,9 @@ type (
 		LotteryParticipationList(ctx context.Context, lotteryId, limit, lastId int64) ([]*LotteryParticipation, error)
 		LotteryParticipationWinList(ctx context.Context, lotteryId int64) ([]*LotteryParticipation, error)
 		LotteryParticipationUserList(ctx context.Context, userId, isWon, isAnnounced int64) ([]*UserLottery, error)
+		GetParticipationUserIdsByLotteryId(ctx context.Context, LotteryId int64) ([]int64, error)
+		UpdateWinners(ctx context.Context, LotteryId, UserId, PrizeId int64) error
+		GetParticipatorsCountByLotteryId(ctx context.Context, LotteryId int64) (int64, error)
 	}
 
 	customLotteryParticipationModel struct {
@@ -37,6 +41,52 @@ func NewLotteryParticipationModel(conn sqlx.SqlConn, c cache.CacheConf, opts ...
 	return &customLotteryParticipationModel{
 		defaultLotteryParticipationModel: newLotteryParticipationModel(conn, c, opts...),
 	}
+}
+
+func (m *defaultLotteryParticipationModel) GetParticipatorsCountByLotteryId(ctx context.Context, LotteryId int64) (int64, error) {
+	query := fmt.Sprintf("SELECT COUNT(*) FROM %s WHERE lottery_id = ?", m.table)
+	var resp int64
+	err := m.QueryRowNoCacheCtx(ctx, &resp, query, LotteryId)
+	if err != nil {
+		return 0, errors.Wrapf(xerr.NewErrCode(xerr.DB_ERROR), "GetParticipatorsCountByLotteryId, LotteryId:%v, error: %v", LotteryId, err)
+	}
+	return resp, nil
+}
+
+func (m *defaultLotteryParticipationModel) GetParticipationUserIdsByLotteryId(ctx context.Context, LotteryId int64) ([]int64, error) {
+	query := fmt.Sprintf("SELECT user_id FROM %s WHERE lottery_id = ?", m.table)
+	var resp []int64
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, LotteryId)
+
+	switch err {
+	case nil:
+		return resp, nil
+	case sqlc.ErrNotFound:
+		return nil, ErrNotFound
+	default:
+		return nil, errors.Wrapf(xerr.NewErrCode(xerr.DB_ERROR), "GetParticipationUserIdsByLotteryId,LotteryId:%v, error: %v", LotteryId, err)
+	}
+}
+
+func (m *defaultLotteryParticipationModel) UpdateWinners(ctx context.Context, LotteryId, UserId, PrizeId int64) error {
+	data, err := m.FindOneByLotteryIdUserId(ctx, LotteryId, UserId)
+	if err != nil {
+		return err
+	}
+	gozeroLotteryParticipationIdKey := fmt.Sprintf("%s%v", cacheLotteryLotteryParticipationIdPrefix, data.Id)
+	gozeroLotteryParticipationLotteryIdUserIdKey := fmt.Sprintf("%s%v:%v", cacheLotteryLotteryParticipationLotteryIdUserIdPrefix, data.LotteryId, data.UserId)
+	query := fmt.Sprintf("update %s set is_won = 1, prize_id = ? where `lottery_id` = ? and `user_id` = ?", m.table)
+	_, err = m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (sql.Result, error) {
+		res, err := conn.ExecCtx(ctx, query, PrizeId, LotteryId, UserId)
+		if err != nil {
+			return nil, err
+		}
+		return res, nil
+	}, gozeroLotteryParticipationIdKey, gozeroLotteryParticipationLotteryIdUserIdKey)
+	if err != nil {
+		return errors.Wrapf(xerr.NewErrCode(xerr.DB_ERROR), "UpdateWinners, PrizeId:%v, LotteryId:%v, UserId:%v, error: %v", PrizeId, LotteryId, UserId, err)
+	}
+	return nil
 }
 
 func (c *customLotteryParticipationModel) GetLotteryParticipationByUserIdLotteryId(ctx context.Context, userId, lotteryId int64) (*LotteryParticipation, error) {

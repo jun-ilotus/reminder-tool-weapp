@@ -14,3 +14,6 @@ const MsgWxMiniProgramNotifyUser = "msg:wx_mini_program:notify_user"
 
 // ScheduleRemindSignin 提醒签到的定时任务
 const ScheduleRemindSignin = "schedule:remind_signin"
+
+// ScheduleLotteryDraw 开奖的定时任务
+const ScheduleLotteryDraw = "schedule:lottery:draw"

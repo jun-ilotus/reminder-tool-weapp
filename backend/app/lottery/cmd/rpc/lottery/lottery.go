@@ -20,6 +20,8 @@ type (
 	AddLotteryResp                     = pb.AddLotteryResp
 	AddPrizeReq                        = pb.AddPrizeReq
 	AddPrizeResp                       = pb.AddPrizeResp
+	AnnounceLotteryReq                 = pb.AnnounceLotteryReq
+	AnnounceLotteryResp                = pb.AnnounceLotteryResp
 	DelLotteryParticipationReq         = pb.DelLotteryParticipationReq
 	DelLotteryParticipationResp        = pb.DelLotteryParticipationResp
 	DelLotteryReq                      = pb.DelLotteryReq
@@ -60,6 +62,7 @@ type (
 		DelLottery(ctx context.Context, in *DelLotteryReq, opts ...grpc.CallOption) (*DelLotteryResp, error)
 		GetLotteryById(ctx context.Context, in *GetLotteryByIdReq, opts ...grpc.CallOption) (*GetLotteryByIdResp, error)
 		SearchLottery(ctx context.Context, in *SearchLotteryReq, opts ...grpc.CallOption) (*SearchLotteryResp, error)
+		AnnounceLottery(ctx context.Context, in *AnnounceLotteryReq, opts ...grpc.CallOption) (*AnnounceLotteryResp, error)
 		// -----------------------鍙備笌鎶藉-----------------------
 		AddLotteryParticipation(ctx context.Context, in *AddLotteryParticipationReq, opts ...grpc.CallOption) (*AddLotteryParticipationResp, error)
 		UpdateLotteryParticipation(ctx context.Context, in *UpdateLotteryParticipationReq, opts ...grpc.CallOption) (*UpdateLotteryParticipationResp, error)
@@ -111,6 +114,11 @@ func (m *defaultLotteryZrpcClient) GetLotteryById(ctx context.Context, in *GetLo
 func (m *defaultLotteryZrpcClient) SearchLottery(ctx context.Context, in *SearchLotteryReq, opts ...grpc.CallOption) (*SearchLotteryResp, error) {
 	client := pb.NewLotteryClient(m.cli.Conn())
 	return client.SearchLottery(ctx, in, opts...)
+}
+
+func (m *defaultLotteryZrpcClient) AnnounceLottery(ctx context.Context, in *AnnounceLotteryReq, opts ...grpc.CallOption) (*AnnounceLotteryResp, error) {
+	client := pb.NewLotteryClient(m.cli.Conn())
+	return client.AnnounceLottery(ctx, in, opts...)
 }
 
 // -----------------------鍙備笌鎶藉-----------------------

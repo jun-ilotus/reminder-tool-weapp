@@ -114,6 +114,13 @@ message SearchLotteryResp {
   repeated Lottery lottery = 1; //lottery
 }
 
+message AnnounceLotteryReq {
+  int64 AnnounceType = 1;
+}
+
+message AnnounceLotteryResp {
+}
+
 //--------------------------------鍙備笌鎶藉--------------------------------
 message LotteryParticipation {
   int64 id = 1; //涓婚敭
@@ -305,7 +312,8 @@ service lottery{
 	 rpc UpdateLottery(UpdateLotteryReq) returns (UpdateLotteryResp); 
 	 rpc DelLottery(DelLotteryReq) returns (DelLotteryResp); 
 	 rpc GetLotteryById(GetLotteryByIdReq) returns (GetLotteryByIdResp); 
-	 rpc SearchLottery(SearchLotteryReq) returns (SearchLotteryResp); 
+	 rpc SearchLottery(SearchLotteryReq) returns (SearchLotteryResp);
+     rpc AnnounceLottery(AnnounceLotteryReq) returns (AnnounceLotteryResp);
 	 //-----------------------鍙備笌鎶藉----------------------- 
 	 rpc AddLotteryParticipation(AddLotteryParticipationReq) returns (AddLotteryParticipationResp); 
 	 rpc UpdateLotteryParticipation(UpdateLotteryParticipationReq) returns (UpdateLotteryParticipationResp); 

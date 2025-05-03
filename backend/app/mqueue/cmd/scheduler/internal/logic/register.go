@@ -21,4 +21,5 @@ func (l *MqueueScheduler) Register() {
 
 	//l.settleRecordScheduler()
 	l.remindSignin()
+	l.LotteryDrawScheduler()
 }

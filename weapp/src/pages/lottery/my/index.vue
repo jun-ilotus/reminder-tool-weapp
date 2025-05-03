@@ -26,12 +26,12 @@
                 <div v-for="item in AnnouncedData">
                     <nut-cell center v-if="item.announceType === 1" :title="item.name" :sub-title="item.announceTime">
                         <template #desc>
-                            <IconFont @click="clickSheet(item)" name="horizontal-n"></IconFont>
+                            <IconFont @click="clickSheet1(item)" name="horizontal-n"></IconFont>
                         </template>
                     </nut-cell>
                     <nut-cell center v-if="item.announceType === 2" :title="item.name" :sub-title="item.awardDeadline">
                         <template #desc>
-                            <IconFont @click="clickSheet(item)" name="horizontal-n"></IconFont>
+                            <IconFont @click="clickSheet1(item)" name="horizontal-n"></IconFont>
                         </template>
                     </nut-cell>
                 </div>
@@ -39,6 +39,7 @@
         </nut-tab-pane>
     </nut-tabs>
     <nut-action-sheet v-model:visible="showSheet" :menu-items="menuItems" :title="actionSheetTitle" @choose="choose" cancel-txt="取消"/>
+    <nut-action-sheet v-model:visible="showSheet1" :menu-items="menuItems1" :title="actionSheetTitle" @choose="choose" cancel-txt="取消"/>
 </template>
 
 <script lang="ts" setup>
@@ -69,10 +70,22 @@ const menuItems = [
       name: '修改',
     },
 ]
+const menuItems1 = [
+    {
+      key: 0,
+      name: '详情',
+    },
+]
 const showSheet = ref(false)
+const showSheet1 = ref(false)
 const clickLottery = ref<any>()
 const clickSheet = (lottery) => {
     showSheet.value = true
+    actionSheetTitle.value = lottery.name
+    clickLottery.value = lottery
+}
+const clickSheet1 = (lottery) => {
+    showSheet1.value = true
     actionSheetTitle.value = lottery.name
     clickLottery.value = lottery
 }

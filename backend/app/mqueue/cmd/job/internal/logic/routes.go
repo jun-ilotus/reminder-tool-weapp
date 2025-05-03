@@ -32,6 +32,7 @@ func (l *CronJob) Register() *asynq.ServeMux {
 
 	mux.Handle(jobtype.MsgWxMiniProgramNotifyUser, NewWxMiniProgramNotifyUserHandler(l.svcCtx))
 	mux.Handle(jobtype.ScheduleRemindSignin, NewWxMiniRemindSigninHandler(l.svcCtx))
+	mux.Handle(jobtype.ScheduleLotteryDraw, NewLotteryDrawHandler(l.svcCtx))
 
 	//queue job , asynq support queue job
 	// wait you fill..

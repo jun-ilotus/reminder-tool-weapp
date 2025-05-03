@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/pkg/errors"
 	"looklook/app/lottery/model"
+	"looklook/common/constants"
 	"looklook/common/xerr"
 	"time"
 
@@ -38,15 +39,18 @@ func (l *AddLotteryParticipationLogic) AddLotteryParticipation(in *pb.AddLottery
 	if err != nil {
 		return nil, err
 	}
+	if lottery.IsAnnounced == 1 {
+		return nil, errors.Wrap(xerr.NewErrMsg("该抽奖已开奖"), "该抽奖已开奖")
+	}
 
 	// todo 完善一下 防止超卖
 	now := time.Now()
 	switch lottery.AnnounceType {
-	case 1: // 按时间开奖
+	case constants.AnnounceTypeTimeLottery: // 按时间开奖
 		if lottery.AnnounceTime.Before(now) {
 			return nil, errors.Wrap(xerr.NewErrMsg("抽奖时间已过"), "抽奖时间已过")
 		}
-	case 2: // 按人数开奖
+	case constants.AnnounceTypePeopleLottery: // 按人数开奖
 		if lottery.AnnounceTime.Before(now) {
 			return nil, errors.Wrap(xerr.NewErrMsg("抽奖时间已过"), "抽奖时间已过")
 		}

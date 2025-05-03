@@ -1,7 +1,7 @@
 <template>
     <nut-cell-group style="margin-top: 5vh;">
         <div v-for="item in AnnouncedData">
-            <nut-cell center :title="item.name" :sub-title="item.prizeName" is-link></nut-cell>
+            <nut-cell center @click="click(item.id)" :title="item.name" :sub-title="item.prizeName" is-link></nut-cell>
         </div>
     </nut-cell-group>
 </template>
@@ -19,6 +19,12 @@ const AnnouncedData = ref([])
 useReady (() => {
     getUserLotteryList(1)
 })
+
+const click = (lotteryId) => {
+    Taro.navigateTo({ 
+        url: '/pages/lottery/detail/index?id=' + String(lotteryId)
+    })
+}
 
 interface ApiResponse {
     success: boolean;

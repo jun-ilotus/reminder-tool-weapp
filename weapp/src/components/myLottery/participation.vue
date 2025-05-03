@@ -1,14 +1,14 @@
 <template>
     <nut-cell-group desc="未开奖">
         <div v-for="item in lotteryData">
-            <nut-cell center v-if="item.announceType === 1" :title="item.name" :sub-title="item.announceTime" is-link></nut-cell>
-            <nut-cell center v-if="item.announceType === 2" :title="item.name" :sub-title="item.awardDeadline" is-link></nut-cell>
+            <nut-cell center @click="click(item.id)" v-if="item.announceType === 1" :title="item.name" :sub-title="item.announceTime" is-link></nut-cell>
+            <nut-cell center @click="click(item.id)" v-if="item.announceType === 2" :title="item.name" :sub-title="item.awardDeadline" is-link></nut-cell>
         </div>
     </nut-cell-group>
     <nut-cell-group desc="已开奖" style="margin-top: 5vh;">
         <div v-for="item in AnnouncedData">
-            <nut-cell center v-if="item.announceType === 1" :title="item.name" :sub-title="item.announceTime" is-link></nut-cell>
-            <nut-cell center v-if="item.announceType === 2" :title="item.name" :sub-title="item.awardDeadline" is-link></nut-cell>
+            <nut-cell center @click="click(item.id)" v-if="item.announceType === 1" :title="item.name" :sub-title="item.announceTime" is-link></nut-cell>
+            <nut-cell center @click="click(item.id)" v-if="item.announceType === 2" :title="item.name" :sub-title="item.awardDeadline" is-link></nut-cell>
         </div>
     </nut-cell-group>
 </template>
@@ -27,6 +27,12 @@ useReady (() => {
     getUserLotteryList(0)
     getUserLotteryList(1)
 })
+
+const click = (lotteryId) => {
+    Taro.navigateTo({ 
+        url: '/pages/lottery/detail/index?id=' + String(lotteryId)
+    })
+}
 
 interface ApiResponse {
     success: boolean;

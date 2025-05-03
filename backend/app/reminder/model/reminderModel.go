@@ -6,8 +6,10 @@ import (
 	"fmt"
 	"github.com/pkg/errors"
 	"github.com/zeromicro/go-zero/core/stores/cache"
+	"github.com/zeromicro/go-zero/core/stores/sqlc"
 	"github.com/zeromicro/go-zero/core/stores/sqlx"
 	"looklook/common/xerr"
+	"time"
 )
 
 var _ ReminderModel = (*customReminderModel)(nil)
@@ -22,6 +24,7 @@ type (
 		GetLastId(ctx context.Context) (int64, error)
 		ReminderList(ctx context.Context, status, userId int64) ([]*Reminder, error)
 		DoneRemindered(ctx context.Context, reminderId, status int64) error
+		ReminderListByLessThanCurrentTime(ctx context.Context, currentTime time.Time) ([]*Reminder, error)
 	}
 
 	customReminderModel struct {
@@ -55,6 +58,22 @@ func (c *customReminderModel) ReminderList(ctx context.Context, status, userId i
 		return nil, errors.Wrapf(xerr.NewErrCode(xerr.DB_ERROR), "ReminderList, &resp:%v, query:%v, status:%v, userId:%v, error: %v", &resp, query, status, userId, err)
 	}
 	return resp, nil
+}
+
+func (c *customReminderModel) ReminderListByLessThanCurrentTime(ctx context.Context, currentTime time.Time) ([]*Reminder, error) {
+	var query string
+	query = fmt.Sprintf("select %s from %s where reminder_time <= ? and status = 0", reminderRows, c.table)
+	var resp []*Reminder
+	err := c.QueryRowsNoCacheCtx(ctx, &resp, query, currentTime)
+
+	switch err {
+	case nil:
+		return resp, nil
+	case sqlc.ErrNotFound:
+		return nil, ErrNotFound
+	default:
+		return nil, errors.Wrapf(xerr.NewErrCode(xerr.DB_ERROR), "ReminderListByLessThanCurrentTime, &resp:%v, query:%v,  error: %v", &resp, query, err)
+	}
 }
 
 func (c *customReminderModel) DoneRemindered(ctx context.Context, reminderId, status int64) error {

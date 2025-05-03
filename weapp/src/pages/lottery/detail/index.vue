@@ -209,6 +209,7 @@ async function lotteryParticipation () {
         }, true) as ApiResponse;
         if (result.success) {
             lotteryData.value.isParticipated = 1
+            GetParticipations(0, 10)
         } else {
             Taro.showToast({
                 title: '参与失败！' + result.message,
@@ -234,6 +235,9 @@ async function GetParticipations (lastId, pageSize) {
         let data = result.data
         let participations = data.list
         if (result.success) {
+            if (lastId === 0) {
+                participationsData.value.list = []
+            }
             participationsData.value.count = data.count
             for (let index = 0; index < participations.length; index++) {
                 let participation = {

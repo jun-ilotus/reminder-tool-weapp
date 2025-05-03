@@ -15,4 +15,5 @@ type Config struct {
 	ReminderRpcConf   zrpc.RpcClientConf
 	UsercenterRpcConf zrpc.RpcClientConf
 	SigninRpcConf     zrpc.RpcClientConf
+	LotteryRpcConf    zrpc.RpcClientConf
 }

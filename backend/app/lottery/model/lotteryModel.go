@@ -2,11 +2,14 @@ package model
 
 import (
 	"context"
+	"database/sql"
 	"fmt"
 	"github.com/pkg/errors"
 	"github.com/zeromicro/go-zero/core/stores/cache"
+	"github.com/zeromicro/go-zero/core/stores/sqlc"
 	"github.com/zeromicro/go-zero/core/stores/sqlx"
 	"looklook/common/xerr"
+	"time"
 )
 
 var _ LotteryModel = (*customLotteryModel)(nil)
@@ -20,6 +23,9 @@ type (
 		GetLastId(ctx context.Context) (int64, error)
 		GetLotteryById(ctx context.Context, lotteryId int64) (*Lottery, error)
 		LotteryUserList(ctx context.Context, userId, isAnnounced int64) ([]*Lottery, error)
+		GetLotterysByLessThanCurrentTime(ctx context.Context, currentTime time.Time, announceType int64) ([]int64, error)
+		UpdateLotteryStatus(ctx context.Context, lotteryId int64) error
+		GetLotterysByLessThanCurrentTime2(ctx context.Context, currentTime time.Time, announceType int64) ([]*Lottery, error)
 	}
 
 	customLotteryModel struct {
@@ -32,6 +38,51 @@ func NewLotteryModel(conn sqlx.SqlConn, c cache.CacheConf, opts ...cache.Option)
 	return &customLotteryModel{
 		defaultLotteryModel: newLotteryModel(conn, c, opts...),
 	}
+}
+
+func (c *customLotteryModel) GetLotterysByLessThanCurrentTime2(ctx context.Context, currentTime time.Time, announceType int64) ([]*Lottery, error) {
+	var resp []*Lottery
+	query := fmt.Sprintf("SELECT %s FROM %s WHERE announce_type = ? AND is_announced = 0 AND announce_time <= ?", lotteryRows, c.table)
+	err := c.QueryRowsNoCacheCtx(ctx, &resp, query, announceType, currentTime)
+
+	switch err {
+	case nil:
+		return resp, nil
+	case sqlc.ErrNotFound:
+		return nil, ErrNotFound
+	default:
+		return nil, errors.Wrapf(xerr.NewErrCode(xerr.DB_ERROR), "GetLotterysByLessThanCurrentTime, CurrentTime:%v, anounceType:%v, error: %v", currentTime, announceType, err)
+	}
+}
+
+func (c *customLotteryModel) GetLotterysByLessThanCurrentTime(ctx context.Context, currentTime time.Time, announceType int64) ([]int64, error) {
+	var resp []int64
+	query := fmt.Sprintf("SELECT id FROM %s WHERE announce_type = ? AND is_announced = 0 AND announce_time <= ?", c.table)
+	err := c.QueryRowsNoCacheCtx(ctx, &resp, query, announceType, currentTime)
+
+	switch err {
+	case nil:
+		return resp, nil
+	case sqlc.ErrNotFound:
+		return nil, ErrNotFound
+	default:
+		return nil, errors.Wrapf(xerr.NewErrCode(xerr.DB_ERROR), "GetLotterysByLessThanCurrentTime, CurrentTime:%v, anounceType:%v, error: %v", currentTime, announceType, err)
+	}
+}
+
+// UpdateLotteryStatus 根据lotteryId更新lottery状态为已开奖
+func (c *customLotteryModel) UpdateLotteryStatus(ctx context.Context, lotteryId int64) error {
+	// 准备更新数据的SQL语句
+	lotteryLotteryIdKey := fmt.Sprintf("%s%v", cacheLotteryLotteryIdPrefix, lotteryId)
+	query := fmt.Sprintf("UPDATE %s SET is_announced = 1 WHERE id = ?", c.table)
+
+	_, err := c.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (sql.Result, error) {
+		return conn.Exec(query, lotteryId)
+	}, lotteryLotteryIdKey)
+	if err != nil {
+		return errors.Wrapf(xerr.NewErrCode(xerr.DB_ERROR), "UpdateLotteryStatus, lotteryId:%v error: %v", lotteryId, err)
+	}
+	return nil
 }
 
 func (c *customLotteryModel) LotteryList(ctx context.Context, limit, selected, lastId int64) ([]*Lottery, error) {

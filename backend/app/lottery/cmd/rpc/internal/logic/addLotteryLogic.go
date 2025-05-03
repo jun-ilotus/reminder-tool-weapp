@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/pkg/errors"
 	"looklook/app/lottery/model"
+	"looklook/common/constants"
 	"looklook/common/xerr"
 	"time"
 
@@ -44,11 +45,11 @@ func (l *AddLotteryLogic) AddLottery(in *pb.AddLotteryReq) (*pb.AddLotteryResp, 
 		ClockTaskId:   in.ClockTaskId,
 	}
 	now := time.Now()
-	if lottery.AnnounceType == 1 && lottery.AnnounceTime.Before(now) {
+	if lottery.AnnounceType == constants.AnnounceTypeTimeLottery && lottery.AnnounceTime.Before(now) {
 		return nil, errors.Wrapf(xerr.NewErrCode(xerr.PARAM_ERROR_AnnounceTime), "开奖时间在发布时间之前")
-	} else if lottery.AnnounceType == 2 && lottery.AnnounceTime.Before(now) {
+	} else if lottery.AnnounceType == constants.AnnounceTypePeopleLottery && lottery.AnnounceTime.Before(now) {
 		return nil, errors.Wrapf(xerr.NewErrCode(xerr.PARAM_ERROR_AnnounceTime), "开奖时间在发布时间之前")
-	} else if lottery.AnnounceType == 3 && (lottery.AnnounceTime.Before(now) || lottery.AwardDeadline.Before(lottery.AnnounceTime)) {
+	} else if lottery.AnnounceType == constants.AnnounceTypePeopleLottery && (lottery.AnnounceTime.Before(now) || lottery.AwardDeadline.Before(lottery.AnnounceTime)) {
 		return nil, errors.Wrapf(xerr.NewErrCode(xerr.PARAM_ERROR_AnnounceTime), "开奖时间在发布时间之前")
 	}
 

@@ -49,6 +49,11 @@ func (s *LotteryServer) SearchLottery(ctx context.Context, in *pb.SearchLotteryR
 	return l.SearchLottery(in)
 }
 
+func (s *LotteryServer) AnnounceLottery(ctx context.Context, in *pb.AnnounceLotteryReq) (*pb.AnnounceLotteryResp, error) {
+	l := logic.NewAnnounceLotteryLogic(ctx, s.svcCtx)
+	return l.AnnounceLottery(in)
+}
+
 // -----------------------鍙備笌鎶藉-----------------------
 func (s *LotteryServer) AddLotteryParticipation(ctx context.Context, in *pb.AddLotteryParticipationReq) (*pb.AddLotteryParticipationResp, error) {
 	l := logic.NewAddLotteryParticipationLogic(ctx, s.svcCtx)
