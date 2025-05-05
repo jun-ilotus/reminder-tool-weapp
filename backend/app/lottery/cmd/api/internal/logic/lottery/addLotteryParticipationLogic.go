@@ -2,11 +2,9 @@ package lottery
 
 import (
 	"context"
-	"looklook/app/lottery/cmd/rpc/pb"
-	"looklook/common/ctxdata"
-
 	"looklook/app/lottery/cmd/api/internal/svc"
 	"looklook/app/lottery/cmd/api/internal/types"
+	"looklook/app/lottery/cmd/rpc/pb"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -26,7 +24,8 @@ func NewAddLotteryParticipationLogic(ctx context.Context, svcCtx *svc.ServiceCon
 }
 
 func (l *AddLotteryParticipationLogic) AddLotteryParticipation(req *types.AddLotteryParticipationReq) (resp *types.AddLotteryParticipationResp, err error) {
-	userId := ctxdata.GetUidFromCtx(l.ctx)
+	//userId := ctxdata.GetUidFromCtx(l.ctx)
+	userId := req.UserId
 
 	_, err = l.svcCtx.LotteryRpc.AddLotteryParticipation(l.ctx, &pb.AddLotteryParticipationReq{
 		UserId:    userId,

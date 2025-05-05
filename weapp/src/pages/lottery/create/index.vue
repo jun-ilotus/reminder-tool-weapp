@@ -151,7 +151,7 @@
     </nut-popup>
     <nut-popup v-model:visible="awardDeadlineshow" position="bottom">
         <nut-date-picker
-        v-model="lotteryData.awardDeadlineTime"
+        v-model="lotteryData.awardDeadline"
         type="datetime"
         :min-date="min"
         :three-dimensional="false"
@@ -227,7 +227,7 @@ const timeConfirm = ({ selectedValue }) => {
 }
 const awardDeadlineConfirm = ({ selectedValue }) => {
     awardDeadlineshow.value = false
-    lotteryData.value.awardDeadlineString = dateFormat(lotteryData.value.awardDeadlineTime, 'YYYY年MM月DD日 HH:mm')
+    lotteryData.value.awardDeadlineString = dateFormat(lotteryData.value.awardDeadline, 'YYYY年MM月DD日 HH:mm')
 }
 
 const file = reactive([
@@ -358,7 +358,7 @@ async function createLottery() {
         announceTime: Math.floor(lotteryData.value.announceTime/1000),
         joinNumber: Number(lotteryData.value.joinNumber),
         introduce: lotteryData.value.introduce,
-        awardDeadline: Math.floor(lotteryData.value.awardDeadlineTime/1000),
+        awardDeadline: Math.floor(lotteryData.value.awardDeadline/1000),
         isClocked: lotteryData.value.isClocked ? 1:0,
         clockTaskId: lotteryData.value.clockTaskId,
         prizes: [],

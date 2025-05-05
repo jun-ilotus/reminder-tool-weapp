@@ -45,21 +45,21 @@ services:
       - looklook_net
 
   #查看prometheus监控数据 - Grafana to view Prometheus monitoring data
-  #  grafana:
-  #    image: grafana/grafana:8.0.6
-  #    container_name: grafana
-  #    hostname: grafana
-  #    user: root
-  #    environment:
-  #      # 时区上海 - Time zone Shanghai (Change if needed)
-  #      TZ: Asia/Shanghai
-  #    restart: always
-  #    volumes:
-  #        - ./data/grafana/data:/var/lib/grafana
-  #    ports:
-  #        - "3001:3000"
-  #    networks:
-  #        - looklook_net
+  grafana:
+    image: grafana/grafana:8.0.6
+    container_name: grafana
+    hostname: grafana
+    user: root
+    environment:
+      # 时区上海 - Time zone Shanghai (Change if needed)
+      TZ: Asia/Shanghai
+    restart: always
+    volumes:
+        - ./data/grafana/data:/var/lib/grafana
+    ports:
+        - "3001:3000"
+    networks:
+        - looklook_net
 
   #搜集kafka业务日志、存储prometheus监控数据 - Kafka for collecting business logs and storing Prometheus monitoring data
   #  elasticsearch:

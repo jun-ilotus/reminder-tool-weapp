@@ -44,12 +44,6 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Handler: lottery.LotteryListHandler(serverCtx),
 			},
 			{
-				// 参与抽奖
-				Method:  http.MethodPost,
-				Path:    "/lottery/participation",
-				Handler: lottery.AddLotteryParticipationHandler(serverCtx),
-			},
-			{
 				// 抽奖人
 				Method:  http.MethodGet,
 				Path:    "/lottery/participations",
@@ -63,6 +57,18 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 			},
 		},
 		rest.WithJwt(serverCtx.Config.JwtAuth.AccessSecret),
+		rest.WithPrefix("/lottery/v1"),
+	)
+
+	server.AddRoutes(
+		[]rest.Route{
+			{
+				// 参与抽奖
+				Method:  http.MethodPost,
+				Path:    "/lottery/participation",
+				Handler: lottery.AddLotteryParticipationHandler(serverCtx),
+			},
+		},
 		rest.WithPrefix("/lottery/v1"),
 	)
 }

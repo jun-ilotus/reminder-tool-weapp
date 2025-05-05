@@ -11,7 +11,8 @@
         </template>
         <template #origin><div> </div></template>
         <template #shop-tag >
-            <div style="font-size: x-small;">{{announceTimeString[item.announceType]}}</div>
+            <div v-if="item.announceType === 1">
+                <div style="font-size: x-small;">开奖时间</div>
                 <AtCountdown 
                     :isCard="false"
                     :format="{day:'天', hours: '时', minutes: '分', seconds: '秒' }"
@@ -19,6 +20,29 @@
                     :seconds="item.announceTime"
                     style="font-size: x-small;"
                 />
+            </div>
+            <div v-if="item.announceType === 2">
+                <div v-if="item.announceTime > 0">
+                    <div style="font-size: x-small;">开始时间</div>
+                        <AtCountdown 
+                            :isCard="false"
+                            :format="{day:'天', hours: '时', minutes: '分', seconds: '秒' }"
+                            isShowDay
+                            :seconds="item.announceTime"
+                            style="font-size: x-small;"
+                        />
+                </div>
+                <div v-else>
+                    <div style="font-size: x-small;">结束时间</div>
+                        <AtCountdown 
+                            :isCard="false"
+                            :format="{day:'天', hours: '时', minutes: '分', seconds: '秒' }"
+                            isShowDay
+                            :seconds="item.awardDeadline"
+                            style="font-size: x-small;"
+                        />
+                </div>
+            </div>
         </template>
         <template #footer >
             <nut-button size="mini"  type="primary" @click="lotteryDetail(item.id)" >参与抽奖</nut-button>
@@ -93,7 +117,7 @@ async function getLotteryList (lastId, pageSize, isSelected) {
                     thumb: list[index].thumb,
                     joinNumber: list[index].joinNumber,
                     introduce: list[index].introduce,
-                    awardDeadline: dateFormat(list[index].awardDeadline*1000, 'YYYY-MM-DD HH:mm'),
+                    awardDeadline: (list[index].awardDeadline*1000 - Date.now())/1000,
                     isSelected: list[index].isSelected,
                     announceType: list[index].announceType,
                     announceTime: (list[index].announceTime*1000 - Date.now())/1000,

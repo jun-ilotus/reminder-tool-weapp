@@ -33,6 +33,8 @@ type (
 	}
 )
 
+var CacheLotteryJoinNumberIdPrefix = "cache:lottery:join_number:id:"
+
 // NewLotteryModel returns a model for the database table.
 func NewLotteryModel(conn sqlx.SqlConn, c cache.CacheConf, opts ...cache.Option) LotteryModel {
 	return &customLotteryModel{
