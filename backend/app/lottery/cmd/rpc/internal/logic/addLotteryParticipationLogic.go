@@ -7,6 +7,7 @@ import (
 	"looklook/app/lottery/model"
 	"looklook/common/constants"
 	"looklook/common/xerr"
+	"strconv"
 	"time"
 
 	"looklook/app/lottery/cmd/rpc/internal/svc"
@@ -84,6 +85,39 @@ func (l *AddLotteryParticipationLogic) AddLotteryParticipation(in *pb.AddLottery
 		//  防止超卖
 		// 把前缀与id结合成 redisKey
 		lotteryJoinNumberKey := fmt.Sprintf("%s%v", model.CacheLotteryJoinNumberIdPrefix, lottery.Id)
+		exists, err := l.svcCtx.RedisClient.ExistsCtx(l.ctx, lotteryJoinNumberKey)
+		if err != nil {
+			return nil, errors.Wrapf(xerr.NewErrMsg("redis库存更新错误"), "redis库存更新错误 err: %+v", err)
+		}
+
+		// redis 中没有库存的键值信息
+		if !exists {
+			// 通过 set 加锁操作 获得到锁的进行数据库查询 将库存保存到redis
+			lotteryJoinNumberSetKey := fmt.Sprintf("%sset:%v", model.CacheLotteryJoinNumberIdPrefix, lottery.Id)
+
+			// 若给定的 key 已经存在，则 SETNX 不做任何动作。 且 5 秒后解除锁 防止死锁
+			exCtx, err := l.svcCtx.RedisClient.SetnxExCtx(l.ctx, lotteryJoinNumberSetKey, "1", 5)
+			if err != nil {
+				return nil, errors.Wrapf(xerr.NewErrMsg("redis设置锁错误"), "redis设置锁错误 err: %+v", err)
+			}
+			if !exCtx { // 没获得到锁  直接返回参与失败   同时也可以防止过快的请求
+				return nil, errors.Wrapf(xerr.NewErrMsg("参与失败"), "没获得到锁")
+			}
+
+			// 获得到了锁 去数据库中查询库存放入 redis
+			count, err := l.svcCtx.LotteryParticipationModel.GetLotteryParticipationCount(l.ctx, lottery.Id, 0)
+			if err != nil {
+				_, _ = l.svcCtx.RedisClient.DelCtx(l.ctx, lotteryJoinNumberSetKey) // 释放锁防止死锁
+				return nil, errors.Wrapf(xerr.NewErrMsg("参与失败"), "数据出错 err: %+v", err)
+			}
+			count = lottery.JoinNumber - count // 当前剩余库存
+
+			passSeconds := lottery.AwardDeadline.Unix() - now.Unix() // 截止时间减去现在时间
+			// 设置库存
+			_, err = l.svcCtx.RedisClient.SetnxExCtx(l.ctx, lotteryJoinNumberKey, strconv.FormatInt(count, 10), int(passSeconds))
+			_, _ = l.svcCtx.RedisClient.DelCtx(l.ctx, lotteryJoinNumberSetKey) // 释放锁防止死锁
+		}
+
 		result, err := l.svcCtx.RedisClient.EvalCtx(l.ctx, addLuaScript, []string{lotteryJoinNumberKey})
 		if err != nil {
 			return nil, errors.Wrapf(xerr.NewErrMsg("redis库存更新错误"), "redis库存更新错误 err: %+v", err)
