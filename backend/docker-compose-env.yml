@@ -134,37 +134,37 @@ services:
   #      - kafka
 
 
-  #zookeeper是kafka的依赖 - Zookeeper is the dependencies of Kafka
-  #  zookeeper:
-  #    image: wurstmeister/zookeeper
-  #    container_name: zookeeper
-  #    environment:
-  #      # 时区上海 - Time zone Shanghai (Change if needed)
-  #      TZ: Asia/Shanghai
-  #    restart: always
-  #    ports:
-  #      - 2181:2181
-  #    networks:
-  #      - looklook_net
+#  zookeeper是kafka的依赖 - Zookeeper is the dependencies of Kafka
+  zookeeper:
+    image: wurstmeister/zookeeper
+    container_name: zookeeper
+    environment:
+      # 时区上海 - Time zone Shanghai (Change if needed)
+      TZ: Asia/Shanghai
+    restart: always
+    ports:
+      - 2181:2181
+    networks:
+      - looklook_net
 
   #消息队列 - Message queue
-  #  kafka:
-  #    image: wurstmeister/kafka
-  #    container_name: kafka
-  #    ports:
-  #      - 9092:9092
-  #    environment:
-  #      - KAFKA_ADVERTISED_HOST_NAME=kafka
-  #      - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
-  #      - KAFKA_AUTO_CREATE_TOPICS_ENABLE=false
-  #      - TZ=Asia/Shanghai
-  #    restart: always
-  #    volumes:
-  #      - /var/run/docker.sock:/var/run/docker.sock
-  #    networks:
-  #      - looklook_net
-  #    depends_on:
-  #      - zookeeper
+  kafka:
+    image: wurstmeister/kafka
+    container_name: kafka
+    ports:
+      - 9092:9092
+    environment:
+      - KAFKA_ADVERTISED_HOST_NAME=kafka
+      - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
+      - KAFKA_AUTO_CREATE_TOPICS_ENABLE=false
+      - TZ=Asia/Shanghai
+    restart: always
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - looklook_net
+    depends_on:
+      - zookeeper
 
   #asynqmon asynq延迟队列、定时队列的webui - Asynqmon asynq delay queue, timing queue's webUI
   asynqmon:

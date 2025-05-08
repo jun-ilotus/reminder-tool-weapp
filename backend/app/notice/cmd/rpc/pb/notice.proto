@@ -1,0 +1,94 @@
+syntax = "proto3";
+
+option go_package ="./pb";
+
+package pb;
+
+// ------------------------------------ 
+// Messages
+// ------------------------------------ 
+
+//--------------------------------noticeLog--------------------------------
+message NoticeLog {
+  int64 id = 1; //id
+  int64 userId = 2; //userId
+  string userOpenid = 3; //userOpenid
+  int64 msgTemplateId = 4; //msgTemplateId
+  int64 createTime = 5; //createTime
+  int64 updateTime = 6; //updateTime
+  int64 status = 7; //0 寰呭彂閫侊紱1鍙戦€佹垚鍔燂紱鍏朵粬涓哄彂閫佸け璐ョ殑澶辫触鐮?
+  string error = 8; //鍙戦€佸け璐ュ師鍥?
+}
+
+message AddNoticeLogReq {
+  int64 userId = 1; //userId
+  string userOpenid = 2; //userOpenid
+  int64 msgTemplateId = 3; //msgTemplateId
+  int64 status = 4; //0 寰呭彂閫侊紱1鍙戦€佹垚鍔燂紱鍏朵粬涓哄彂閫佸け璐ョ殑澶辫触鐮
+  string error = 5; //鍙戦€佸け璐ュ師鍥?
+}
+
+message AddNoticeLogResp {
+}
+
+message UpdateNoticeLogReq {
+  int64 id = 1; //id
+  int64 userId = 2; //userId
+  string userOpenid = 3; //userOpenid
+  int64 msgTemplateId = 4; //msgTemplateId
+  int64 status = 5; //0 寰呭彂閫侊紱1鍙戦€佹垚鍔燂紱鍏朵粬涓哄彂閫佸け璐ョ殑澶辫触鐮?
+  string error = 6; //鍙戦€佸け璐ュ師鍥?
+ }
+
+message UpdateNoticeLogResp {
+}
+
+message DelNoticeLogReq {
+  int64 id = 1; //id
+}
+
+message DelNoticeLogResp {
+}
+
+message GetNoticeLogByIdReq {
+  int64 id = 1; //id
+}
+
+message GetNoticeLogByIdResp {
+  NoticeLog noticeLog = 1; //noticeLog
+}
+
+message SearchNoticeLogReq {
+  int64 page = 1; //page
+  int64 limit = 2; //limit
+  int64 id = 3; //id
+  int64 userId = 4; //userId
+  string userOpenid = 5; //userOpenid
+  int64 msgTemplateId = 6; //msgTemplateId
+  int64 createTime = 7; //createTime
+  int64 updateTime = 8; //updateTime
+  int64 status = 9; //0 寰呭彂閫侊紱1鍙戦€佹垚鍔燂紱鍏朵粬涓哄彂閫佸け璐ョ殑澶辫触鐮?
+  string error = 10; //鍙戦€佸け璐ュ師鍥?
+}
+
+message SearchNoticeLogResp {
+  repeated NoticeLog noticeLog = 1; //noticeLog
+}
+
+
+
+// ------------------------------------
+// Rpc Func
+// ------------------------------------
+
+
+service notice {
+
+	 //-----------------------noticeLog----------------------- 
+	 rpc AddNoticeLog(AddNoticeLogReq) returns (AddNoticeLogResp); 
+	 rpc UpdateNoticeLog(UpdateNoticeLogReq) returns (UpdateNoticeLogResp); 
+	 rpc DelNoticeLog(DelNoticeLogReq) returns (DelNoticeLogResp); 
+	 rpc GetNoticeLogById(GetNoticeLogByIdReq) returns (GetNoticeLogByIdResp); 
+	 rpc SearchNoticeLog(SearchNoticeLogReq) returns (SearchNoticeLogResp); 
+
+}

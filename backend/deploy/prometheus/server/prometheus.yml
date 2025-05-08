@@ -107,3 +107,17 @@ scrape_configs:
           job: lottery-rpc
           app: lottery-rpc
           env: dev
+  - job_name: 'notice-rpc'
+    static_configs:
+      - targets: [ 'looklook:4022' ]
+        labels:
+          job: notice-rpc
+          app: notice-rpc
+          env: dev
+  - job_name: 'notice-mq'
+    static_configs:
+      - targets: [ 'looklook:4023' ]
+        labels:
+          job: notice-mq
+          app: notice-mq
+          env: dev
