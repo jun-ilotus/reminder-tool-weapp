@@ -2,11 +2,16 @@ package logic
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
+	"github.com/ArtisanCloud/PowerWeChat/v3/src/kernel/power"
 	"github.com/pkg/errors"
 	"github.com/zeromicro/go-zero/core/stores/sqlx"
 	"looklook/app/lottery/model"
+	"looklook/app/usercenter/cmd/rpc/usercenter"
 	"looklook/common/constants"
+	"looklook/common/kqueue"
+	"looklook/common/wxnotice"
 	"looklook/common/xerr"
 	"math/rand"
 	"time"
@@ -128,17 +133,39 @@ func (l *AnnounceLotteryLogic) DrawLottery(ctx context.Context, lotteryId int64,
 }
 
 // NotifyParticipators 通知MQ队列
-//func (l *AnnounceLotteryLogic) NotifyParticipators(participators []int64, lotteryId int64) error {
-//	fmt.Println("NotifyParticipators", participators, lotteryId)
-//	_, err := l.svcCtx.NoticeRpc.NoticeLotteryDraw(l.ctx, &notice.NoticeLotteryDrawReq{
-//		LotteryId: lotteryId,
-//		UserIds:   participators,
-//	})
-//	if err != nil {
-//		return err
-//	}
-//	return nil
-//}
+func (l *AnnounceLotteryLogic) NotifyParticipators(participators []int64, lotteryId int64) error {
+	fmt.Println("NotifyParticipators", participators, lotteryId)
+
+	now := time.Now()
+	msg := wxnotice.MessageReminder{
+		ReminderContent: wxnotice.Item{Value: "开奖结束，快来看看你有没有中奖"},
+		ReminderTime:    wxnotice.Item{Value: now.Format("2006-01-02 15:04")},
+	}
+	data, _ := power.StructToHashMap(&msg)
+
+	// 拼接小程序页面地址
+	pageAddr := fmt.Sprintf("pages/lottery/my/index")
+
+	for _, userId := range participators {
+		userOpenId, err := l.svcCtx.UsercenterRpc.GetUserAuthByUserId(l.ctx, &usercenter.GetUserAuthByUserIdReq{
+			UserId:   userId,
+			AuthType: constants.UserAuthTypeSmallWX,
+		})
+		if err != nil {
+			continue
+		}
+		m := kqueue.WXMiniNoticeSendMessage{
+			ToUser: userOpenId.UserAuth.AuthKey,
+			Page:   pageAddr,
+			UserId: userId,
+			Data:   data,
+		}
+		body, err := json.Marshal(m)
+		_ = l.svcCtx.KqueueNoticeSendClient.Push(l.ctx, string(body))
+	}
+
+	return nil
+}
 
 // WriteWinnersToLotteryParticipation 更新参与抽奖表
 func (l *AnnounceLotteryLogic) WriteWinnersToLotteryParticipation(winners []Winner) error {
@@ -212,10 +239,10 @@ func (s *TimeLotteryStrategy) Run() error {
 		}
 
 		// 执行开奖结果通知任务
-		//err := s.NotifyParticipators(participators, lotteryId)
-		//if err != nil {
-		//	return err
-		//}
+		err := s.NotifyParticipators(participators, lotteryId)
+		if err != nil {
+			return err
+		}
 	}
 	return nil
 }
@@ -286,10 +313,10 @@ func (s *PeopleLotteryStrategy) Run() error {
 		}
 
 		// 执行开奖结果通知任务
-		//err := s.NotifyParticipators(participators, lottery.Id)
-		//if err != nil {
-		//	return err
-		//}
+		err := s.NotifyParticipators(participators, lottery.Id)
+		if err != nil {
+			return err
+		}
 	}
 	return nil
 }

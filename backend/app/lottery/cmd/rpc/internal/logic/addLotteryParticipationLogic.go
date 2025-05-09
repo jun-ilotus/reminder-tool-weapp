@@ -124,6 +124,8 @@ func (l *AddLotteryParticipationLogic) AddLotteryParticipation(in *pb.AddLottery
 		}
 		if result.(int64) == -1 {
 			return nil, errors.Wrap(xerr.NewErrMsg("已经抽完了"), "超出抽奖人数限制")
+		} else if result.(int64) == 0 { //todo 当最后一个人刚好抽完库存时，触发开奖
+
 		}
 	}
 

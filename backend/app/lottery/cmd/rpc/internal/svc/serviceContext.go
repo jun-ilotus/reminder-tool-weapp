@@ -1,6 +1,7 @@
 package svc
 
 import (
+	"github.com/zeromicro/go-queue/kq"
 	"github.com/zeromicro/go-zero/core/stores/redis"
 	"github.com/zeromicro/go-zero/core/stores/sqlx"
 	"github.com/zeromicro/go-zero/zrpc"
@@ -17,6 +18,7 @@ type ServiceContext struct {
 	LotteryModel              model.LotteryModel
 	PrizeModel                model.PrizeModel
 	LotteryParticipationModel model.LotteryParticipationModel
+	KqueueNoticeSendClient    *kq.Pusher
 }
 
 func NewServiceContext(c config.Config) *ServiceContext {
@@ -30,5 +32,6 @@ func NewServiceContext(c config.Config) *ServiceContext {
 		LotteryModel:              model.NewLotteryModel(sqlx.NewMysql(c.DB.DataSource), c.Cache),
 		PrizeModel:                model.NewPrizeModel(sqlx.NewMysql(c.DB.DataSource), c.Cache),
 		LotteryParticipationModel: model.NewLotteryParticipationModel(sqlx.NewMysql(c.DB.DataSource), c.Cache),
+		KqueueNoticeSendClient:    kq.NewPusher(c.NoticeSendConf.Brokers, c.NoticeSendConf.Topic),
 	}
 }

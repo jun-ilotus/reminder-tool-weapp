@@ -5,6 +5,11 @@ import (
 	"github.com/zeromicro/go-zero/zrpc"
 )
 
+type KqConfig struct {
+	Brokers []string
+	Topic   string
+}
+
 type Config struct {
 	zrpc.RpcServerConf
 	DB struct {
@@ -12,4 +17,5 @@ type Config struct {
 	}
 	Cache             cache.CacheConf
 	UsercenterRpcConf zrpc.RpcClientConf
+	NoticeSendConf    KqConfig
 }

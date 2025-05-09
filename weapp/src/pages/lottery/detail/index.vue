@@ -77,12 +77,11 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue'
-import { useReady, useReachBottom, useRouter  } from '@tarojs/taro'
+import { useReady, useRouter  } from '@tarojs/taro'
 import Taro from '@tarojs/taro'
 import { numberToChinese, dateFormat } from 'src/pages/utils'
 import { getAction, postAction } from "src/http";
 
-import { My } from '@nutui/icons-vue-taro'
 
 
 const announceTimeString: string[] = ['', '开奖时间 ', '结束时间 ', '开始时间 ']
@@ -134,7 +133,16 @@ useReady(() => {
 })
 
 const participation = () => {
-    lotteryParticipation()
+    Taro.requestSubscribeMessage({
+        tmplIds:["T6iprDxSmNa_hmMQDSrfJAGxTulxZh3dkBTycKWpXlI"],
+        entityIds:["T6iprDxSmNa_hmMQDSrfJAGxTulxZh3dkBTycKWpXlI"],
+        success: function (res) { 
+          // console.log(res)
+          if (res.T6iprDxSmNa_hmMQDSrfJAGxTulxZh3dkBTycKWpXlI === "accept") {
+            lotteryParticipation()
+          }
+        }
+      })
 }
 
 interface ApiResponse {
