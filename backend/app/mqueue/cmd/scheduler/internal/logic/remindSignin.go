@@ -12,7 +12,7 @@ func (l *MqueueScheduler) remindSignin() {
 
 	task := asynq.NewTask(jobtype.ScheduleRemindSignin, nil)
 	// 这里只有 5 个参数
-	entryID, err := l.svcCtx.Scheduler.Register("0 22 * * *", task)
+	entryID, err := l.svcCtx.Scheduler.Register("0 19 * * *", task)
 	if err != nil {
 		logx.WithContext(l.ctx).Errorf("!!!MqueueSchedulerErr!!! ====> 【remindSigninScheduler】 registered  err:%+v , task:%+v", err, task)
 	}

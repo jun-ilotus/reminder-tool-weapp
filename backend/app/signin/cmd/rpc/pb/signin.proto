@@ -235,6 +235,14 @@ message SearchRemindResp {
   repeated Remind reminds = 1;
 }
 
+message SendRemindReq {
+
+}
+
+message SendRemindResp {
+
+}
+
 // ------------------------------------ 
 // Rpc Func
 // ------------------------------------ 
@@ -265,4 +273,5 @@ service signin {
      rpc ChangeSignRemind(ChangeRemindReq) returns (ChangeRemindResp);
      rpc GetRemindStatus(GetRemindStatusReq) returns (GetRemindStatusResp);
      rpc SearchRemind(SearchRemindReq) returns (SearchRemindResp);
+     rpc SendRemind(SendRemindReq) returns (SendRemindResp);
 }

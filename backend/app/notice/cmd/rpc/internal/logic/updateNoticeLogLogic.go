@@ -28,12 +28,11 @@ func NewUpdateNoticeLogLogic(ctx context.Context, svcCtx *svc.ServiceContext) *U
 
 func (l *UpdateNoticeLogLogic) UpdateNoticeLog(in *pb.UpdateNoticeLogReq) (*pb.UpdateNoticeLogResp, error) {
 	noticeLog := &model.NoticeLog{
-		Id:            in.Id,
-		UserId:        in.UserId,
-		UserOpenid:    in.UserOpenid,
-		MsgTemplateId: in.MsgTemplateId,
-		Status:        in.Status,
-		Error:         in.Error,
+		Id:         in.Id,
+		UserId:     in.UserId,
+		UserOpenid: in.UserOpenid,
+		Status:     in.Status,
+		Error:      in.Error,
 	}
 	err := l.svcCtx.NoticeModel.Update(l.ctx, noticeLog)
 	if err != nil {

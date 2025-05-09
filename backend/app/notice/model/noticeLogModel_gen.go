@@ -22,7 +22,7 @@ import (
 var (
 	noticeLogFieldNames          = builder.RawFieldNames(&NoticeLog{})
 	noticeLogRows                = strings.Join(noticeLogFieldNames, ",")
-	noticeLogRowsExpectAutoSet   = strings.Join(stringx.Remove(noticeLogFieldNames, "`create_at`", "`create_time`", "`created_at`", "`update_at`", "`update_time`", "`updated_at`"), ",")
+	noticeLogRowsExpectAutoSet   = strings.Join(stringx.Remove(noticeLogFieldNames, "`id`", "`create_at`", "`create_time`", "`created_at`", "`update_at`", "`update_time`", "`updated_at`"), ",")
 	noticeLogRowsWithPlaceHolder = strings.Join(stringx.Remove(noticeLogFieldNames, "`id`", "`create_at`", "`create_time`", "`created_at`", "`update_at`", "`update_time`", "`updated_at`"), "=?,") + "=?"
 
 	cacheNoticeNoticeLogIdPrefix = "cache:notice:noticeLog:id:"
@@ -54,14 +54,13 @@ type (
 	}
 
 	NoticeLog struct {
-		Id            int64     `db:"id"`
-		UserId        int64     `db:"user_id"`
-		UserOpenid    string    `db:"user_openid"`
-		MsgTemplateId int64     `db:"msg_template_id"`
-		CreateTime    time.Time `db:"create_time"`
-		UpdateTime    time.Time `db:"update_time"`
-		Status        int64     `db:"status"` // 0 待发送；1发送成功；其他为发送失败的失败码
-		Error         string    `db:"error"`  // 发送失败原因
+		Id         int64     `db:"id"`
+		UserId     int64     `db:"user_id"`
+		UserOpenid string    `db:"user_openid"`
+		CreateTime time.Time `db:"create_time"`
+		UpdateTime time.Time `db:"update_time"`
+		Status     int64     `db:"status"` // 0 待发送；1发送成功；其他为发送失败的失败码
+		Error      string    `db:"error"`  // 发送失败原因
 	}
 )
 
@@ -101,8 +100,8 @@ func (m *defaultNoticeLogModel) FindOne(ctx context.Context, id int64) (*NoticeL
 func (m *defaultNoticeLogModel) Insert(ctx context.Context, data *NoticeLog) (sql.Result, error) {
 	noticeNoticeLogIdKey := fmt.Sprintf("%s%v", cacheNoticeNoticeLogIdPrefix, data.Id)
 	ret, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
-		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?)", m.table, noticeLogRowsExpectAutoSet)
-		return conn.ExecCtx(ctx, query, data.Id, data.UserId, data.UserOpenid, data.MsgTemplateId, data.Status, data.Error)
+		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?)", m.table, noticeLogRowsExpectAutoSet)
+		return conn.ExecCtx(ctx, query, data.UserId, data.UserOpenid, data.Status, data.Error)
 	}, noticeNoticeLogIdKey)
 	return ret, err
 }
@@ -110,8 +109,8 @@ func (m *defaultNoticeLogModel) Insert(ctx context.Context, data *NoticeLog) (sq
 func (m *defaultNoticeLogModel) TransInsert(ctx context.Context, session sqlx.Session, data *NoticeLog) (sql.Result, error) {
 	noticeNoticeLogIdKey := fmt.Sprintf("%s%v", cacheNoticeNoticeLogIdPrefix, data.Id)
 	ret, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
-		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?)", m.table, noticeLogRowsExpectAutoSet)
-		return session.ExecCtx(ctx, query, data.Id, data.UserId, data.UserOpenid, data.MsgTemplateId, data.Status, data.Error)
+		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?)", m.table, noticeLogRowsExpectAutoSet)
+		return session.ExecCtx(ctx, query, data.UserId, data.UserOpenid, data.Status, data.Error)
 	}, noticeNoticeLogIdKey)
 	return ret, err
 }
@@ -119,7 +118,7 @@ func (m *defaultNoticeLogModel) Update(ctx context.Context, data *NoticeLog) err
 	noticeNoticeLogIdKey := fmt.Sprintf("%s%v", cacheNoticeNoticeLogIdPrefix, data.Id)
 	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("update %s set %s where `id` = ?", m.table, noticeLogRowsWithPlaceHolder)
-		return conn.ExecCtx(ctx, query, data.UserId, data.UserOpenid, data.MsgTemplateId, data.Status, data.Error, data.Id)
+		return conn.ExecCtx(ctx, query, data.UserId, data.UserOpenid, data.Status, data.Error, data.Id)
 	}, noticeNoticeLogIdKey)
 	return err
 }
@@ -128,7 +127,7 @@ func (m *defaultNoticeLogModel) TransUpdate(ctx context.Context, session sqlx.Se
 	noticeNoticeLogIdKey := fmt.Sprintf("%s%v", cacheNoticeNoticeLogIdPrefix, data.Id)
 	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("update %s set %s where `id` = ?", m.table, noticeLogRowsWithPlaceHolder)
-		return session.ExecCtx(ctx, query, data.UserId, data.UserOpenid, data.MsgTemplateId, data.Status, data.Error, data.Id)
+		return session.ExecCtx(ctx, query, data.UserId, data.UserOpenid, data.Status, data.Error, data.Id)
 	}, noticeNoticeLogIdKey)
 	return err
 }

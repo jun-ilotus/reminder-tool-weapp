@@ -7,6 +7,7 @@ import (
 	"github.com/pkg/errors"
 	"github.com/zeromicro/go-zero/core/logx"
 	"looklook/app/notice/cmd/mq/internal/svc"
+	"looklook/app/notice/cmd/rpc/notice"
 	"looklook/common/kqueue"
 	"looklook/common/wxnotice"
 	"looklook/common/xerr"
@@ -42,15 +43,43 @@ func (l *NoticeSendMq) Consume(ctx context.Context, _, value string) error {
 		return err
 	}
 
-	if err := l.execService(message); err != nil {
+	insert, err := l.svcCtx.NoticeRpc.AddNoticeLog(l.ctx, &notice.AddNoticeLogReq{
+		UserId:     message.UserId,
+		UserOpenid: message.ToUser,
+		Status:     0,
+		Error:      "",
+	})
+	if err != nil {
+		return err
+	}
+
+	code, err := l.execService(message)
+	if err != nil {
 		logx.WithContext(l.ctx).Error("NewNoticeSendMq->execService  err : %v , val : %s , message:%+v", err, value, message)
+		_, err = l.svcCtx.NoticeRpc.UpdateNoticeLog(l.ctx, &notice.UpdateNoticeLogReq{
+			Id:         insert.Id,
+			UserId:     message.UserId,
+			UserOpenid: message.ToUser,
+			Status:     int64(code),
+			Error:      err.Error(),
+		})
+		return err
+	}
+	_, err = l.svcCtx.NoticeRpc.UpdateNoticeLog(l.ctx, &notice.UpdateNoticeLogReq{
+		Id:         insert.Id,
+		UserId:     message.UserId,
+		UserOpenid: message.ToUser,
+		Status:     int64(code),
+	})
+
+	if err != nil {
 		return err
 	}
 
 	return nil
 }
 
-func (l *NoticeSendMq) execService(message kqueue.WXMiniNoticeSendMessage) error {
+func (l *NoticeSendMq) execService(message kqueue.WXMiniNoticeSendMessage) (code int, err error) {
 	reqData := &request.RequestSubscribeMessageSend{
 		ToUser:           message.ToUser,
 		TemplateID:       wxnotice.ReminderTemplateID,
@@ -62,7 +91,7 @@ func (l *NoticeSendMq) execService(message kqueue.WXMiniNoticeSendMessage) error
 	resp, err := l.svcCtx.WxMiniProgram.SubscribeMessage.Send(l.ctx, reqData)
 	if err != nil {
 		// 可重试的错误
-		return errors.Wrapf(ErrNotifyUserFail, "WxMiniRemindSigninHandler send message err:%v, reqData:%+v", err, reqData)
+		return 2, errors.Wrapf(ErrNotifyUserFail, "WxMiniRemindSigninHandler send message err:%v, reqData:%+v", err, reqData)
 	}
 	if resp.ErrCode != 0 {
 		switch resp.ErrCode {
@@ -71,11 +100,11 @@ func (l *NoticeSendMq) execService(message kqueue.WXMiniNoticeSendMessage) error
 			logx.Infow("WxMiniRemindSigninHandler user refuse receive msg",
 				logx.Field("openid", message.ToUser),
 			)
-			return nil
+			return resp.ErrCode, nil
 		default:
 			// 可重试的错误码，后续进行细分
-			return errors.Wrapf(ErrNotifyUserFail, "WxMiniRemindSigninHandler send message fail, errCode:%v, errMsg: %v, reqData:%+v", resp.ErrCode, resp.ErrMsg, reqData)
+			return resp.ErrCode, errors.Wrapf(ErrNotifyUserFail, "WxMiniRemindSigninHandler send message fail, errCode:%v, errMsg: %v, reqData:%+v", resp.ErrCode, resp.ErrMsg, reqData)
 		}
 	}
-	return nil
+	return 1, nil
 }

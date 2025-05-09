@@ -2,11 +2,20 @@ package logic
 
 import (
 	"context"
+	"encoding/json"
+	"fmt"
+	"github.com/ArtisanCloud/PowerWeChat/v3/src/kernel/power"
 	"github.com/pkg/errors"
 	"github.com/zeromicro/go-zero/core/logx"
 	"looklook/app/reminder/cmd/rpc/internal/svc"
 	"looklook/app/reminder/cmd/rpc/pb"
+	"looklook/app/usercenter/cmd/rpc/usercenter"
+	"looklook/app/usercenter/model"
+	"looklook/common/constants"
+	"looklook/common/kqueue"
+	"looklook/common/wxnotice"
 	"looklook/common/xerr"
+	"time"
 )
 
 type DoneReminderedLogic struct {
@@ -25,9 +34,45 @@ func NewDoneReminderedLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Do
 
 func (l *DoneReminderedLogic) DoneRemindered(in *pb.DoneReminderedReq) (*pb.DoneReminderedResp, error) {
 
-	err := l.svcCtx.ReminderModel.DoneRemindered(l.ctx, in.Id, in.Status)
+	remindOne, err := l.svcCtx.ReminderModel.FindOne(l.ctx, in.Id)
 	if err != nil {
-		return nil, errors.Wrapf(xerr.NewErrCode(xerr.DB_ERROR), "更新失败 err: %v", err)
+		return nil, errors.Wrapf(xerr.NewErrCode(xerr.DB_ERROR), "FindOne err: %v", err)
+	}
+	now := time.Now()
+
+	if remindOne.ReminderTime.After(now) || remindOne.Status != constants.ReminderNotSend {
+		return nil, errors.Wrapf(xerr.NewErrCode(xerr.DB_ERROR), "remindOne.ReminderTime.After(now) err: %v", err)
+	}
+
+	userAuthyUserIdResp, err := l.svcCtx.UsercenterRpc.GetUserAuthByUserId(l.ctx, &usercenter.GetUserAuthByUserIdReq{
+		UserId:   remindOne.UserId,
+		AuthType: model.UserAuthTypeSmallWX,
+	})
+	if err != nil {
+		return nil, errors.Wrapf(xerr.NewErrCode(xerr.DB_ERROR), "GetUserAuthByUserId err: %v", err)
+	}
+
+	// 构建微信消息
+	data := wxnotice.MessageReminder{
+		ReminderContent: wxnotice.Item{Value: remindOne.Content},
+		ReminderTime:    wxnotice.Item{Value: now.Format("2006-01-02 15:04")},
+	}
+	dataMap, _ := power.StructToHashMap(&data)
+	m := kqueue.WXMiniNoticeSendMessage{
+		ToUser: userAuthyUserIdResp.UserAuth.AuthKey,
+		Page:   fmt.Sprintf("pages/reminderIndex/index"),
+		UserId: userAuthyUserIdResp.UserAuth.UserId,
+		Data:   dataMap,
+	}
+	body, err := json.Marshal(m)
+	err = l.svcCtx.KqueueNoticeSendClient.Push(l.ctx, string(body))
+	if err != nil {
+		return nil, errors.Wrapf(xerr.NewErrCode(xerr.DB_ERROR), "KqueueNoticeSendClient.Push err: %v", err)
+	}
+
+	err = l.svcCtx.ReminderModel.DoneRemindered(l.ctx, in.Id, constants.ReminderSended)
+	if err != nil {
+		return nil, errors.Wrapf(xerr.NewErrCode(xerr.DB_ERROR), "DoneRemindered err: %v", err)
 	}
 
 	return &pb.DoneReminderedResp{}, nil

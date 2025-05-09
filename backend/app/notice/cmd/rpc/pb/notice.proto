@@ -13,7 +13,6 @@ message NoticeLog {
   int64 id = 1; //id
   int64 userId = 2; //userId
   string userOpenid = 3; //userOpenid
-  int64 msgTemplateId = 4; //msgTemplateId
   int64 createTime = 5; //createTime
   int64 updateTime = 6; //updateTime
   int64 status = 7; //0 寰呭彂閫侊紱1鍙戦€佹垚鍔燂紱鍏朵粬涓哄彂閫佸け璐ョ殑澶辫触鐮?
@@ -23,19 +22,18 @@ message NoticeLog {
 message AddNoticeLogReq {
   int64 userId = 1; //userId
   string userOpenid = 2; //userOpenid
-  int64 msgTemplateId = 3; //msgTemplateId
   int64 status = 4; //0 寰呭彂閫侊紱1鍙戦€佹垚鍔燂紱鍏朵粬涓哄彂閫佸け璐ョ殑澶辫触鐮
   string error = 5; //鍙戦€佸け璐ュ師鍥?
 }
 
 message AddNoticeLogResp {
+  int64 id = 1; //id
 }
 
 message UpdateNoticeLogReq {
   int64 id = 1; //id
   int64 userId = 2; //userId
   string userOpenid = 3; //userOpenid
-  int64 msgTemplateId = 4; //msgTemplateId
   int64 status = 5; //0 寰呭彂閫侊紱1鍙戦€佹垚鍔燂紱鍏朵粬涓哄彂閫佸け璐ョ殑澶辫触鐮?
   string error = 6; //鍙戦€佸け璐ュ師鍥?
  }
@@ -64,7 +62,6 @@ message SearchNoticeLogReq {
   int64 id = 3; //id
   int64 userId = 4; //userId
   string userOpenid = 5; //userOpenid
-  int64 msgTemplateId = 6; //msgTemplateId
   int64 createTime = 7; //createTime
   int64 updateTime = 8; //updateTime
   int64 status = 9; //0 寰呭彂閫侊紱1鍙戦€佹垚鍔燂紱鍏朵粬涓哄彂閫佸け璐ョ殑澶辫触鐮?

@@ -46,6 +46,8 @@ type (
 	SearchTaskFinishResp  = pb.SearchTaskFinishResp
 	SearchTaskReq         = pb.SearchTaskReq
 	SearchTaskResp        = pb.SearchTaskResp
+	SendRemindReq         = pb.SendRemindReq
+	SendRemindResp        = pb.SendRemindResp
 	Task                  = pb.Task
 	TaskFinish            = pb.TaskFinish
 	UpdateRecodeReq       = pb.UpdateRecodeReq
@@ -80,6 +82,7 @@ type (
 		ChangeSignRemind(ctx context.Context, in *ChangeRemindReq, opts ...grpc.CallOption) (*ChangeRemindResp, error)
 		GetRemindStatus(ctx context.Context, in *GetRemindStatusReq, opts ...grpc.CallOption) (*GetRemindStatusResp, error)
 		SearchRemind(ctx context.Context, in *SearchRemindReq, opts ...grpc.CallOption) (*SearchRemindResp, error)
+		SendRemind(ctx context.Context, in *SendRemindReq, opts ...grpc.CallOption) (*SendRemindResp, error)
 	}
 
 	defaultSignin struct {
@@ -195,4 +198,9 @@ func (m *defaultSignin) GetRemindStatus(ctx context.Context, in *GetRemindStatus
 func (m *defaultSignin) SearchRemind(ctx context.Context, in *SearchRemindReq, opts ...grpc.CallOption) (*SearchRemindResp, error) {
 	client := pb.NewSigninClient(m.cli.Conn())
 	return client.SearchRemind(ctx, in, opts...)
+}
+
+func (m *defaultSignin) SendRemind(ctx context.Context, in *SendRemindReq, opts ...grpc.CallOption) (*SendRemindResp, error) {
+	client := pb.NewSigninClient(m.cli.Conn())
+	return client.SendRemind(ctx, in, opts...)
 }
