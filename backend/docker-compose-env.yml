@@ -185,10 +185,10 @@ services:
     image: mysql/mysql-server:8.0.28
     container_name: mysql
     environment:
+      # root 密码 - root password
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}  # 从.env文件读取
       # 时区上海 - Time zone Shanghai (Change if needed)
       TZ: Asia/Shanghai
-      # root 密码 - root password
-      MYSQL_ROOT_PASSWORD: PXDN93VRKUm8TeE7
     ports:
       - 33069:3306
     volumes:
@@ -217,10 +217,11 @@ services:
     environment:
       # 时区上海 - Time zone Shanghai (Change if needed)
       TZ: Asia/Shanghai
+      REDIS_PASSWORD: ${REDIS_PASSWORD}  # 从.env文件读取密码
     volumes:
       # 数据文件 - data files
       - ./data/redis/data:/data:rw
-    command: "redis-server --requirepass G62m50oigInC30sf  --appendonly yes"
+    command: "redis-server --requirepass ${REDIS_PASSWORD}  --appendonly yes"
     privileged: true
     restart: always
     networks:

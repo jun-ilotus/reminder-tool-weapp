@@ -1,0 +1,60 @@
+Name: notice-mq
+ListenOn: 0.0.0.0:2011
+Mode: dev
+
+#监控
+Prometheus:
+  Host: 0.0.0.0
+  Port: 4023
+  Path: /metrics
+
+#链路追踪
+#Telemetry:
+#  Name: order-mq
+#  Endpoint: http://jaeger:14268/api/traces
+#  Sampler: 1.0
+#  Batcher: jaeger
+
+Log:
+  ServiceName: notice-mq
+  Level: error
+
+Redis:
+  Host: redis:6379
+  Type: node
+  Pass: ${REDIS_PASSWORD}
+
+#kq
+NoticeSendConf:
+  Name: NoticeSendStatus
+  Brokers:
+    - kafka:9092
+  Group: notice-send-group
+  Topic: notice-send-topic
+  Offset: first  # latest：从每个分区的最新消息开始消费。
+  Consumers: 1   # 这个消费者组中只有一个消费者实例
+  Processors: 1  # 每个消费者实例中只有一个处理器线程来处理消息
+
+#rpc
+NoticeRpcConf:
+  Etcd:
+    Hosts:
+      - etcd:2379
+    key: notice.rpc
+  NonBlock: true
+
+UsercenterRpcConf:
+  Etcd:
+    Hosts:
+      - etcd:2379
+    key: usercenter.rpc
+  NonBlock: true
+
+#WxMiniConf
+WxMiniConf:
+  AppId: ${WxMiniConf_AppId}
+  Secret: ${WxMiniConf_Secret}
+
+WxMsgConf:
+  EventToken: ${WxMsgConf_EventToken}
+  EncodingAESKey: ${WxMsgConf_EncodingAESKey}

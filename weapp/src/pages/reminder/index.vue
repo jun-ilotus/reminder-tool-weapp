@@ -111,7 +111,16 @@ const submit = () => {
         }
       })
     } else {
-        modifyReq(content.value, reminderTime.value, member.value, status)
+      Taro.requestSubscribeMessage({
+        tmplIds:["T6iprDxSmNa_hmMQDSrfJAGxTulxZh3dkBTycKWpXlI"],
+        entityIds:["T6iprDxSmNa_hmMQDSrfJAGxTulxZh3dkBTycKWpXlI"],
+        success: function (res) { 
+          // console.log(res)
+          if (res.T6iprDxSmNa_hmMQDSrfJAGxTulxZh3dkBTycKWpXlI === "accept") {
+            modifyReq(content.value, reminderTime.value, member.value, status)
+          }
+        }
+      })
     }
 }
 interface ApiResponse {

@@ -1,7 +1,21 @@
 
+将根目录下的 .env_example 替换为 .env 并将配置秘钥都填上
+
 搭建请阅读项目根目录下的 /doc/chinese/ 下的完整教程，从 01-开发环境搭建环境。
 ## go-zero-looklook
 
+### 创建 kafka topic
+系统内使用了1个topic，默认是不允许程序自动创建topic的，进入kafka的容器创建1个topic
+
+进入容器
+```
+$ docker exec -it kafka /bin/sh
+$ cd /opt/kafka/bin/
+```
+创建topic
+```
+$ ./kafka-topics.sh --create --zookeeper zookeeper:2181 --replication-factor 1 -partitions 1 --topic notice-send-topic
+```
 
 - k8s
 - go-zero

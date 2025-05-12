@@ -1,21 +1,22 @@
-Name: reminder-api
+Name: lottery-api
 Host: 0.0.0.0
-Port: 1006
+Port: 1005
 Mode: dev
+MaxConns: 10000
 
 #jwtAuth
 JwtAuth:
   AccessSecret: ${JwtAuth_AccessSecret}
 
 Log:
-  ServiceName: reminder-api
+  ServiceName: lottery-api
   Mode: console
   Level: error
 
 #监控
 Prometheus:
   Host: 0.0.0.0
-  Port: 4012
+  Port: 4020
   Path: /metrics
 
 #链路追踪
@@ -26,20 +27,21 @@ Prometheus:
 #  Batcher: jaeger
 
 DB:
-  DataSource: root:${DB_PASSWORD}@tcp(mysql:3306)/reminder?charset=utf8mb4&parseTime=true&loc=Asia%2FShanghai
+  DataSource: ${DB_USER}:${DB_PASSWORD}@tcp(mysql:3306)/lottery?charset=utf8mb4&parseTime=true&loc=Asia%2FShanghai
 Cache:
   - Host: redis:6379
     Pass: ${REDIS_PASSWORD}
 
-#rpc
-#UsercenterRpcConf:
-#  Endpoints:
-#    - 12.0.0.1:2004
-#  NonBlock: true
-
-ReminderRpcConf:
+LotteryRpcConf:
   Etcd:
     Hosts:
       - etcd:2379
-    key: reminder.rpc
+    key: lottery.rpc
+  NonBlock: true
+
+UsercenterRpcConf:
+  Etcd:
+    Hosts:
+      - etcd:2379
+    key: usercenter.rpc
   NonBlock: true

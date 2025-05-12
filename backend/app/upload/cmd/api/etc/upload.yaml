@@ -1,0 +1,35 @@
+Name: upload-api
+Host: 0.0.0.0
+Port: 1008
+MaxBytes: 6176497735
+Timeout: 300000
+
+#jwtAuth
+JwtAuth:
+  AccessSecret: ${JwtAuth_AccessSecret}
+  AccessExpire: 31536000
+
+#监控
+Prometheus:
+  Host: 0.0.0.0
+  Port: 4016
+  Path: /metrics
+
+#链路追踪
+#Telemetry:
+#  Name: upload-api
+#  Endpoint: http://jaeger:14268/api/traces
+#  Sampler: 1.0
+#  Batcher: jaeger
+
+Log:
+  ServiceName: upload-api
+  Level: error
+
+#rpc service
+FileUploadRpcConf:
+  Etcd:
+    Hosts:
+      - etcd:2379
+    key: upload.rpc
+  NonBlock: true

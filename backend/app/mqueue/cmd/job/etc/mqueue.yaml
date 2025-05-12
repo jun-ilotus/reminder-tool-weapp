@@ -23,16 +23,16 @@ Log:
 Redis:
   Host: redis:6379
   Type: node
-  Pass: G62m50oigInC30sf
+  Pass: ${REDIS_PASSWORD}
 
 #WxMiniConf
 WxMiniConf:
-  AppId: wx7e8638c813ae725d
-  Secret: 7a1add871cbc05b13d88190f05104932
+  AppId: ${WxMiniConf_AppId}
+  Secret: ${WxMiniConf_Secret}
 
 WxMsgConf:
-  EventToken: RKeAteaxQU5zH16Wywq1v4nuOj2J4L6t
-  EncodingAESKey: aMVQyJiuml5AEZCJ4t8Vu6g6b1fJnoR9VQ7kd5vc0X4
+  EventToken: ${WxMsgConf_EventToken}
+  EncodingAESKey: ${WxMsgConf_EncodingAESKey}
 
 #rpc service.
 ReminderRpcConf:

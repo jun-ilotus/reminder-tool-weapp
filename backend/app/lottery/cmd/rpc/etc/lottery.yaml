@@ -1,9 +1,9 @@
-Name: reminder-rpc
-ListenOn: 0.0.0.0:2006
+Name: lottery-rpc
+ListenOn: 0.0.0.0:2005
 Mode: dev
 
 Log:
-  ServiceName: reminder-rpc
+  ServiceName: lottery-rpc
   Mode: console
   # 打印堆栈信息 方便查询错误
   Encoding: plain
@@ -12,7 +12,7 @@ Log:
 #监控
 Prometheus:
   Host: 0.0.0.0
-  Port: 4013
+  Port: 4021
   Path: /metrics
 
 #链路追踪
@@ -26,9 +26,9 @@ Redis:
   Host: redis:6379
   Type: node
   Pass: G62m50oigInC30sf
-  Key: reminder-rpc
+  Key:  lottery-rpc
 DB:
-  DataSource: ${DB_USER}:${DB_PASSWORD}@tcp(mysql:3306)/reminder?charset=utf8mb4&parseTime=true&loc=Asia%2FShanghai
+  DataSource: ${DB_USER}:${DB_PASSWORD}@tcp(mysql:3306)/lottery?charset=utf8mb4&parseTime=true&loc=Asia%2FShanghai
 Cache:
   - Host: redis:6379
     Pass: ${REDIS_PASSWORD}
@@ -36,7 +36,7 @@ Cache:
 Etcd:
   Hosts:
     - etcd:2379
-  key: reminder.rpc
+  key: lottery.rpc
 
 #rpc
 UsercenterRpcConf:

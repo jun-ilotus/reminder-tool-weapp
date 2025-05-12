@@ -1,9 +1,9 @@
-Name: reminder-rpc
-ListenOn: 0.0.0.0:2006
+Name: notice.rpc
+ListenOn: 0.0.0.0:2010
 Mode: dev
 
 Log:
-  ServiceName: reminder-rpc
+  ServiceName: notice-rpc
   Mode: console
   # 打印堆栈信息 方便查询错误
   Encoding: plain
@@ -12,7 +12,7 @@ Log:
 #监控
 Prometheus:
   Host: 0.0.0.0
-  Port: 4013
+  Port: 4022
   Path: /metrics
 
 #链路追踪
@@ -26,9 +26,9 @@ Redis:
   Host: redis:6379
   Type: node
   Pass: G62m50oigInC30sf
-  Key: reminder-rpc
+  Key:  notice-rpc
 DB:
-  DataSource: ${DB_USER}:${DB_PASSWORD}@tcp(mysql:3306)/reminder?charset=utf8mb4&parseTime=true&loc=Asia%2FShanghai
+  DataSource: ${DB_USER}:${DB_PASSWORD}@tcp(mysql:3306)/notice?charset=utf8mb4&parseTime=true&loc=Asia%2FShanghai
 Cache:
   - Host: redis:6379
     Pass: ${REDIS_PASSWORD}
@@ -36,18 +36,4 @@ Cache:
 Etcd:
   Hosts:
     - etcd:2379
-  key: reminder.rpc
-
-#rpc
-UsercenterRpcConf:
-  Etcd:
-    Hosts:
-      - etcd:2379
-    key: usercenter.rpc
-  NonBlock: true
-
-#kq
-NoticeSendConf:
-  Brokers:
-    - kafka:9092
-  Topic: notice-send-topic
+  key: notice.rpc

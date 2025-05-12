@@ -15,7 +15,7 @@ func main() {
 	flag.Parse()
 	var c config.Config
 
-	conf.MustLoad(*configFile, &c)
+	conf.MustLoad(*configFile, &c, conf.UseEnv())
 
 	// log、prometheus、trace、metricsUrl.
 	if err := c.SetUp(); err != nil {

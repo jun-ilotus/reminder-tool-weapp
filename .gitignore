@@ -17,13 +17,7 @@ backend/data/*
 .vscode
 .vscode/
 
-*.yaml
-
-usercenter.yaml
-upload.yaml
-reminder.yaml
-mqueue.yaml
-backend/common/wxnotice
+.env
 
 weapp/dist
 weapp/node_modules

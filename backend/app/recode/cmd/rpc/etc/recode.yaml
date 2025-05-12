@@ -28,10 +28,10 @@ Redis:
   Pass: G62m50oigInC30sf
   Key: recode-rpc
 DB:
-  DataSource: root:PXDN93VRKUm8TeE7@tcp(mysql:3306)/recode?charset=utf8mb4&parseTime=true&loc=Asia%2FShanghai
+  DataSource: ${DB_USER}:${DB_PASSWORD}@tcp(mysql:3306)/recode?charset=utf8mb4&parseTime=true&loc=Asia%2FShanghai
 Cache:
   - Host: redis:6379
-    Pass: G62m50oigInC30sf
+    Pass: ${REDIS_PASSWORD}
 
 Etcd:
   Hosts:
