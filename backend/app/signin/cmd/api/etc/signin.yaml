@@ -47,3 +47,6 @@ UsercenterRpcConf:
       - etcd:2379
     key: usercenter.rpc
   NonBlock: true
+
+DtmServerConf:
+  DtmServer: etcd://etcd:2379/dtmservice

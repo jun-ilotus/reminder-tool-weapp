@@ -10,28 +10,28 @@ scrape_configs:
       - targets: ['127.0.0.1:9090']
   - job_name: 'usercenter-api'
     static_configs:
-      - targets: ['looklook:4008']
+      - targets: ['172.27.19.139:4008']
         labels:
           job: usercenter-api
           app: usercenter-api
           env: dev
   - job_name: 'usercenter-rpc'
     static_configs:
-      - targets: ['looklook:4009']
+      - targets: ['172.27.19.139:4009']
         labels:
           job: usercenter-rpc
           app: usercenter-rpc
           env: dev
   - job_name: 'mqueue-job'
     static_configs:
-      - targets: [ 'looklook:4010' ]
+      - targets: [ '172.27.19.139:4010' ]
         labels:
           job: mqueue-job
           app: mqueue-job
           env: dev
   - job_name: 'mqueue-scheduler'
     static_configs:
-      - targets: [ 'looklook:4011' ]
+      - targets: [ '172.27.19.139:4011' ]
         labels:
           job: mqueue-scheduler
           app: mqueue-scheduler
@@ -39,84 +39,84 @@ scrape_configs:
 
   - job_name: 'reminder-api'
     static_configs:
-      - targets: [ 'looklook:4012' ]
+      - targets: [ '172.27.19.139:4012' ]
         labels:
           job: reminder-api
           app: reminder-api
           env: dev
   - job_name: 'reminder-rpc'
     static_configs:
-      - targets: [ 'looklook:4013' ]
+      - targets: [ '172.27.19.139:4013' ]
         labels:
           job: reminder-rpc
           app: reminder-rpc
           env: dev
   - job_name: 'recode-api'
     static_configs:
-      - targets: [ 'looklook:4014' ]
+      - targets: [ '172.27.19.139:4014' ]
         labels:
           job: recode-api
           app: recode-api
           env: dev
   - job_name: 'recode-rpc'
     static_configs:
-      - targets: [ 'looklook:4015' ]
+      - targets: [ '172.27.19.139:4015' ]
         labels:
           job: recode-rpc
           app: recode-rpc
           env: dev
   - job_name: 'upload-api'
     static_configs:
-      - targets: [ 'looklook:4016' ]
+      - targets: [ '172.27.19.139:4016' ]
         labels:
           job: upload-api
           app: upload-api
           env: dev
   - job_name: 'upload-rpc'
     static_configs:
-      - targets: [ 'looklook:4017' ]
+      - targets: [ '172.27.19.139:4017' ]
         labels:
           job: upload-rpc
           app: upload-rpc
           env: dev
   - job_name: 'signin-api'
     static_configs:
-      - targets: [ 'looklook:4018' ]
+      - targets: [ '172.27.19.139:4018' ]
         labels:
           job: signin-api
           app: signin-api
           env: dev
   - job_name: 'signin-rpc'
     static_configs:
-      - targets: [ 'looklook:4019' ]
+      - targets: [ '172.27.19.139:4019' ]
         labels:
           job: signin-rpc
           app: signin-rpc
           env: dev
   - job_name: 'lottery-api'
     static_configs:
-      - targets: [ 'looklook:4020' ]
+      - targets: [ '172.27.19.139:4020' ]
         labels:
           job: lottery-api
           app: lottery-api
           env: dev
   - job_name: 'lottery-rpc'
     static_configs:
-      - targets: [ 'looklook:4021' ]
+      - targets: [ '172.27.19.139:4021' ]
         labels:
           job: lottery-rpc
           app: lottery-rpc
           env: dev
   - job_name: 'notice-rpc'
     static_configs:
-      - targets: [ 'looklook:4022' ]
+      - targets: [ '172.27.19.139:4022' ]
         labels:
           job: notice-rpc
           app: notice-rpc
           env: dev
   - job_name: 'notice-mq'
     static_configs:
-      - targets: [ 'looklook:4023' ]
+      - targets: [ '172.27.19.139:4023' ]
         labels:
           job: notice-mq
           app: notice-mq

@@ -20,6 +20,9 @@ spec:
       containers:
       - name: {{.Name}}
         image: {{.Image}}
+        envFrom:
+        - secretRef:
+            name: my-secret
         {{if .ImagePullPolicy}}imagePullPolicy: {{.ImagePullPolicy}}
         {{end}}ports:
         - containerPort: {{.Port}}

@@ -14,4 +14,7 @@ type Config struct {
 	Cache             cache.CacheConf
 	SigninRpcConf     zrpc.RpcClientConf
 	UsercenterRpcConf zrpc.RpcClientConf
+	DtmServerConf     struct {
+		DtmServer string
+	}
 }

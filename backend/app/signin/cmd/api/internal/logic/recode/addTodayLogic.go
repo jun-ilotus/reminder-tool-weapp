@@ -16,8 +16,6 @@ import (
 	_ "github.com/dtm-labs/driver-gozero" // 这行导入gozero的dtm驱动
 )
 
-var dtmServer = "etcd://etcd:2379/dtmservice"
-
 type AddTodayLogic struct {
 	logx.Logger
 	ctx    context.Context
@@ -47,8 +45,8 @@ func (l *AddTodayLogic) AddToday(req *types.AddRecodeTodayReq) (resp *types.AddR
 	addRecodeReq := &signin.AddRecodeReq{UserId: userId, SignDate: time.Now().Unix()}
 
 	// 开始分布式事务 tcc
-	gid := dtmgrpc.MustGenGid(dtmServer)
-	err = dtmgrpc.TccGlobalTransaction(dtmServer, gid, func(tcc *dtmgrpc.TccGrpc) error {
+	gid := dtmgrpc.MustGenGid(l.svcCtx.Config.DtmServerConf.DtmServer)
+	err = dtmgrpc.TccGlobalTransaction(l.svcCtx.Config.DtmServerConf.DtmServer, gid, func(tcc *dtmgrpc.TccGrpc) error {
 		addRecodeResp := &signin.AddRecodeResp{}
 		addPointsRecodeResp := &usercenter.AddPointsRecodeResp{}
 		addFinishResp := &signin.AddTaskFinishResp{}
