@@ -14,8 +14,19 @@ $ cd /opt/kafka/bin/
 ```
 创建topic
 ```
-$ ./kafka-topics.sh --create --zookeeper zookeeper:2181 --replication-factor 1 -partitions 1 --topic notice-send-topic
+$ ./kafka-topics.sh --create --zookeeper 172.27.103.240:2181 --replication-factor 1 -partitions 1 --topic notice-send-topic
 ```
+
+### 常见错误
+#### 签到找不到服务
+error: produced zero addresses
+
+查看一下 dtm 服务是否注册到了 etcd 中
+```
+docker exec -it etcd /bin/bash
+etcdctl get "dtmservice" --prefix
+```
+若没有 则重启一下 dtm
 
 - k8s
 - go-zero

@@ -139,11 +139,15 @@ services:
     image: wurstmeister/zookeeper
     container_name: zookeeper
     environment:
-      # 时区上海 - Time zone Shanghai (Change if needed)
-      TZ: Asia/Shanghai
+      - TZ=Asia/Shanghai
+      - ZOO_MAX_CLIENT_CNXNS=1000  # 提高客户端连接数限制
+      - ZOO_HEAP_SIZE=512M        # 分配 512MB 内存（根据服务器调整）
     restart: always
     ports:
       - 2181:2181
+    volumes:
+      - ./data/zookeeper/data:/data  # 持久化数据
+      - ./data/zookeeper/datalog:/datalog  # 持久化事务日志
     networks:
       - looklook_net
 
@@ -221,6 +225,7 @@ services:
     volumes:
       # 数据文件 - data files
       - ./data/redis/data:/data:rw
+      - ./deploy/redis/redis.conf:/usr/local/etc/redis/redis.conf
     command: "redis-server --requirepass ${REDIS_PASSWORD}  --appendonly yes"
     privileged: true
     restart: always

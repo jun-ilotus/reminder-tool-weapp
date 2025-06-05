@@ -1,4 +1,4 @@
-FROM docker.1ms.run/library/golang:{{.Version}}alpine AS builder
+FROM docker.1panel.live/library/golang:{{.Version}}alpine AS builder
 
 LABEL stage=gobuilder
 
